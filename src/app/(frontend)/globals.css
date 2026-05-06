@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+:root {
+  --brand: #0f766e;
+  --brand-dark: #134e4a;
+  --accent: #f59e0b;
+  --text: #172033;
+  --muted: #64748b;
+  --bg: #f8fafc;
+}
+
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+a { text-decoration-thickness: .08em; text-underline-offset: .18em; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }

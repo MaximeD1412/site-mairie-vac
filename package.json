@@ -1,0 +1,41 @@
+{
+  "name": "commune-next-payload-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node scripts/start-with-sqlite-backups.mjs",
+    "payload": "payload",
+    "generate:types": "payload generate:types",
+    "start:next": "next start",
+    "sqlite:restore": "node scripts/sqlite-restore.mjs",
+    "sqlite:restore:force": "node scripts/sqlite-restore.mjs --force",
+    "sqlite:backup": "node scripts/sqlite-backup.mjs"
+  },
+  "dependencies": {
+    "@payloadcms/db-sqlite": "latest",
+    "@payloadcms/next": "latest",
+    "@payloadcms/plugin-seo": "latest",
+    "@payloadcms/richtext-lexical": "latest",
+    "@payloadcms/storage-s3": "latest",
+    "cross-env": "latest",
+    "next": "latest",
+    "payload": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "sharp": "latest",
+    "@aws-sdk/client-s3": "latest",
+    "better-sqlite3": "latest",
+    "dotenv": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest"
+  }
+}
