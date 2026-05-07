@@ -31,7 +31,7 @@ export function Header({ navigation }: HeaderProps) {
         Aller au contenu principal
       </a>
 
-      <header className="sticky top-0 z-50 bg-brand shadow-md">
+      <header className="sticky top-0 z-[100] bg-brand shadow-md">
         <div className="mx-auto max-w-7xl px-6 h-[68px] flex items-center justify-between gap-4">
 
           {/* Logo */}
@@ -51,14 +51,14 @@ export function Header({ navigation }: HeaderProps) {
               <div key={i} className="relative group">
                 <Link
                   href={hrefFromNavItem(item)}
-                  className="flex items-center h-[68px] px-5 text-white/90 hover:text-white hover:bg-white/10 text-[13.5px] font-semibold uppercase tracking-[0.4px] border-b-[3px] border-transparent hover:border-brand-light transition-all no-underline"
+                  className="flex items-center h-[68px] px-5 text-white/90 hover:text-brand-light hover:bg-white/10 text-[13.5px] font-semibold uppercase tracking-[0.4px] border-b-[3px] border-transparent hover:border-brand-light transition-all no-underline"
                 >
                   {item.label}
                 </Link>
 
                 {/* Dropdown enfants */}
                 {item.children && item.children.length > 0 && (
-                  <div className="absolute top-full left-0 min-w-[220px] bg-white shadow-lg border border-border rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                  <div className="absolute top-full left-0 min-w-[220px] bg-white shadow-lg border border-border rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-[110]">
                     {item.children.map((child, j) => (
                       <Link
                         key={j}
