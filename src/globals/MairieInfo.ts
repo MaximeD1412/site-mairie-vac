@@ -7,8 +7,8 @@ export const MairieInfo: GlobalConfig = {
   admin: { group: 'Paramètres' },
   access: { read: () => true, update: isAgentOrAdmin },
   fields: [
-    { name: 'address', label: 'Adresse', type: 'text', defaultValue: '1 Rue de la Mairie, 41160 La Ville-aux-Clercs' },
-    { name: 'phone', label: 'Téléphone', type: 'text', defaultValue: '02.54.80.62.55' },
+    { name: 'address', label: 'Adresse', type: 'text', required: true, defaultValue: '1 Rue de la Mairie, 41160 La Ville-aux-Clercs' },
+    { name: 'phone', label: 'Téléphone', type: 'text', required: true, defaultValue: '02.54.80.62.55' },
     { name: 'email', label: 'Email', type: 'email' },
     { name: 'facebookUrl', label: 'URL page Facebook', type: 'text' },
     {

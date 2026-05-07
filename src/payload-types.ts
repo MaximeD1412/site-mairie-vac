@@ -854,8 +854,8 @@ export interface SiteSetting {
  */
 export interface MairieInfo {
   id: number;
-  address?: string | null;
-  phone?: string | null;
+  address: string;
+  phone: string;
   email?: string | null;
   facebookUrl?: string | null;
   openingHours?:
