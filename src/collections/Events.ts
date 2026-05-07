@@ -24,7 +24,20 @@ export const Events: CollectionConfig = {
       admin: { date: { pickerAppearance: 'dayAndTime', timeIntervals: 15 } },
     },
     { name: 'location', label: 'Lieu', type: 'text' },
-    { name: 'category', label: 'Catégorie', type: 'select', options: ['Municipal', 'Association', 'Culture', 'Sport', 'École', 'Bibliothèque', 'Autre'] },
+    {
+      name: 'category',
+      label: 'Catégorie',
+      type: 'select',
+      options: [
+        { label: 'Municipal', value: 'municipal' },
+        { label: 'Association', value: 'association' },
+        { label: 'Culture', value: 'culture' },
+        { label: 'Sport', value: 'sport' },
+        { label: 'École', value: 'ecole' },
+        { label: 'Bibliothèque', value: 'bibliotheque' },
+        { label: 'Autre', value: 'autre' },
+      ],
+    },
     {
       name: 'organizer',
       label: 'Organisateur (association)',
