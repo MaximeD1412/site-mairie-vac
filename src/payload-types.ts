@@ -101,8 +101,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+    'mairie-info': MairieInfo;
+    'homepage-settings': HomepageSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'mairie-info': MairieInfoSelect<false> | MairieInfoSelect<true>;
+    'homepage-settings': HomepageSettingsSelect<false> | HomepageSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -298,6 +306,7 @@ export interface Navigation {
         children?:
           | {
               label: string;
+              kind: 'page' | 'external' | 'newsArchive' | 'eventsArchive' | 'documentsArchive' | 'associationsArchive';
               page?: (number | null) | Page;
               url?: string | null;
               id?: string | null;
@@ -351,7 +360,11 @@ export interface Event {
   startDate: string;
   endDate?: string | null;
   location?: string | null;
-  category?: ('Municipal' | 'Association' | 'Culture' | 'Sport' | 'École' | 'Autre') | null;
+  category?: ('municipal' | 'association' | 'culture' | 'sport' | 'ecole' | 'bibliotheque' | 'autre') | null;
+  /**
+   * Laisser vide pour un événement municipal
+   */
+  organizer?: (number | null) | Association;
   image?: (number | null) | Media;
   description?: {
     root: {
@@ -371,20 +384,6 @@ export interface Event {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "documents".
- */
-export interface Document {
-  id: number;
-  title: string;
-  file: number | Media;
-  category: 'Bulletin municipal' | 'Compte-rendu' | 'Arrêté' | 'Formulaire' | 'Autre';
-  date?: string | null;
-  description?: string | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -413,6 +412,29 @@ export interface Association {
   email?: string | null;
   phone?: string | null;
   website?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: number;
+  title: string;
+  file: number | Media;
+  category:
+    | 'bulletin-municipal'
+    | 'ptitmag'
+    | 'bepos'
+    | 'pv-conseil'
+    | 'actes-administratifs'
+    | 'compte-rendu'
+    | 'arrete'
+    | 'formulaire'
+    | 'autre';
+  date?: string | null;
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -685,6 +707,7 @@ export interface NavigationSelect<T extends boolean = true> {
           | T
           | {
               label?: T;
+              kind?: T;
               page?: T;
               url?: T;
               id?: T;
@@ -721,6 +744,7 @@ export interface EventsSelect<T extends boolean = true> {
   endDate?: T;
   location?: T;
   category?: T;
+  organizer?: T;
   image?: T;
   description?: T;
   updatedAt?: T;
@@ -807,6 +831,122 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  heroImage?: (number | null) | Media;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  /**
+   * URL fournie par PanneauPocket pour l'embed iframe
+   */
+  panneauPocketUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mairie-info".
+ */
+export interface MairieInfo {
+  id: number;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  facebookUrl?: string | null;
+  openingHours?:
+    | {
+        days?: string | null;
+        hours?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage-settings".
+ */
+export interface HomepageSetting {
+  id: number;
+  /**
+   * Ces liens apparaissent sous la photo d'accueil avec une icône.
+   */
+  quickLinks?:
+    | {
+        label: string;
+        icon:
+          | 'Newspaper'
+          | 'CalendarDays'
+          | 'ClipboardList'
+          | 'School'
+          | 'Home'
+          | 'Phone'
+          | 'BookOpen'
+          | 'Users'
+          | 'FileText'
+          | 'Info';
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  heroImage?: T;
+  heroTitle?: T;
+  heroSubtitle?: T;
+  panneauPocketUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mairie-info_select".
+ */
+export interface MairieInfoSelect<T extends boolean = true> {
+  address?: T;
+  phone?: T;
+  email?: T;
+  facebookUrl?: T;
+  openingHours?:
+    | T
+    | {
+        days?: T;
+        hours?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage-settings_select".
+ */
+export interface HomepageSettingsSelect<T extends boolean = true> {
+  quickLinks?:
+    | T
+    | {
+        label?: T;
+        icon?: T;
+        href?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -14,6 +14,9 @@ import { Events } from './collections/Events'
 import { Documents } from './collections/Documents'
 import { Associations } from './collections/Associations'
 import { ElectedOfficials } from './collections/ElectedOfficials'
+import { SiteSettings } from './globals/SiteSettings'
+import { MairieInfo } from './globals/MairieInfo'
+import { HomepageSettings } from './globals/HomepageSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -47,6 +50,7 @@ export default buildConfig({
     Associations,
     ElectedOfficials
   ],
+  globals: [SiteSettings, MairieInfo, HomepageSettings],
   plugins: [
     ...(s3Enabled
       ? [
