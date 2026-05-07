@@ -1,7 +1,7 @@
 # Spec — Refonte infrastructure : OVH VPS + Docker + PostgreSQL
 
 **Date :** 2026-05-07
-**Branche :** feat/ui-design-system
+**Branche :** feat/infra-ovh-docker (à créer depuis main)
 
 ---
 
