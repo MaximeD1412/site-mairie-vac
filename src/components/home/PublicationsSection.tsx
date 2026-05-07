@@ -46,14 +46,15 @@ export function PublicationsSection({ documents }: PublicationsSectionProps) {
         {documents.length === 0 ? (
           <p className="text-muted text-[13px]">Aucune publication disponible.</p>
         ) : (
-          <ul className="grid grid-cols-2 md:grid-cols-4 gap-5 list-none p-0 m-0">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 list-none p-0 m-0">
             {documents.map((doc) => {
               const file = doc.file && typeof doc.file === 'object' ? doc.file : null
-              const fileUrl = file?.url ?? '#'
+              const fileUrl = file?.url
+              if (!fileUrl) return null
               return (
                 <li key={doc.id}>
                   <a
-                    href={fileUrl}
+                    href={fileUrl as string}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col rounded-xl overflow-hidden border border-border bg-white hover:border-brand-light hover:shadow-md transition-all no-underline"

@@ -54,7 +54,8 @@ function NewsCard({ item, featured }: { item: NewsItem; featured?: boolean }) {
 }
 
 export function ActuPanneauSection({ news, settings }: ActuPanneauSectionProps) {
-  const [featured, ...rest] = news
+  const [featured, ...allRest] = news
+  const rest = allRest.slice(0, 2)
   const panneauUrl = settings?.panneauPocketUrl
 
   return (

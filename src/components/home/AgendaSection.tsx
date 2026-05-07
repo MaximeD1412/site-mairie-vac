@@ -33,7 +33,7 @@ export function AgendaSection({ events }: AgendaSectionProps) {
           <p className="text-muted text-[13px]">Aucun événement à venir.</p>
         ) : (
           <ul className="flex flex-col gap-3 list-none p-0 m-0">
-            {events.map((event) => {
+            {events.slice(0, 4).map((event) => {
               const date = event.startDate ? new Date(event.startDate) : null
               return (
                 <li key={event.id}>
