@@ -15,20 +15,21 @@
     "sqlite:backup": "node scripts/sqlite-backup.mjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "latest",
     "@payloadcms/db-sqlite": "latest",
     "@payloadcms/next": "latest",
     "@payloadcms/plugin-seo": "latest",
     "@payloadcms/richtext-lexical": "latest",
     "@payloadcms/storage-s3": "latest",
+    "better-sqlite3": "latest",
     "cross-env": "latest",
+    "dotenv": "latest",
+    "lucide-react": "^1.14.0",
     "next": "latest",
     "payload": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "sharp": "latest",
-    "@aws-sdk/client-s3": "latest",
-    "better-sqlite3": "latest",
-    "dotenv": "latest"
+    "sharp": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",
