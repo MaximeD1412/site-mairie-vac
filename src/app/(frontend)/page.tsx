@@ -5,6 +5,8 @@ import { ActuPanneauSection } from '@/components/home/ActuPanneauSection'
 import { AgendaSection } from '@/components/home/AgendaSection'
 import { PublicationsSection } from '@/components/home/PublicationsSection'
 
+export const revalidate = 60
+
 export default async function HomePage() {
   const payload = await getPayloadClient()
 
@@ -27,6 +29,7 @@ export default async function HomePage() {
       collection: 'documents',
       limit: 4,
       sort: '-date',
+      depth: 1,
     }).catch(() => ({ docs: [] })),
 
     payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
