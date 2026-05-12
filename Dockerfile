@@ -10,6 +10,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
+# Placeholder so payload generate:importmap can load the config — not used at runtime
+ARG PAYLOAD_SECRET=build-placeholder
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 RUN npm run build
 
 # Stage 3 — Runtime

@@ -18,8 +18,8 @@ const navItemFields = [
       { label: 'Associations', value: 'associationsArchive' }
     ]
   },
-  { name: 'page', label: 'Page', type: 'relationship', relationTo: 'pages', admin: { condition: (_, siblingData) => siblingData?.kind === 'page' } },
-  { name: 'url', label: 'URL', type: 'text', admin: { condition: (_, siblingData) => siblingData?.kind === 'external' } },
+  { name: 'page', label: 'Page', type: 'relationship', relationTo: 'pages', admin: { condition: (_: Record<string, unknown>, siblingData: Record<string, unknown>) => siblingData?.kind === 'page' } },
+  { name: 'url', label: 'URL', type: 'text', admin: { condition: (_: Record<string, unknown>, siblingData: Record<string, unknown>) => siblingData?.kind === 'external' } },
   {
     name: 'children',
     label: 'Sous-menu',

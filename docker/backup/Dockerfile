@@ -1,5 +1,5 @@
-FROM alpine:3.21
-RUN apk add --no-cache postgresql18-client aws-cli dcron
+FROM postgres:18-alpine
+RUN apk add --no-cache aws-cli dcron
 COPY backup.sh /backup.sh
 RUN chmod +x /backup.sh
 # Toutes les 6h
