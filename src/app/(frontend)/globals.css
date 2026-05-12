@@ -3,6 +3,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Brand tokens — conservés car utilisés dans les composants */
+@theme {
+  --color-brand:       #1a61ab;
+  --color-brand-mid:   #2a7fd4;
+  --color-brand-light: #93baf2;
+  --color-brand-pale:  #eef4fd;
+  --color-teal:        #0bbfa4;
+  --color-teal-light:  #e6faf8;
+  --color-text:        #1a1a2e;
+  --color-border:      #dde4ee;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -26,18 +38,6 @@
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
-}
-
-/* Brand tokens — conservés car utilisés dans les composants */
-@theme {
-  --color-brand:       #1a61ab;
-  --color-brand-mid:   #2a7fd4;
-  --color-brand-light: #93baf2;
-  --color-brand-pale:  #eef4fd;
-  --color-teal:        #0bbfa4;
-  --color-teal-light:  #e6faf8;
-  --color-text:        #1a1a2e;
-  --color-border:      #dde4ee;
 }
 
 /* Overrides brand dans le système shadcn */
