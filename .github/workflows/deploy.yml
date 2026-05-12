@@ -19,3 +19,4 @@ jobs:
             cd /opt/mairie
             git pull origin main
             docker compose up -d --build
+            docker compose exec app npx payload migrate

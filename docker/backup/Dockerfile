@@ -1,6 +1,5 @@
 FROM alpine:3.19
-RUN apk add --no-cache postgresql16-client python3 py3-pip dcron && \
-    pip3 install awscli
+RUN apk add --no-cache postgresql16-client aws-cli dcron
 COPY backup.sh /backup.sh
 RUN chmod +x /backup.sh
 # Toutes les 6h

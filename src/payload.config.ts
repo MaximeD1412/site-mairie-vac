@@ -27,7 +27,7 @@ export default buildConfig({
     }
   },
   editor: lexicalEditor({}),
-  secret: process.env.PAYLOAD_SECRET || 'dev-secret-change-me',
+  secret: process.env.PAYLOAD_SECRET!,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts')
   },
