@@ -1,5 +1,6 @@
-FROM alpine:3.21
-RUN apk add --no-cache postgresql18-client python3 py3-pip && \
+FROM postgres:18-alpine
+ENTRYPOINT []
+RUN apk add --no-cache python3 py3-pip && \
     pip3 install --break-system-packages --no-cache-dir awscli
 COPY backup.sh /backup.sh
 RUN chmod +x /backup.sh
