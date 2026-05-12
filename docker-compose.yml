@@ -16,7 +16,9 @@ services:
   app:
     ports:
       - "3000:3000"
-    build: .
+    build:
+      context: .
+      network: host
     env_file: .env
     depends_on:
       postgres:
@@ -40,7 +42,9 @@ services:
     restart: unless-stopped
 
   backup:
-    build: ./docker/backup
+    build:
+      context: ./docker/backup
+      network: host
     env_file: .env
     depends_on:
       postgres:
