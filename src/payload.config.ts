@@ -1,7 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 
@@ -27,13 +27,13 @@ export default buildConfig({
     }
   },
   editor: lexicalEditor({}),
-  secret: process.env.PAYLOAD_SECRET || 'dev-secret-change-me',
+  secret: process.env.PAYLOAD_SECRET!,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts')
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || 'file:./data/payload.db'
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URL
     }
   }),
   collections: [
@@ -56,7 +56,7 @@ export default buildConfig({
             },
             bucket: process.env.S3_BUCKET || '',
             config: {
-              region: process.env.S3_REGION || 'fr',
+              region: process.env.S3_REGION || 'gra',
               endpoint: process.env.S3_ENDPOINT,
               credentials: {
                 accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
