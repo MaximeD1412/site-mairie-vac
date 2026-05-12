@@ -1,24 +1,75 @@
 @import 'tailwindcss';
+@import 'shadcn/tailwind.css';
 
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+/* Brand tokens — conservés car utilisés dans les composants */
 @theme {
-  --color-brand:        #1a61ab;
-  --color-brand-mid:    #2a7fd4;
-  --color-brand-light:  #93baf2;
-  --color-brand-pale:   #eef4fd;
-  --color-teal:         #0bbfa4;
-  --color-teal-light:   #e6faf8;
-  --color-border:       #dde4ee;
-  --color-text:         #1a1a2e;
-  --color-muted:        #5a6a7a;
+  --color-brand:       #1a61ab;
+  --color-brand-mid:   #2a7fd4;
+  --color-brand-light: #93baf2;
+  --color-brand-pale:  #eef4fd;
+  --color-teal:        #0bbfa4;
+  --color-teal-light:  #e6faf8;
+  --color-text:        #1a1a2e;
+  --color-border:      #dde4ee;
+}
+
+/* Overrides brand dans le système shadcn */
+:root {
+  --radius: 0.5rem;
+  --background: #ffffff;
+  --foreground: #1a1a2e;
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a2e;
+  --primary: #1a61ab;
+  --primary-foreground: #ffffff;
+  --secondary: #eef4fd;
+  --secondary-foreground: #1a61ab;
+  --muted: #f5f7fa;
+  --muted-foreground: #5a6a7a;
+  --accent: #0bbfa4;
+  --accent-foreground: #ffffff;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #dde4ee;
+  --input: #dde4ee;
+  --ring: #0bbfa4;
 }
 
 html { scroll-behavior: smooth; }
-body { margin: 0; background: #ffffff; color: #1a1a2e; }
+body { margin: 0; background: var(--background); color: var(--foreground); }
 a { text-decoration-thickness: .08em; text-underline-offset: .18em; }
 
 /* RGAA : focus visible sur tous les éléments interactifs */
 :focus-visible {
-  outline: 3px solid #0bbfa4;
+  outline: 3px solid var(--ring);
   outline-offset: 3px;
 }
 
@@ -27,7 +78,7 @@ a { text-decoration-thickness: .08em; text-underline-offset: .18em; }
   position: absolute;
   top: -100%;
   left: 0;
-  background: #1a61ab;
+  background: var(--primary);
   color: #ffffff;
   padding: 8px 16px;
   font-weight: 600;
