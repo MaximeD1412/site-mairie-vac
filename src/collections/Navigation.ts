@@ -46,13 +46,13 @@ const navItemFields = [
         label: 'Page',
         type: 'relationship',
         relationTo: 'pages',
-        admin: { condition: (_, s) => s?.kind === 'page' },
+        admin: { condition: (_: Record<string, unknown>, s: Record<string, unknown>) => s?.kind === 'page' },
       },
       {
         name: 'url',
         label: 'URL externe',
         type: 'text',
-        admin: { condition: (_, s) => s?.kind === 'external' },
+        admin: { condition: (_: Record<string, unknown>, s: Record<string, unknown>) => s?.kind === 'external' },
       },
     ],
   }
