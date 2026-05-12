@@ -10,10 +10,41 @@ export const Events: CollectionConfig = {
   fields: [
     { name: 'title', label: 'Titre', type: 'text', required: true },
     { name: 'slug', label: 'Slug', type: 'text', required: true, unique: true },
-    { name: 'startDate', label: 'Date de début', type: 'date', required: true },
-    { name: 'endDate', label: 'Date de fin', type: 'date' },
+    {
+      name: 'startDate',
+      label: 'Date et heure de début',
+      type: 'date',
+      required: true,
+      admin: { date: { pickerAppearance: 'dayAndTime', timeIntervals: 15 } },
+    },
+    {
+      name: 'endDate',
+      label: 'Date et heure de fin',
+      type: 'date',
+      admin: { date: { pickerAppearance: 'dayAndTime', timeIntervals: 15 } },
+    },
     { name: 'location', label: 'Lieu', type: 'text' },
-    { name: 'category', label: 'Catégorie', type: 'select', options: ['Municipal', 'Association', 'Culture', 'Sport', 'École', 'Autre'] },
+    {
+      name: 'category',
+      label: 'Catégorie',
+      type: 'select',
+      options: [
+        { label: 'Municipal', value: 'municipal' },
+        { label: 'Association', value: 'association' },
+        { label: 'Culture', value: 'culture' },
+        { label: 'Sport', value: 'sport' },
+        { label: 'École', value: 'ecole' },
+        { label: 'Bibliothèque', value: 'bibliotheque' },
+        { label: 'Autre', value: 'autre' },
+      ],
+    },
+    {
+      name: 'organizer',
+      label: 'Organisateur (association)',
+      type: 'relationship',
+      relationTo: 'associations',
+      admin: { description: 'Laisser vide pour un événement municipal' },
+    },
     { name: 'image', label: 'Image', type: 'upload', relationTo: 'media' },
     { name: 'description', label: 'Description', type: 'richText' }
   ]

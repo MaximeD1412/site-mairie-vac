@@ -1,15 +1,37 @@
 @import 'tailwindcss';
 
-:root {
-  --brand: #0f766e;
-  --brand-dark: #134e4a;
-  --accent: #f59e0b;
-  --text: #172033;
-  --muted: #64748b;
-  --bg: #f8fafc;
+@theme {
+  --color-brand:        #1a61ab;
+  --color-brand-mid:    #2a7fd4;
+  --color-brand-light:  #93baf2;
+  --color-brand-pale:   #eef4fd;
+  --color-teal:         #0bbfa4;
+  --color-teal-light:   #e6faf8;
+  --color-border:       #dde4ee;
+  --color-text:         #1a1a2e;
+  --color-muted:        #5a6a7a;
 }
 
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--bg); color: var(--text); }
+body { margin: 0; background: #ffffff; color: #1a1a2e; }
 a { text-decoration-thickness: .08em; text-underline-offset: .18em; }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* RGAA : focus visible sur tous les éléments interactifs */
+:focus-visible {
+  outline: 3px solid #0bbfa4;
+  outline-offset: 3px;
+}
+
+/* Skip link RGAA — visible uniquement au focus clavier */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: #1a61ab;
+  color: #ffffff;
+  padding: 8px 16px;
+  font-weight: 600;
+  z-index: 9999;
+  text-decoration: none;
+}
+.skip-link:focus { top: 0; }

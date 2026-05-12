@@ -26,9 +26,35 @@ const navItemFields = [
     type: 'array',
     fields: [
       { name: 'label', label: 'Libellé', type: 'text', required: true },
-      { name: 'page', label: 'Page', type: 'relationship', relationTo: 'pages' },
-      { name: 'url', label: 'URL externe optionnelle', type: 'text' }
-    ]
+      {
+        name: 'kind',
+        label: 'Type de lien',
+        type: 'select',
+        required: true,
+        defaultValue: 'page',
+        options: [
+          { label: 'Page CMS', value: 'page' },
+          { label: 'URL externe', value: 'external' },
+          { label: 'Actualités', value: 'newsArchive' },
+          { label: 'Agenda', value: 'eventsArchive' },
+          { label: 'Documents', value: 'documentsArchive' },
+          { label: 'Associations', value: 'associationsArchive' },
+        ],
+      },
+      {
+        name: 'page',
+        label: 'Page',
+        type: 'relationship',
+        relationTo: 'pages',
+        admin: { condition: (_: Record<string, unknown>, s: Record<string, unknown>) => s?.kind === 'page' },
+      },
+      {
+        name: 'url',
+        label: 'URL externe',
+        type: 'text',
+        admin: { condition: (_: Record<string, unknown>, s: Record<string, unknown>) => s?.kind === 'external' },
+      },
+    ],
   }
 ] as any
 
