@@ -63,7 +63,7 @@ export function Header({ navigation }: HeaderProps) {
                       <Link
                         key={j}
                         href={hrefFromNavItem(child)}
-                        className="block px-5 py-3 text-[13.5px] text-text hover:bg-brand-pale hover:text-brand border-b border-border last:border-0 no-underline transition-colors"
+                        className="block px-5 py-3 text-[13.5px] text-foreground hover:bg-brand-pale hover:text-brand border-b border-border last:border-0 no-underline transition-colors"
                       >
                         {child.label}
                       </Link>

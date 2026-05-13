@@ -40,7 +40,7 @@ export function QuickLinksBar({ settings }: QuickLinksBarProps) {
             <Link
               key={link.id ?? i}
               href={link.href}
-              className="flex flex-col items-center gap-2 px-7 py-5 text-text hover:text-brand hover:bg-brand-pale border-b-[3px] border-transparent hover:border-teal min-w-[110px] no-underline transition-all"
+              className="flex flex-col items-center gap-2 px-7 py-5 text-foreground hover:text-brand hover:bg-brand-pale border-b-[3px] border-transparent hover:border-teal min-w-[110px] no-underline transition-all"
             >
               <span className="w-[46px] h-[46px] rounded-xl bg-brand-pale flex items-center justify-center text-brand">
                 {Icon && <Icon size={20} aria-hidden={true} />}
