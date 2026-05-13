@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
 interface NewsImage {
   url?: string | null
@@ -29,26 +31,28 @@ function NewsCard({ item, featured }: { item: NewsItem; featured?: boolean }) {
   return (
     <Link
       href={`/actualites/${item.slug ?? item.id}`}
-      className={`flex no-underline rounded-xl overflow-hidden border border-border bg-white hover:-translate-y-0.5 hover:shadow-lg transition-all ${featured ? 'flex-col' : 'flex-row'}`}
       aria-label={`Lire l'actualité : ${item.title}`}
+      className="no-underline"
     >
-      <div className={`bg-gradient-to-br from-brand-light to-brand-mid relative ${featured ? 'h-[200px]' : 'w-[130px] shrink-0'}`}>
-        {image?.url && (
-          <Image src={image.url} alt="" aria-hidden="true" fill className="object-cover" />
-        )}
-      </div>
-      <div className="p-5 flex flex-col gap-2">
-        <span className="inline-block bg-teal-light text-teal rounded px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide w-fit">
-          {featured ? 'À la une' : 'Actualité'}
-        </span>
-        <strong className="text-[15px] font-bold text-text leading-snug">{item.title}</strong>
-        {item.summary && <p className="text-[13px] text-muted line-clamp-2">{item.summary}</p>}
-        <span className="text-[11.5px] text-muted">
-          {item.publishedAt
-            ? new Date(item.publishedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
-            : ''}
-        </span>
-      </div>
+      <Card className={`overflow-hidden hover:-translate-y-0.5 hover:shadow-lg transition-all ${featured ? 'flex-col' : 'flex-row'} flex rounded-xl`}>
+        <div className={`bg-gradient-to-br from-brand-light to-brand-mid relative ${featured ? 'h-[200px]' : 'w-[130px] shrink-0'}`}>
+          {image?.url && (
+            <Image src={image.url} alt="" aria-hidden="true" fill className="object-cover" />
+          )}
+        </div>
+        <CardContent className="p-5 flex flex-col gap-2">
+          <Badge variant="secondary" className="bg-teal-light text-teal w-fit text-[10.5px] uppercase tracking-wide font-bold">
+            {featured ? 'À la une' : 'Actualité'}
+          </Badge>
+          <strong className="text-[15px] font-bold text-foreground leading-snug">{item.title}</strong>
+          {item.summary && <p className="text-[13px] text-muted-foreground line-clamp-2">{item.summary}</p>}
+          <span className="text-[11.5px] text-muted-foreground">
+            {item.publishedAt
+              ? new Date(item.publishedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+              : ''}
+          </span>
+        </CardContent>
+      </Card>
     </Link>
   )
 }
@@ -77,7 +81,7 @@ export function ActuPanneauSection({ news, settings }: ActuPanneauSectionProps) 
             {featured && <NewsCard item={featured} featured />}
             {rest.map((item) => <NewsCard key={item.id} item={item} />)}
             {news.length === 0 && (
-              <p className="text-muted text-[13px]">Aucune actualité pour le moment.</p>
+              <p className="text-muted-foreground text-[13px]">Aucune actualité pour le moment.</p>
             )}
           </div>
         </div>
@@ -106,7 +110,7 @@ export function ActuPanneauSection({ news, settings }: ActuPanneauSectionProps) 
                 loading="lazy"
               />
             ) : (
-              <div className="flex-1 flex items-center justify-center text-muted text-[13px] p-6 text-center bg-[#f8faff]">
+              <div className="flex-1 flex items-center justify-center text-muted-foreground text-[13px] p-6 text-center bg-[#f8faff]">
                 URL PanneauPocket non configurée.<br />
                 Renseigner dans <em>Paramètres du site</em> dans l&apos;administration.
               </div>
