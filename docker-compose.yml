@@ -18,6 +18,7 @@ services:
       - "3000:3000"
     build:
       context: .
+      target: runner
       network: host
     env_file: .env
     depends_on:

@@ -4,7 +4,14 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Stage 2 — Build
+# Stage 2 — Development (hot reload via volume)
+FROM node:24-alpine AS development
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json ./
+CMD ["npm", "run", "dev"]
+
+# Stage 3 — Build
 FROM node:24-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -12,7 +19,7 @@ COPY . .
 ENV NODE_ENV=production
 RUN npm run build
 
-# Stage 3 — Runtime
+# Stage 4 — Runtime
 FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
