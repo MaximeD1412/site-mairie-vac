@@ -1,23 +1,34 @@
-# Starter site communal — Next.js + Payload CMS
+# Site communal — Next.js + Payload CMS
 
-Starter pensé pour une petite commune : site vitrine moderne, back-office clair, contenus administrables, agenda, actualités, documents, associations et intégration PanneauPocket.
+Site vitrine pour une commune : back-office administrable, actualités, agenda, documents, associations, intégration PanneauPocket.
 
 ## Stack
 
-- Next.js App Router
-- Payload CMS intégré dans la même app
-- SQLite au démarrage pour réduire le coût
-- Cellar / S3 compatible pour les médias en production
-- Tailwind CSS
-- Clever Cloud Node nano recommandé
+- **Next.js 15** App Router + React 19
+- **Payload CMS** intégré dans la même app Next.js
+- **PostgreSQL 18** base de données
+- **OVH Object Storage** (S3 compatible) pour les médias et les backups
+- **Tailwind CSS v4** + **shadcn/ui**
+- **Docker Compose** : app · postgres · caddy · backup
 
-## Structure fonctionnelle
+## Architecture Docker
 
-```txt
+```
+Caddy (reverse proxy + TLS)
+└── Next.js + Payload (port 3000)
+    └── PostgreSQL 18
+        └── Backup pg_dump → OVH Object Storage (cron séparé)
+```
+
+## Routes
+
+```
 /admin                      Back-office Payload
 /                           Accueil
 /actualites                 Liste des actualités
+/actualites/[slug]          Détail actualité
 /agenda                     Liste des événements
+/agenda/[slug]              Détail événement
 /documents                  Documents publics
 /associations               Annuaire associatif
 /[...slug]                  Pages CMS configurables
@@ -25,7 +36,7 @@ Starter pensé pour une petite commune : site vitrine moderne, back-office clair
 
 ## Collections Payload
 
-```txt
+```
 Pages                       Pages libres administrables
 Navigation                  Menu principal / footer configurables
 Actualités                  Actus publiables
@@ -33,131 +44,125 @@ Agenda                      Événements
 Documents                   Bulletins, arrêtés, formulaires, comptes-rendus
 Associations                Annuaire associatif
 Élus                        Conseil municipal
-Médias                      Images + PDF
+Médias                      Images + PDF (stockés dans OVH Object Storage)
 Utilisateurs                Admin technique / Agent mairie
 ```
 
-## Installation locale
+## Installation locale (dev)
 
 ```bash
 cp .env.example .env
+# Renseigner DATABASE_URL avec une base PostgreSQL locale
 npm install
 npm run dev
 ```
 
-Puis ouvrir :
+Ouvrir `http://localhost:3000/admin` — Payload propose la création du premier utilisateur au premier lancement.
 
-```txt
-http://localhost:3000/admin
+### PostgreSQL local avec Docker
+
+```bash
+docker run -d \
+  --name postgres-mairie \
+  -e POSTGRES_DB=mairie \
+  -e POSTGRES_USER=mairie \
+  -e POSTGRES_PASSWORD=mairie \
+  -p 5432:5432 \
+  postgres:18-alpine
 ```
 
-Au premier lancement, Payload propose la création du premier utilisateur.
+Puis dans `.env` :
 
-## Variables importantes
+```
+DATABASE_URL=postgresql://mairie:mairie@localhost:5432/mairie
+```
 
-```env
-PAYLOAD_SECRET=...
-DATABASE_URI=file:./payload.db
-S3_ENABLED=false
+## Variables d'environnement
+
+```
+# App
+NEXT_PUBLIC_SITE_URL=https://mairie.exemple.fr
+PAYLOAD_SECRET=<secret long et aléatoire>
+
+# PostgreSQL
+DATABASE_URL=postgresql://mairie:<password>@postgres:5432/mairie
+POSTGRES_DB=mairie
+POSTGRES_USER=mairie
+POSTGRES_PASSWORD=<password>
+
+# OVH Object Storage — médias Payload
+S3_ENABLED=true
+S3_BUCKET=mairie-media
+S3_REGION=gra
+S3_ENDPOINT=https://s3.gra.io.cloud.ovh.net
+S3_ACCESS_KEY_ID=
+S3_SECRET_ACCESS_KEY=
+
+# OVH Object Storage — backups pg_dump (bucket séparé)
+BACKUP_S3_ENDPOINT=https://s3.gra.io.cloud.ovh.net
+BACKUP_S3_REGION=gra
+BACKUP_S3_BUCKET=mairie-backups
+BACKUP_S3_ACCESS_KEY_ID=
+BACKUP_S3_SECRET_ACCESS_KEY=
+
+# Caddy — domaine du site
+DOMAIN=mairie.exemple.fr
+
+# PanneauPocket widget (optionnel)
 NEXT_PUBLIC_PANNEAUPOCKET_WIDGET_URL=
 ```
 
-## Production Clever Cloud économique
+## Déploiement Docker
 
-Architecture cible :
+```bash
+cp .env.example .env
+# Renseigner toutes les variables
 
-```txt
-Clever Cloud Node nano
-├── Next.js + Payload
-├── SQLite fichier
-└── Cellar pour images/PDF
+docker compose up -d
 ```
 
-Conditions à respecter :
+Les 4 services démarrent :
+1. `postgres` — base de données (healthcheck avant que l'app démarre)
+2. `app` — Next.js + Payload, exécute `payload migrate` au démarrage
+3. `caddy` — reverse proxy, TLS automatique via Let's Encrypt
+4. `backup` — pg_dump vers OVH Object Storage selon cron
 
-1. Une seule instance Node tant que SQLite est utilisé.
-2. Activer Cellar pour ne pas stocker les médias dans le filesystem applicatif.
-3. Mettre en place une sauvegarde régulière du fichier SQLite.
-4. Prévoir une migration vers PostgreSQL si le site devient plus utilisé ou plus métier.
+## Backups PostgreSQL
 
-## Cellar / S3
+Le service `backup` (dans `docker/backup/`) exécute `pg_dump` et envoie l'archive compressée vers OVH Object Storage. Rotation : 7 backups journaliers, 4 hebdomadaires, 2 mensuels.
 
-Activer dans `.env` :
+Bucket séparé du stockage médias — credentials séparés recommandés.
 
-```env
-S3_ENABLED=true
-S3_BUCKET=...
-S3_REGION=fr
-S3_ENDPOINT=https://cellar-c2.services.clever-cloud.com
-S3_ACCESS_KEY_ID=...
-S3_SECRET_ACCESS_KEY=...
-```
+## Médias — OVH Object Storage
+
+Payload stocke les uploads directement dans OVH Object Storage via `@payloadcms/storage-s3`. Activer avec `S3_ENABLED=true` et renseigner les credentials OVH.
 
 ## PanneauPocket
 
 Deux options :
 
-1. définir `NEXT_PUBLIC_PANNEAUPOCKET_WIDGET_URL`,
-2. ou créer un bloc `PanneauPocket` dans une page et remplir l’URL du widget.
-
-## À compléter avant production
-
-- Rendu propre du rich text Lexical au lieu du placeholder JSON.
-- Pages détails `/actualites/[slug]` et `/agenda/[slug]`.
-- Paramètres globaux du site : adresse, horaires, téléphone, réseaux sociaux.
-- Déclaration d’accessibilité, mentions légales, politique de confidentialité.
-- Redirections depuis les anciennes URLs Joomla.
-- Script de seed initial : menus, page accueil, contact, démarches.
-- Sauvegardes SQLite.
+1. Définir `NEXT_PUBLIC_PANNEAUPOCKET_WIDGET_URL` dans `.env`
+2. Créer un bloc `PanneauPocket` dans une page et renseigner l'URL du widget dans l'administration
 
 ## Notes RGAA
 
-Base à respecter dès le début :
+Base implémentée :
 
-- un seul H1 par page,
-- liens explicites,
-- focus visible,
-- contraste suffisant,
-- alt images,
-- navigation clavier,
-- formulaires avec labels,
-- pas de carrousel obligatoire,
-- déclaration d’accessibilité.
+- Skip link (`Aller au contenu principal`) en haut de chaque page
+- Un seul `H1` par page
+- Focus visible sur tous les éléments interactifs (outline teal 3px)
+- Navigation clavier sur les dropdowns du menu (focus-within)
+- Contraste couleurs conforme
+- Alt sur les images
+- Labels sur les formulaires
+- HTML sémantique (`header`, `main`, `footer`, `nav`, `section`)
 
-## Philosophie du starter
+## À compléter avant production
 
-Les menus et la majorité des pages sont administrables. Les contenus répétables restent dans des collections dédiées pour garder un back-office simple pour les agents.
-
-## SQLite sécurisé + backups Cellar
-
-Le starter inclut maintenant un flow complet pour utiliser SQLite en production légère :
-
-```txt
-./data/payload.db
-→ backup périodique vers Cellar
-→ restauration automatique au démarrage si la DB locale n'existe pas
-```
-
-Scripts utiles :
-
-```bash
-npm run sqlite:backup
-npm run sqlite:restore
-npm run sqlite:restore:force
-npm start
-```
-
-En production, `npm start` exécute :
-
-1. restauration depuis `backups/sqlite/latest.db` si `data/payload.db` n'existe pas ;
-2. démarrage Next.js/Payload ;
-3. sauvegarde périodique vers Cellar.
-
-Documentation détaillée :
-
-```txt
-docs/sqlite-backup-cellar.md
-docs/clever-cloud.md
-```
-
-> Important : cette stratégie est prévue pour une seule instance Node. Pour du multi-instance ou beaucoup d'écritures, passer sur PostgreSQL.
+- Rendu propre du rich text Lexical (actuellement JSON brut)
+- Pages détail `/actualites/[slug]` et `/agenda/[slug]`
+- Déclaration d'accessibilité, mentions légales, politique de confidentialité
+- Redirections depuis les anciennes URLs Joomla
+- Script de seed initial : menus, page accueil, contact, démarches
+- Logo SVG de la commune (actuellement placeholder "M")
+- `aria-current="page"` sur l'item de nav actif
