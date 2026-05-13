@@ -1,6 +1,8 @@
 import Link from 'next/link'
-import { Search } from 'lucide-react'
+import { Search, Menu } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 
 interface NavChild {
   label: string
@@ -45,7 +47,7 @@ export function Header({ navigation }: HeaderProps) {
             </div>
           </Link>
 
-          {/* Navigation principale */}
+          {/* Navigation principale — desktop */}
           <nav aria-label="Navigation principale" className="hidden md:flex">
             {items.map((item, i) => (
               <div key={i} className="relative group">
@@ -55,8 +57,6 @@ export function Header({ navigation }: HeaderProps) {
                 >
                   {item.label}
                 </Link>
-
-                {/* Dropdown enfants */}
                 {item.children && item.children.length > 0 && (
                   <div className="absolute top-full left-0 min-w-[220px] bg-white shadow-lg border border-border rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-[110]">
                     {item.children.map((child, j) => (
@@ -76,12 +76,52 @@ export function Header({ navigation }: HeaderProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-2 shrink-0">
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               aria-label="Rechercher sur le site"
-              className="w-9 h-9 rounded-full bg-white/12 text-white flex items-center justify-center hover:bg-white/22 transition-colors"
+              className="text-white hover:bg-white/12 hover:text-white"
             >
               <Search size={16} aria-hidden="true" />
-            </button>
+            </Button>
+
+            {/* Mobile nav */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Ouvrir le menu de navigation"
+                  className="md:hidden text-white hover:bg-white/12 hover:text-white"
+                >
+                  <Menu size={20} aria-hidden="true" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] p-0">
+                <SheetTitle className="sr-only">Menu de navigation</SheetTitle>
+                <nav aria-label="Navigation mobile" className="flex flex-col pt-6">
+                  {items.map((item, i) => (
+                    <div key={i}>
+                      <Link
+                        href={hrefFromNavItem(item)}
+                        className="block px-6 py-3 text-[14px] font-semibold hover:bg-brand-pale hover:text-brand transition-colors no-underline"
+                      >
+                        {item.label}
+                      </Link>
+                      {item.children?.map((child, j) => (
+                        <Link
+                          key={j}
+                          href={hrefFromNavItem(child)}
+                          className="block px-10 py-2.5 text-[13px] text-muted-foreground hover:bg-brand-pale hover:text-brand transition-colors no-underline"
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
 
         </div>
