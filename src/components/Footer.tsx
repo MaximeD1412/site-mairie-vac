@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Separator } from '@/components/ui/separator'
 
 interface OpeningHour {
   days?: string | null
@@ -100,9 +101,12 @@ export function Footer({ mairieInfo, footerNav }: FooterProps) {
 
       </div>
 
-      <div className="border-t border-white/10 mx-auto max-w-7xl px-6 py-4 flex justify-between text-[12px] text-white/50">
-        <span>© {new Date().getFullYear()} Mairie de La Ville-aux-Clercs</span>
-        <span>Tous droits réservés</span>
+      <div className="mx-auto max-w-7xl px-6">
+        <Separator className="bg-white/10" />
+        <div className="py-4 flex justify-between text-[12px] text-white/50">
+          <span>© {new Date().getFullYear()} Mairie de La Ville-aux-Clercs</span>
+          <span>Tous droits réservés</span>
+        </div>
       </div>
     </footer>
   )
