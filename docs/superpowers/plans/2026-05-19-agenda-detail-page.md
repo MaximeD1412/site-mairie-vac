@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Créer la page `/agenda/[slug]` qui affiche un événement de la collection `events` avec image hero, titre, bloc info compact (date, lieu, organisateur), badge catégorie et description richtext.
+**Goal:** Créer la page `/agenda/[slug]` qui affiche un événement de la collection `events` avec image hero, titre, bloc info compact (date, lieu, organisateur), badge catégorie et description richtext, et rendre l'archive `/agenda` navigable vers les pages de détail.
 
-**Architecture:** Un composant présentationnel `EventArticle` extrait du fichier de route pour être testable indépendamment. La route (`page.tsx`) est un async Server Component qui fetch les données Payload et délègue l'affichage à `EventArticle`. `RichTextBlock` est réutilisé tel quel. Le formatage des dates et le mapping des catégories vivent dans le fichier du composant — un seul appelant, pas d'extraction prématurée.
+**Architecture:** Un composant présentationnel `EventArticle` extrait du fichier de route pour être testable indépendamment. La route de détail (`agenda/[slug]/page.tsx`) est un async Server Component qui fetch les données Payload et délègue l'affichage à `EventArticle`. L'archive `/agenda` reste simple mais transforme chaque événement en lien vers son détail. `RichTextBlock` est réutilisé tel quel. Le formatage des dates et le mapping des catégories vivent dans le fichier du composant — un seul appelant, pas d'extraction prématurée.
 
 **Tech Stack:** Next.js 15 (App Router, Server Components), Payload CMS, Vitest + React Testing Library, Tailwind v4.
 
@@ -17,6 +17,7 @@
 | Créer | `src/components/events/EventArticle.tsx` | Composant présentationnel pur — reçoit les données et rend l'événement |
 | Créer | `src/components/events/__tests__/EventArticle.test.tsx` | Tests unitaires de `EventArticle` |
 | Créer | `src/app/(frontend)/agenda/[slug]/page.tsx` | Route Next.js — fetch Payload, `generateMetadata`, `notFound`, délègue à `EventArticle` |
+| Modifier | `src/app/(frontend)/agenda/page.tsx` | Archive agenda — rend chaque événement cliquable vers `/agenda/[slug]` |
 
 ---
 
@@ -157,7 +158,7 @@ describe('EventArticle', () => {
         image={{ url: '/img.jpg' }}
       />
     )
-    expect(screen.getByRole('img')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Titre' })).toBeInTheDocument()
   })
 
   it('does not render an image element when image is absent', () => {
@@ -189,7 +190,7 @@ describe('EventArticle', () => {
 npm test -- --reporter=verbose src/components/events/__tests__/EventArticle.test.tsx
 ```
 
-Résultat attendu : toutes les assertions échouent avec `Cannot find module '../EventArticle'`.
+Résultat attendu : la suite échoue au chargement avec `Cannot find module '../EventArticle'`.
 
 - [ ] **Step 3 : Implémenter `EventArticle`**
 
@@ -269,7 +270,7 @@ export function EventArticle({
     <main>
       {img?.url && (
         <div className="relative h-64 w-full overflow-hidden bg-brand">
-          <Image src={img.url} alt="" aria-hidden fill className="object-cover" />
+          <Image src={img.url} alt={img.alt ?? title} fill className="object-cover" />
         </div>
       )}
       <div className="mx-auto max-w-2xl px-4 py-10">
@@ -316,7 +317,7 @@ export function EventArticle({
 npm test -- --reporter=verbose src/components/events/__tests__/EventArticle.test.tsx
 ```
 
-Résultat attendu : 16 tests PASS.
+Résultat attendu : 17 tests PASS.
 
 - [ ] **Step 5 : Commit**
 
@@ -327,10 +328,11 @@ git commit -m "feat: add EventArticle presentational component with tests"
 
 ---
 
-## Task 2 : Route `/agenda/[slug]`
+## Task 2 : Route `/agenda/[slug]` et archive cliquable
 
 **Files:**
 - Create: `src/app/(frontend)/agenda/[slug]/page.tsx`
+- Modify: `src/app/(frontend)/agenda/page.tsx`
 
 - [ ] **Step 1 : Créer la route**
 
@@ -388,7 +390,39 @@ export default async function EventDetailPage(
 }
 ```
 
-- [ ] **Step 2 : Lancer le serveur de dev et vérifier manuellement**
+- [ ] **Step 2 : Rendre l'archive `/agenda` cliquable**
+
+Modifier `src/app/(frontend)/agenda/page.tsx` :
+
+```tsx
+import Link from 'next/link'
+import { getPayloadClient } from '@/lib/payload'
+
+export default async function EventsArchive() {
+  const payload = await getPayloadClient()
+  const events = await payload.find({ collection: 'events', sort: 'startDate', limit: 50 })
+
+  return (
+    <main className="mx-auto max-w-5xl px-4 py-12">
+      <h1 className="text-4xl font-bold">Agenda</h1>
+      <div className="mt-8 grid gap-4">
+        {events.docs.map((item: any) => (
+          <Link
+            key={item.id}
+            href={`/agenda/${item.slug}`}
+            className="block rounded-2xl bg-white p-5 shadow-sm no-underline transition-shadow hover:shadow-md"
+          >
+            <strong>{item.title}</strong>
+            <p className="mt-2 text-slate-600">{item.location || 'Lieu à préciser'}</p>
+          </Link>
+        ))}
+      </div>
+    </main>
+  )
+}
+```
+
+- [ ] **Step 3 : Lancer le serveur de dev et vérifier manuellement**
 
 ```bash
 npm run dev
@@ -397,11 +431,13 @@ npm run dev
 Vérifier :
 1. Naviguer vers `/` (la home) — la section `Agenda` liste des événements
 2. Cliquer sur un événement → la page de détail s'affiche (titre, badge catégorie si présent, bloc info date/lieu/organisateur, image si présente, description richtext si présente)
-3. Naviguer vers un slug inexistant (ex. `/agenda/slug-qui-nexiste-pas`) → page 404 native Next.js
-4. Si un événement n'a pas d'image, le contenu commence directement (pas de bandeau vide)
-5. Si un événement n'a ni catégorie ni lieu ni organisateur ni description, seuls la date et le titre s'affichent — pas de blocs vides
+3. Naviguer vers `/agenda` — chaque événement est un lien vers `/agenda/[slug]`
+4. Cliquer sur `← Retour à l'agenda` depuis une page de détail — retour à l'archive `/agenda`
+5. Naviguer vers un slug inexistant (ex. `/agenda/slug-qui-nexiste-pas`) → page 404 native Next.js
+6. Si un événement n'a pas d'image, le contenu commence directement (pas de bandeau vide)
+7. Si un événement n'a ni catégorie ni lieu ni organisateur ni description, seuls la date et le titre s'affichent — pas de blocs vides
 
-- [ ] **Step 3 : Lancer la suite de tests complète**
+- [ ] **Step 4 : Lancer la suite de tests complète**
 
 ```bash
 npm test
@@ -409,9 +445,9 @@ npm test
 
 Résultat attendu : tous les tests passent, aucune régression.
 
-- [ ] **Step 4 : Commit**
+- [ ] **Step 5 : Commit**
 
 ```bash
-git add src/app/(frontend)/agenda/[slug]/page.tsx
-git commit -m "feat: add agenda detail page route /agenda/[slug]"
+git add src/app/(frontend)/agenda/[slug]/page.tsx src/app/(frontend)/agenda/page.tsx
+git commit -m "feat: add agenda detail page route"
 ```
