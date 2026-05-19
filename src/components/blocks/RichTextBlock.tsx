@@ -27,6 +27,8 @@ interface LexicalNode {
   videoID?: string
 }
 
+const VALID_HEADING_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+
 const HEADING_CLASS: Record<string, string> = {
   h1: 'text-3xl font-bold text-text mt-8 mb-4',
   h2: 'text-2xl font-bold text-text mt-7 mb-3',
@@ -68,7 +70,8 @@ export function renderNode(node: LexicalNode, key: number): React.ReactNode {
       return <p key={key} className="mb-4 leading-relaxed">{ch()}</p>
 
     case 'heading': {
-      const tag = (node.tag ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+      const rawTag = node.tag ?? 'h2'
+      const tag = (VALID_HEADING_TAGS.has(rawTag) ? rawTag : 'h2') as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
       const Tag = tag
       return <Tag key={key} className={HEADING_CLASS[tag]}>{ch()}</Tag>
     }
@@ -131,7 +134,7 @@ export function renderNode(node: LexicalNode, key: number): React.ReactNode {
     }
 
     case 'youtube': {
-      if (!node.videoID) return null
+      if (!node.videoID || !/^[a-zA-Z0-9_-]{11}$/.test(node.videoID)) return null
       return (
         <div key={key} className="my-6 aspect-video w-full overflow-hidden rounded-xl">
           <iframe

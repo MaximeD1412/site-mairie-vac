@@ -178,6 +178,32 @@ describe('renderNode', () => {
     const result = renderNode(node, 0)
     expect(result).toBeNull()
   })
+
+  it('renders link with # href when no url provided', () => {
+    const { container } = render(
+      <>{renderNode({ type: 'link', children: [{ type: 'text', text: 'click', format: 0 }] }, 0)}</>
+    )
+    expect(container.querySelector('a')?.getAttribute('href')).toBe('#')
+  })
+
+  it('renders heading with invalid tag as h2', () => {
+    const { container } = render(
+      <>{renderNode({ type: 'heading', tag: 'invalid', children: [] }, 0)}</>
+    )
+    expect(container.querySelector('h2')).not.toBeNull()
+  })
+
+  it('returns null for youtube with invalid videoID', () => {
+    const result = renderNode({ type: 'youtube', videoID: 'bad!id' }, 0)
+    expect(result).toBeNull()
+  })
+
+  it('renders upload image with empty string alt when alt is missing', () => {
+    const { container } = render(
+      <>{renderNode({ type: 'upload', value: { url: '/img.jpg', mimeType: 'image/jpeg' } }, 0)}</>
+    )
+    expect(container.querySelector('img')?.getAttribute('alt')).toBe('')
+  })
 })
 
 // ---------------------------------------------------------------------------
