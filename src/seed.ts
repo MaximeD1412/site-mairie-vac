@@ -18,10 +18,11 @@ try {
   await seedPages(payload)
   await seedGlobals(payload)
   console.log('[seed] Done.')
+} catch (err) {
+  console.error('[seed] Error:', err)
+  process.exitCode = 1
 } finally {
   await payload.db.destroy?.()
-
-  process.exit(0)
 }
 
 function richText(text: string) {
