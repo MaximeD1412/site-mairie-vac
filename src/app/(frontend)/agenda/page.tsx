@@ -1,15 +1,21 @@
 import Link from 'next/link'
+import type { Event } from '@/payload-types'
 import { getPayloadClient } from '@/lib/payload'
 
 export default async function EventsArchive() {
   const payload = await getPayloadClient()
-  const events = await payload.find({ collection: 'events', sort: 'startDate', limit: 50 })
+  const events = await payload.find({
+    collection: 'events',
+    where: { _status: { equals: 'published' } },
+    sort: 'startDate',
+    limit: 50,
+  })
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="text-4xl font-bold">Agenda</h1>
       <div className="mt-8 grid gap-4">
-        {events.docs.map((item: any) => (
+        {events.docs.map((item: Event) => (
           <Link
             key={item.id}
             href={`/agenda/${item.slug}`}
