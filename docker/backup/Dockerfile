@@ -1,7 +1,9 @@
 FROM postgres:18-alpine
-RUN apk add --no-cache aws-cli dcron
+ENTRYPOINT []
+RUN apk add --no-cache python3 py3-pip && \
+    pip3 install --break-system-packages --no-cache-dir awscli
 COPY backup.sh /backup.sh
 RUN chmod +x /backup.sh
-# Toutes les 6h
-RUN echo "0 */6 * * * /backup.sh >> /var/log/backup.log 2>&1" | crontab -
+RUN mkdir -p /var/spool/cron/crontabs && \
+    echo "0 */6 * * * /backup.sh >> /var/log/backup.log 2>&1" > /var/spool/cron/crontabs/root
 CMD ["crond", "-f", "-d", "8"]
