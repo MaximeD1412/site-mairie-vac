@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical'
+import { YoutubeFeature } from 'payloadcms-lexical-ext'
 import { publishedOrLoggedIn, isAgentOrAdmin } from '../access'
 
 export const News: CollectionConfig = {
@@ -14,6 +16,17 @@ export const News: CollectionConfig = {
     { name: 'image', label: 'Image', type: 'upload', relationTo: 'media' },
     { name: 'publishedAt', label: 'Date de publication', type: 'date', required: true },
     { name: 'featured', label: 'Mettre en avant', type: 'checkbox', defaultValue: false },
-    { name: 'content', label: 'Contenu', type: 'richText' }
-  ]
+    {
+      name: 'content',
+      label: 'Contenu',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          UploadFeature({ collections: { media: { fields: [] } } }),
+          YoutubeFeature(),
+        ],
+      }),
+    },
+  ],
 }
