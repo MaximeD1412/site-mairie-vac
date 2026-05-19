@@ -188,3 +188,95 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
   ]
   await seedCollection(payload, 'news', items, 'slug')
 }
+
+async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
+  // Résolution des IDs d'associations
+  const assocResult = await payload.find({
+    collection: 'associations',
+    overrideAccess: true,
+    limit: 10,
+  })
+  const assocByName: Record<string, string> = {}
+  for (const a of assocResult.docs) {
+    assocByName[a.name] = a.id as string
+  }
+
+  const items = [
+    {
+      title: 'Conseil municipal de juin 2026',
+      slug: 'conseil-municipal-juin-2026',
+      startDate: '2026-06-10T19:00:00.000Z',
+      endDate: '2026-06-10T21:00:00.000Z',
+      location: 'Salle du conseil municipal — Mairie de Vacqueyras',
+      category: 'municipal',
+      _status: 'published',
+    },
+    {
+      title: 'Vide-grenier du FC Vacqueyras',
+      slug: 'vide-grenier-fc-vacqueyras',
+      startDate: '2026-05-31T08:00:00.000Z',
+      endDate: '2026-05-31T17:00:00.000Z',
+      location: 'Parking de la salle polyvalente',
+      category: 'association',
+      organizer: assocByName['FC Vacqueyras'] ?? undefined,
+      _status: 'published',
+    },
+    {
+      title: 'Exposition : 100 ans de Vacqueyras',
+      slug: 'exposition-patrimoine',
+      startDate: '2026-06-06T10:00:00.000Z',
+      endDate: '2026-06-29T18:00:00.000Z',
+      location: 'Salle polyvalente de Vacqueyras',
+      category: 'culture',
+      organizer: assocByName['Amis du Patrimoine'] ?? undefined,
+      _status: 'published',
+    },
+    {
+      title: 'Tournoi de foot inter-villages',
+      slug: 'tournoi-foot-juillet',
+      startDate: '2026-07-05T09:00:00.000Z',
+      endDate: '2026-07-05T18:00:00.000Z',
+      location: 'Stade municipal',
+      category: 'sport',
+      organizer: assocByName['FC Vacqueyras'] ?? undefined,
+      _status: 'published',
+    },
+    {
+      title: 'Permanence du maire',
+      slug: 'permanence-maire-juin',
+      startDate: '2026-06-20T09:00:00.000Z',
+      endDate: '2026-06-20T11:00:00.000Z',
+      location: 'Mairie de Vacqueyras — bureau du maire',
+      category: 'municipal',
+      _status: 'published',
+    },
+    {
+      title: 'Atelier jardinage partagé',
+      slug: 'atelier-jardinage-mai',
+      startDate: '2026-05-23T10:00:00.000Z',
+      endDate: '2026-05-23T12:00:00.000Z',
+      location: 'Jardin partagé — chemin de la Garenne',
+      category: 'autre',
+      _status: 'published',
+    },
+    {
+      title: 'Fête de la Musique 2026',
+      slug: 'fete-musique-2026',
+      startDate: '2026-06-21T18:00:00.000Z',
+      endDate: '2026-06-21T23:30:00.000Z',
+      location: 'Place de la Mairie',
+      category: 'culture',
+      _status: 'published',
+    },
+    {
+      title: 'Marché de Noël 2026',
+      slug: 'marche-noel-2026',
+      startDate: '2026-12-13T10:00:00.000Z',
+      endDate: '2026-12-13T19:00:00.000Z',
+      location: 'Place du village',
+      category: 'culture',
+      _status: 'published',
+    },
+  ]
+  await seedCollection(payload, 'events', items, 'slug')
+}
