@@ -280,3 +280,33 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
   ]
   await seedCollection(payload, 'events', items, 'slug')
 }
+
+async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const items = [
+    {
+      title: 'Notre commune',
+      slug: 'notre-commune',
+      summary: "Découvrez l'histoire, la géographie et la vie de la commune de Vacqueyras.",
+      layout: [
+        {
+          blockType: 'richText',
+          content: richText("Vacqueyras est une commune du Vaucluse (84) située dans le département de Vaucluse, dans la région Provence-Alpes-Côte d'Azur. Elle compte environ 1 000 habitants et est connue pour son vignoble d'appellation Vacqueyras AOC. La mairie assure les services publics locaux et l'animation du territoire."),
+        },
+      ],
+      _status: 'published',
+    },
+    {
+      title: 'Contact',
+      slug: 'contact',
+      summary: "Coordonnées et horaires d'ouverture de la mairie de Vacqueyras.",
+      layout: [
+        {
+          blockType: 'richText',
+          content: richText("Mairie de Vacqueyras\nPlace de la Mairie\n84190 Vacqueyras\n\nTéléphone : 04 90 00 00 00\nEmail : mairie@vacqueyras-fictif.fr\n\nHoraires d'ouverture :\nLundi, mercredi, vendredi : 9h–12h\nMardi, jeudi : 9h–12h et 14h–17h"),
+        },
+      ],
+      _status: 'published',
+    },
+  ]
+  await seedCollection(payload, 'pages', items, 'slug')
+}
