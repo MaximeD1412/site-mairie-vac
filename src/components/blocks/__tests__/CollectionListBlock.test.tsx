@@ -73,4 +73,36 @@ describe('CollectionListBlock', () => {
     const result = await CollectionListBlock({ collection: 'unknown' as any })
     expect(result).toBeNull()
   })
+
+  it('renders documents items', async () => {
+    mockGetPayloadClient.mockResolvedValue({
+      find: vi.fn().mockResolvedValue({
+        docs: [
+          { id: '1', title: 'Budget 2024', date: '2024-01-01', category: 'Finance', file: { url: '/doc.pdf' } },
+        ],
+      }),
+    })
+
+    const html = renderToStaticMarkup(
+      await CollectionListBlock({ collection: 'documents' }) as React.ReactElement
+    )
+    expect(html).toContain('Budget 2024')
+    expect(html).toContain('Télécharger le document')
+  })
+
+  it('renders associations items', async () => {
+    mockGetPayloadClient.mockResolvedValue({
+      find: vi.fn().mockResolvedValue({
+        docs: [
+          { id: '1', name: 'Association Sport', description: 'Club de foot' },
+        ],
+      }),
+    })
+
+    const html = renderToStaticMarkup(
+      await CollectionListBlock({ collection: 'associations' }) as React.ReactElement
+    )
+    expect(html).toContain('Association Sport')
+    expect(html).toContain('Club de foot')
+  })
 })
