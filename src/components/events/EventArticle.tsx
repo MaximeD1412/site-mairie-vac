@@ -32,8 +32,11 @@ const CATEGORY_LABELS: Record<string, string> = {
   autre: 'Autre',
 }
 
-const DAY_FMT: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' }
-const TIME_FMT: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' }
+const DAY_FMT: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }
+const TIME_FMT: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }
+
+const toParisDate = (d: Date) =>
+  d.toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' })
 
 function formatEventDate(startISO: string, endISO?: string | null): string {
   const start = new Date(startISO)
@@ -44,7 +47,7 @@ function formatEventDate(startISO: string, endISO?: string | null): string {
 
   if (!end) return `${startDay} · ${startTime}`
 
-  if (start.toDateString() === end.toDateString()) {
+  if (toParisDate(start) === toParisDate(end)) {
     const endTime = end.toLocaleTimeString('fr-FR', TIME_FMT)
     return `${startDay} · ${startTime} – ${endTime}`
   }
