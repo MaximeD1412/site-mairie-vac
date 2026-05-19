@@ -74,3 +74,28 @@ async function seedCollection<T extends Record<string, unknown>>(
 
   console.log(`[seed] ${collection}: ${inserted} inserted, ${skipped} skipped`)
 }
+
+async function seedAssociations(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const items = [
+    {
+      name: 'FC Vacqueyras',
+      category: 'Sport',
+      email: 'fc@vacqueyras-fictif.fr',
+      phone: '04 90 11 22 33',
+      website: 'https://fcvacqueyras-fictif.fr',
+    },
+    {
+      name: 'Amis du Patrimoine',
+      category: 'Culture',
+      email: 'patrimoine@vacqueyras-fictif.fr',
+      phone: '04 90 11 22 44',
+    },
+    {
+      name: 'Entraide Locale',
+      category: 'Solidarité',
+      email: 'entraide@vacqueyras-fictif.fr',
+      phone: '04 90 11 22 55',
+    },
+  ]
+  await seedCollection(payload, 'associations', items, 'name')
+}
