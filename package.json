@@ -39,6 +39,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "^6.0.2",
+    "drizzle-kit": "^0.31.10",
     "jsdom": "^29.1.1",
     "tailwindcss": "latest",
     "typescript": "latest",
