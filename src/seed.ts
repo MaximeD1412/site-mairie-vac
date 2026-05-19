@@ -99,3 +99,14 @@ async function seedAssociations(payload: Awaited<ReturnType<typeof getPayload>>)
   ]
   await seedCollection(payload, 'associations', items, 'name')
 }
+
+async function seedElectedOfficials(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const items = [
+    { name: 'Jean-Pierre Faure', role: 'Maire', delegation: '', order: 1 },
+    { name: 'Marie Lefebvre', role: '1ère adjointe', delegation: 'Urbanisme et aménagement', order: 2 },
+    { name: 'Thomas Girard', role: '2ème adjoint', delegation: 'Finances et budget', order: 3 },
+    { name: 'Isabelle Moreau', role: '3ème adjointe', delegation: 'Culture et communication', order: 4 },
+    { name: 'Luc Bonnet', role: '4ème adjoint', delegation: 'Sports et associations', order: 5 },
+  ]
+  await seedCollection(payload, 'elected-officials', items, 'name')
+}
