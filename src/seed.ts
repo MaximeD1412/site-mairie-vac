@@ -197,9 +197,9 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
     overrideAccess: true,
     limit: 10,
   })
-  const assocByName: Record<string, string> = {}
+  const assocByName: Record<string, number> = {}
   for (const a of assocResult.docs) {
-    assocByName[a.name] = String(a.id)
+    assocByName[a.name] = a.id
   }
 
   const items = [
