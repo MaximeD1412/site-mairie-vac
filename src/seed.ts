@@ -198,7 +198,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
   })
   const assocByName: Record<string, string> = {}
   for (const a of assocResult.docs) {
-    assocByName[a.name] = a.id as string
+    assocByName[a.name] = String(a.id)
   }
 
   const items = [
@@ -309,4 +309,64 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
     },
   ]
   await seedCollection(payload, 'pages', items, 'slug')
+}
+
+async function seedGlobals(payload: Awaited<ReturnType<typeof getPayload>>) {
+  // MairieInfo
+  const mairieInfo = await payload.findGlobal({ slug: 'mairie-info', overrideAccess: true })
+  if (!mairieInfo.address || mairieInfo.address === '1 Rue de la Mairie, 41160 La Ville-aux-Clercs') {
+    await payload.updateGlobal({
+      slug: 'mairie-info',
+      overrideAccess: true,
+      data: {
+        address: 'Place de la Mairie, 84190 Vacqueyras',
+        phone: '04 90 00 00 00',
+        email: 'mairie@vacqueyras-fictif.fr',
+        openingHours: [
+          { days: 'Lundi, Mercredi, Vendredi', hours: '9h – 12h' },
+          { days: 'Mardi, Jeudi', hours: '9h – 12h et 14h – 17h' },
+        ],
+      },
+    })
+    console.log('[seed] mairie-info: updated')
+  } else {
+    console.log('[seed] mairie-info: skipped (already set)')
+  }
+
+  // SiteSettings
+  const siteSettings = await payload.findGlobal({ slug: 'site-settings', overrideAccess: true })
+  if (!siteSettings.heroTitle || siteSettings.heroTitle === 'La Ville-aux-Clercs') {
+    await payload.updateGlobal({
+      slug: 'site-settings',
+      overrideAccess: true,
+      data: {
+        heroTitle: 'Vacqueyras',
+        heroSubtitle: 'Commune du Vaucluse — Provence',
+      },
+    })
+    console.log('[seed] site-settings: updated')
+  } else {
+    console.log('[seed] site-settings: skipped (already set)')
+  }
+
+  // HomepageSettings
+  const homepageSettings = await payload.findGlobal({ slug: 'homepage-settings', overrideAccess: true })
+  if (!homepageSettings.quickLinks || homepageSettings.quickLinks.length === 0) {
+    await payload.updateGlobal({
+      slug: 'homepage-settings',
+      overrideAccess: true,
+      data: {
+        quickLinks: [
+          { label: 'Actualités', icon: 'Newspaper', href: '/actualites' },
+          { label: 'Agenda', icon: 'CalendarDays', href: '/agenda' },
+          { label: 'Associations', icon: 'Users', href: '/associations' },
+          { label: 'Documents', icon: 'FileText', href: '/documents' },
+          { label: 'Contact', icon: 'Phone', href: '/contact' },
+        ],
+      },
+    })
+    console.log('[seed] homepage-settings: updated')
+  } else {
+    console.log('[seed] homepage-settings: skipped (already set)')
+  }
 }
