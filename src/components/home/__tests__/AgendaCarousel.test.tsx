@@ -49,9 +49,12 @@ describe('AgendaCarousel', () => {
     const track = screen.getByTestId('carousel-track')
     await act(async () => { vi.advanceTimersByTime(5000) })
     expect(track).toHaveAttribute('data-current-index', '1')
-    await act(async () => { vi.advanceTimersByTime(5000) })
+    await act(async () => { vi.advanceTimersByTime(5000) }) // advances to clone (current=2)
+    expect(track).toHaveAttribute('data-current-index', '0') // data-current-index shows 0 when current===count
+    expect(track).toHaveStyle({ transform: 'translateY(-720px)' }) // still at clone position
+    await act(async () => { vi.advanceTimersByTime(510) }) // snap timer fires
     expect(track).toHaveAttribute('data-current-index', '0')
-    expect(track).toHaveStyle({ transform: 'translateY(0px)' })
+    expect(track).toHaveStyle({ transform: 'translateY(0px)' }) // snapped back
   })
 
   it('navigates down on next button click', () => {

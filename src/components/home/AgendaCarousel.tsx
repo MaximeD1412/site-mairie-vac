@@ -55,8 +55,10 @@ function formatDate(startISO: string, endISO?: string | null): string {
 
 export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
   const [current, setCurrent] = useState(0)
+  const [transitionEnabled, setTransitionEnabled] = useState(true)
   const [paused, setPaused] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const snapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const count = events.length
   const renderedEvents = count > 1 ? [...events, events[0]] : events
 
@@ -67,19 +69,41 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
   const scheduleNext = useCallback(() => {
     clearTimer()
     timerRef.current = setTimeout(() => {
-      setCurrent(prev => (prev + 1) % count)
+      setCurrent(prev => prev + 1)
     }, AUTO_MS)
-  }, [count, clearTimer])
+  }, [clearTimer])
+
+  // Snap back from clone to real first slide
+  useEffect(() => {
+    if (current === count && count > 1) {
+      if (snapTimerRef.current) clearTimeout(snapTimerRef.current)
+      snapTimerRef.current = setTimeout(() => {
+        setTransitionEnabled(false)
+        setCurrent(0)
+      }, 510) // slightly after 500ms CSS transition
+      return () => {
+        if (snapTimerRef.current) clearTimeout(snapTimerRef.current)
+      }
+    }
+    if (!transitionEnabled) {
+      // Re-enable transition after snap (needs two frames)
+      const raf1 = requestAnimationFrame(() =>
+        requestAnimationFrame(() => setTransitionEnabled(true))
+      )
+      return () => cancelAnimationFrame(raf1)
+    }
+  }, [current, count, transitionEnabled])
 
   useEffect(() => {
-    if (!paused && count > 1) scheduleNext()
+    if (!paused && count > 1 && current < count) scheduleNext()
     return clearTimer
   }, [paused, current, scheduleNext, clearTimer, count])
 
   const navigate = (dir: 'prev' | 'next') => {
-    setCurrent(prev =>
-      dir === 'prev' ? (prev - 1 + count) % count : (prev + 1) % count,
-    )
+    setCurrent(prev => {
+      if (dir === 'prev') return (prev - 1 + count) % count
+      return prev >= count - 1 ? count : prev + 1
+    })
   }
 
   if (count === 0) return null
@@ -94,8 +118,8 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
       {/* Slides track */}
       <div
         data-testid="carousel-track"
-        data-current-index={current}
-        className="transition-transform duration-500 ease-in-out"
+        data-current-index={current === count ? 0 : current}
+        className={transitionEnabled ? 'transition-transform duration-500 ease-in-out' : ''}
         style={{ transform: `translateY(${-current * SLIDE_H}px)` }}
       >
         {renderedEvents.map((event, i) => {
@@ -172,7 +196,7 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
             key={i}
             data-testid="carousel-dot"
             className={`h-1.5 rounded-full transition-all ${
-              i === current ? 'w-4 bg-brand' : 'w-1.5 bg-brand/30'
+              i === (current === count ? 0 : current) ? 'w-4 bg-brand' : 'w-1.5 bg-brand/30'
             }`}
           />
         ))}

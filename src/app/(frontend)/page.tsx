@@ -41,7 +41,12 @@ export default async function HomePage() {
       where: {
         and: [
           { _status: { equals: 'published' } },
-          { startDate: { greater_than: nowISO } },
+          {
+            or: [
+              { startDate: { greater_than_equal: nowISO } },
+              { endDate: { greater_than_equal: nowISO } },
+            ],
+          },
         ],
       },
     }).catch(() => ({ docs: [] })),
