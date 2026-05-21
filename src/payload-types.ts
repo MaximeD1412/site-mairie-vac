@@ -72,6 +72,7 @@ export interface Config {
     pages: Page;
     navigation: Navigation;
     news: News;
+    'event-categories': EventCategory;
     events: Event;
     documents: Document;
     associations: Association;
@@ -88,6 +89,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    'event-categories': EventCategoriesSelect<false> | EventCategoriesSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     associations: AssociationsSelect<false> | AssociationsSelect<true>;
@@ -351,6 +353,21 @@ export interface News {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-categories".
+ */
+export interface EventCategory {
+  id: number;
+  name: string;
+  slug: string;
+  /**
+   * Couleur hexadécimale (ex: #3B82F6)
+   */
+  color: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -360,7 +377,7 @@ export interface Event {
   startDate: string;
   endDate?: string | null;
   location?: string | null;
-  category?: ('municipal' | 'association' | 'culture' | 'sport' | 'ecole' | 'bibliotheque' | 'autre') | null;
+  category?: (number | null) | EventCategory;
   /**
    * Laisser vide pour un événement municipal
    */
@@ -495,6 +512,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'news';
         value: number | News;
+      } | null)
+    | ({
+        relationTo: 'event-categories';
+        value: number | EventCategory;
       } | null)
     | ({
         relationTo: 'events';
@@ -732,6 +753,17 @@ export interface NewsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-categories_select".
+ */
+export interface EventCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  color?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

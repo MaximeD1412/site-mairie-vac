@@ -11,25 +11,20 @@ interface EventOrganizer {
   name?: string | null
 }
 
+interface EventCategoryObject {
+  name?: string | null
+  color?: string | null
+}
+
 interface EventArticleProps {
   title: string
   startDate: string
   endDate?: string | null
   location?: string | null
-  category?: string | null
+  category?: EventCategoryObject | string | number | null
   organizer?: EventOrganizer | string | null
   image?: EventImage | string | null
   description?: any
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  municipal: 'Municipal',
-  association: 'Association',
-  culture: 'Culture',
-  sport: 'Sport',
-  ecole: 'École',
-  bibliotheque: 'Bibliothèque',
-  autre: 'Autre',
 }
 
 const DAY_FMT: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }
@@ -68,7 +63,9 @@ export function EventArticle({
 }: EventArticleProps) {
   const img = image && typeof image === 'object' ? image : null
   const org = organizer && typeof organizer === 'object' ? organizer : null
-  const categoryLabel = category ? (CATEGORY_LABELS[category] ?? category) : null
+  const categoryObj = category && typeof category === 'object' ? category as EventCategoryObject : null
+  const categoryLabel = categoryObj?.name ?? (typeof category === 'string' ? category : null)
+  const categoryColor = categoryObj?.color ?? '#3B82F6'
 
   return (
     <main>
@@ -84,7 +81,10 @@ export function EventArticle({
 
         {categoryLabel && (
           <div className="mt-6">
-            <span className="inline-block bg-brand-pale text-brand px-3 py-1 rounded-full text-[11px] font-semibold">
+            <span
+              className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold text-white"
+              style={{ backgroundColor: categoryColor }}
+            >
               {categoryLabel}
             </span>
           </div>

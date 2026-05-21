@@ -21,12 +21,12 @@ describe('EventArticle', () => {
     expect(screen.getByRole('link', { name: /retour à l'agenda/i })).toHaveAttribute('href', '/agenda')
   })
 
-  it('renders the category badge with mapped label', () => {
-    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" category="culture" />)
+  it('renders the category badge from an EventCategory object', () => {
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" category={{ name: 'Culture', color: '#10B981' }} />)
     expect(screen.getByText('Culture')).toBeInTheDocument()
   })
 
-  it('renders raw category value when not mapped', () => {
+  it('renders raw category value when category is a plain string', () => {
     render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" category="custom-tag" />)
     expect(screen.getByText('custom-tag')).toBeInTheDocument()
   })
