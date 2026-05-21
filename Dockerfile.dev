@@ -3,4 +3,4 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 EXPOSE 3000
-CMD ["node_modules/.bin/next", "dev", "--webpack"]
+CMD ["sh", "-c", "node_modules/.bin/payload migrate && node_modules/.bin/next dev --webpack"]

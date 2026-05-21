@@ -970,27 +970,43 @@ describe('AgendaCarousel', () => {
 
   it('advances to next event after 5 seconds', async () => {
     render(<AgendaCarousel events={[makeEvent(1), makeEvent(2)]} />)
+    const track = screen.getByTestId('carousel-track')
     await act(async () => { vi.advanceTimersByTime(5000) })
-    expect(screen.getByText('Événement 2')).toBeInTheDocument()
+    expect(track).toHaveAttribute('data-current-index', '1')
+    expect(track).toHaveStyle({ transform: 'translateY(-360px)' })
   })
 
   it('wraps around from last to first', async () => {
     render(<AgendaCarousel events={[makeEvent(1), makeEvent(2)]} />)
-    await act(async () => { vi.advanceTimersByTime(10000) })
-    expect(screen.getByText('Événement 1')).toBeInTheDocument()
+    const track = screen.getByTestId('carousel-track')
+    await act(async () => { vi.advanceTimersByTime(5000) })
+    expect(track).toHaveAttribute('data-current-index', '1')
+    await act(async () => { vi.advanceTimersByTime(5000) })
+    expect(track).toHaveAttribute('data-current-index', '0')
+    expect(track).toHaveStyle({ transform: 'translateY(0px)' })
   })
 
   it('navigates down on next button click', () => {
     render(<AgendaCarousel events={[makeEvent(1), makeEvent(2), makeEvent(3)]} />)
+    const track = screen.getByTestId('carousel-track')
     fireEvent.click(screen.getByRole('button', { name: /suivant/i }))
-    expect(screen.getByText('Événement 2')).toBeInTheDocument()
+    expect(track).toHaveAttribute('data-current-index', '1')
+    expect(track).toHaveStyle({ transform: 'translateY(-360px)' })
   })
 
   it('navigates up on prev button click', () => {
     render(<AgendaCarousel events={[makeEvent(1), makeEvent(2), makeEvent(3)]} />)
+    const track = screen.getByTestId('carousel-track')
     fireEvent.click(screen.getByRole('button', { name: /suivant/i }))
     fireEvent.click(screen.getByRole('button', { name: /précédent/i }))
-    expect(screen.getByText('Événement 1')).toBeInTheDocument()
+    expect(track).toHaveAttribute('data-current-index', '0')
+    expect(track).toHaveStyle({ transform: 'translateY(0px)' })
+  })
+
+  it('keeps a cloned first slide after the last event for the peek pattern', () => {
+    render(<AgendaCarousel events={[makeEvent(1), makeEvent(2)]} />)
+    expect(screen.getAllByTestId('carousel-slide')).toHaveLength(3)
+    expect(screen.getAllByText('Événement 1')).toHaveLength(2)
   })
 
   it('renders image when event has one', () => {
@@ -1091,6 +1107,7 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
   const [paused, setPaused] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const count = events.length
+  const renderedEvents = count > 1 ? [...events, events[0]] : events
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
@@ -1125,15 +1142,18 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
     >
       {/* Slides track */}
       <div
+        data-testid="carousel-track"
+        data-current-index={current}
         className="transition-transform duration-500 ease-in-out"
         style={{ transform: `translateY(${-current * SLIDE_H}px)` }}
       >
-        {events.map((event) => {
+        {renderedEvents.map((event, i) => {
           const img = event.image && typeof event.image === 'object' ? event.image : null
           const color = event.category?.color ?? DEFAULT_COLOR
           return (
             <Link
-              key={event.id}
+              key={`${event.id}-${i}`}
+              data-testid="carousel-slide"
               href={`/agenda/${event.slug ?? event.id}`}
               className="flex no-underline border-b border-border last:border-0"
               style={{ height: SLIDE_H }}
@@ -1488,7 +1508,7 @@ function IndicatorEl({
           title={dot.title}
           className="absolute rounded-full"
           style={{
-            left: `${dot.col * colW + colW / 2 - INDICATOR_H / 2}%`,
+            left: `calc(${dot.col * colW + colW / 2}% - ${INDICATOR_H / 2}px)`,
             top,
             width: INDICATOR_H,
             height: INDICATOR_H,
@@ -1519,6 +1539,7 @@ function IndicatorEl({
     </Link>
   )
 }
+```
 
 - [ ] **Step 4 : Lancer les tests**
 
@@ -1577,16 +1598,54 @@ payload.find({
 }).catch(() => ({ docs: [] })),
 ```
 
-Mettre à jour le destructuring de `Promise.all` :
+Remplacer le bloc `Promise.all` complet par :
 
 ```ts
+const nowISO = new Date().toISOString()
+
 const [newsResult, carouselEventsResult, calendarEventsResult, docsResult, siteSettings, homepageSettings] = await Promise.all([
-  // news...
-  // carousel events (limit 4, depth 1)...
-  // calendar events (limit 50, depth 1)...
-  // docs...
-  // siteSettings...
-  // homepageSettings...
+  payload.find({
+    collection: 'news',
+    limit: 3,
+    sort: '-publishedAt',
+    where: { _status: { equals: 'published' } },
+  }).catch(() => ({ docs: [] })),
+
+  payload.find({
+    collection: 'events',
+    limit: 4,
+    sort: 'startDate',
+    depth: 1,
+    where: {
+      and: [
+        { _status: { equals: 'published' } },
+        { startDate: { greater_than: nowISO } },
+      ],
+    },
+  }).catch(() => ({ docs: [] })),
+
+  payload.find({
+    collection: 'events',
+    limit: 50,
+    sort: 'startDate',
+    depth: 1,
+    where: {
+      and: [
+        { _status: { equals: 'published' } },
+        { startDate: { greater_than: nowISO } },
+      ],
+    },
+  }).catch(() => ({ docs: [] })),
+
+  payload.find({
+    collection: 'documents',
+    limit: 4,
+    sort: '-date',
+    depth: 1,
+  }).catch(() => ({ docs: [] })),
+
+  payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
+  payload.findGlobal({ slug: 'homepage-settings' }).catch(() => null),
 ])
 ```
 
@@ -1664,7 +1723,7 @@ Attendu : tous les tests passent (EventArticle, AgendaCarousel, MiniCalendar, ca
 npx tsc --noEmit
 ```
 
-Corriger les éventuelles erreurs de types avant de committer.
+Attendu : aucune erreur TypeScript. Si la commande échoue, ne pas committer ; appliquer les corrections indiquées par la sortie, puis relancer `npx tsc --noEmit` jusqu'à obtenir un exit code 0.
 
 - [ ] **Step 5 : Commit final**
 
