@@ -11,7 +11,7 @@ interface EventOrganizer {
   name?: string | null
 }
 
-interface EventCategoryObject {
+interface EventCategory {
   name?: string | null
   color?: string | null
 }
@@ -21,8 +21,8 @@ interface EventArticleProps {
   startDate: string
   endDate?: string | null
   location?: string | null
-  category?: EventCategoryObject | string | number | null
-  organizer?: EventOrganizer | string | null
+  category?: EventCategory | null
+  organizer?: EventOrganizer | number | null
   image?: EventImage | string | null
   description?: any
 }
@@ -30,26 +30,22 @@ interface EventArticleProps {
 const DAY_FMT: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }
 const TIME_FMT: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' }
 
-const toParisDate = (d: Date) =>
-  d.toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' })
+const toParisDateStr = (d: Date) =>
+  d.toLocaleString('sv-SE', { timeZone: 'Europe/Paris' }).slice(0, 10)
 
 function formatEventDate(startISO: string, endISO?: string | null): string {
   const start = new Date(startISO)
   const end = endISO ? new Date(endISO) : null
-
   const startDay = start.toLocaleDateString('fr-FR', DAY_FMT)
   const startTime = start.toLocaleTimeString('fr-FR', TIME_FMT)
-
   if (!end) return `${startDay} · ${startTime}`
-
-  if (toParisDate(start) === toParisDate(end)) {
-    const endTime = end.toLocaleTimeString('fr-FR', TIME_FMT)
-    return `${startDay} · ${startTime} – ${endTime}`
+  if (toParisDateStr(start) === toParisDateStr(end)) {
+    return `${startDay} · ${startTime} – ${end.toLocaleTimeString('fr-FR', TIME_FMT)}`
   }
-
-  const endDay = end.toLocaleDateString('fr-FR', DAY_FMT)
-  return `Du ${startDay} au ${endDay}`
+  return `Du ${startDay} au ${end.toLocaleDateString('fr-FR', DAY_FMT)}`
 }
+
+const DEFAULT_COLOR = '#3B82F6'
 
 export function EventArticle({
   title,
@@ -61,11 +57,9 @@ export function EventArticle({
   image,
   description,
 }: EventArticleProps) {
-  const img = image && typeof image === 'object' ? image : null
-  const org = organizer && typeof organizer === 'object' ? organizer : null
-  const categoryObj = category && typeof category === 'object' ? category as EventCategoryObject : null
-  const categoryLabel = categoryObj?.name ?? (typeof category === 'string' ? category : null)
-  const categoryColor = categoryObj?.color ?? '#3B82F6'
+  const img = image && typeof image === 'object' ? image as EventImage : null
+  const org = organizer && typeof organizer === 'object' ? organizer as EventOrganizer : null
+  const color = category?.color ?? DEFAULT_COLOR
 
   return (
     <main>
@@ -79,13 +73,13 @@ export function EventArticle({
           ← Retour à l'agenda
         </Link>
 
-        {categoryLabel && (
+        {category?.name && (
           <div className="mt-6">
             <span
-              className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold text-white"
-              style={{ backgroundColor: categoryColor }}
+              className="inline-block px-3 py-1 rounded-full text-[11px] font-semibold"
+              style={{ backgroundColor: `${color}22`, color }}
             >
-              {categoryLabel}
+              {category.name}
             </span>
           </div>
         )}

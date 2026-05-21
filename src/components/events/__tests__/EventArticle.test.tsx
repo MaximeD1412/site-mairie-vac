@@ -21,14 +21,15 @@ describe('EventArticle', () => {
     expect(screen.getByRole('link', { name: /retour à l'agenda/i })).toHaveAttribute('href', '/agenda')
   })
 
-  it('renders the category badge from an EventCategory object', () => {
-    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" category={{ name: 'Culture', color: '#10B981' }} />)
+  it('renders the category badge with name from object', () => {
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" category={{ name: 'Culture', color: '#DB2777' }} />)
     expect(screen.getByText('Culture')).toBeInTheDocument()
   })
 
-  it('renders raw category value when category is a plain string', () => {
-    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" category="custom-tag" />)
-    expect(screen.getByText('custom-tag')).toBeInTheDocument()
+  it('applies category color to badge', () => {
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" category={{ name: 'Sport', color: '#059669' }} />)
+    const badge = screen.getByText('Sport')
+    expect(badge).toHaveStyle({ color: '#059669' })
   })
 
   it('does not render a badge when category is absent', () => {
@@ -72,13 +73,7 @@ describe('EventArticle', () => {
   })
 
   it('renders the location when provided', () => {
-    render(
-      <EventArticle
-        title="Titre"
-        startDate="2026-06-20T12:00:00.000Z"
-        location="Salle des fêtes"
-      />
-    )
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" location="Salle des fêtes" />)
     expect(screen.getByText(/Salle des fêtes/)).toBeInTheDocument()
   })
 
@@ -88,13 +83,7 @@ describe('EventArticle', () => {
   })
 
   it('renders the organizer name when provided', () => {
-    render(
-      <EventArticle
-        title="Titre"
-        startDate="2026-06-20T12:00:00.000Z"
-        organizer={{ name: 'Association Lecture' }}
-      />
-    )
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" organizer={{ name: 'Association Lecture' }} />)
     expect(screen.getByText(/Association Lecture/)).toBeInTheDocument()
   })
 
@@ -103,25 +92,13 @@ describe('EventArticle', () => {
     expect(screen.queryByTestId('event-organizer')).toBeNull()
   })
 
-  it('does not render organizer when relation is a string (unresolved id)', () => {
-    render(
-      <EventArticle
-        title="Titre"
-        startDate="2026-06-20T12:00:00.000Z"
-        organizer={'asso-id-123' as any}
-      />
-    )
+  it('does not render organizer when relation is a number (unresolved id)', () => {
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" organizer={42 as any} />)
     expect(screen.queryByTestId('event-organizer')).toBeNull()
   })
 
   it('renders the hero image when image url is provided', () => {
-    render(
-      <EventArticle
-        title="Titre"
-        startDate="2026-06-20T12:00:00.000Z"
-        image={{ url: '/img.jpg' }}
-      />
-    )
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" image={{ url: '/img.jpg' }} />)
     expect(screen.getByRole('img', { name: 'Titre' })).toBeInTheDocument()
   })
 
@@ -131,13 +108,7 @@ describe('EventArticle', () => {
   })
 
   it('renders richtext content when description is provided', () => {
-    render(
-      <EventArticle
-        title="Titre"
-        startDate="2026-06-20T12:00:00.000Z"
-        description={{ root: { children: [] } }}
-      />
-    )
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" description={{ root: { children: [] } }} />)
     expect(screen.getByTestId('rich-text')).toBeInTheDocument()
   })
 

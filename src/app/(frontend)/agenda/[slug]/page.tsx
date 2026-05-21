@@ -24,6 +24,7 @@ export async function generateMetadata(
   const result = await payload.find({
     collection: 'events',
     where: publishedEventWhere(slug),
+    depth: 1,
     limit: 1,
   })
   const event = result.docs[0] as Event | undefined
@@ -51,7 +52,11 @@ export default async function EventDetailPage(
       startDate={event.startDate}
       endDate={event.endDate}
       location={event.location}
-      category={event.category}
+      category={
+        event.category && typeof event.category === 'object'
+          ? { name: event.category.name, color: event.category.color }
+          : null
+      }
       organizer={event.organizer as { name?: string | null } | null | undefined}
       image={event.image as { url?: string | null; alt?: string | null } | null | undefined}
       description={event.description}
