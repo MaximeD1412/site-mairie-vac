@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { hrefFromNavItem } from '@/lib/links'
 
@@ -27,14 +27,56 @@ export function MobileMenu({ items }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [openItems, setOpenItems] = useState<Set<number>>(new Set())
 
-  const close = useCallback(() => setIsOpen(false), [])
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  const close = useCallback(() => {
+    setIsOpen(false)
+    // Focus return is deferred to next tick so inert is removed first
+    setTimeout(() => triggerRef.current?.focus(), 0)
+  }, [])
 
   useEffect(() => {
     if (!isOpen) return
+
+    const dialog = dialogRef.current
+    const focusableSelectors = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+    const getFocusables = () =>
+      Array.from(dialog?.querySelectorAll<HTMLElement>(focusableSelectors) ?? [])
+
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close()
+      if (e.key === 'Escape') {
+        close()
+        return
+      }
+      if (e.key !== 'Tab' || !dialog) return
+
+      const focusables = getFocusables()
+      if (focusables.length === 0) return
+
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
     }
+
     document.addEventListener('keydown', handler)
+
+    // Move focus into the dialog when it opens
+    const focusables = getFocusables()
+    if (focusables.length > 0) focusables[0].focus()
+
     return () => document.removeEventListener('keydown', handler)
   }, [isOpen, close])
 
@@ -55,6 +97,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
   return (
     <>
       <button
+        ref={triggerRef}
         onClick={() => setIsOpen(true)}
         aria-label="Ouvrir le menu"
         aria-expanded={isOpen}
@@ -73,6 +116,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
       )}
 
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Menu de navigation"
@@ -131,6 +175,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
                     <button
                       onClick={() => toggleItem(i)}
                       aria-expanded={isExpanded}
+                      aria-controls={`submenu-${i}`}
                       className="flex-1 px-5 py-3 text-white/90 hover:text-white hover:bg-white/10 text-[14px] font-semibold transition-colors text-left"
                     >
                       {item.label}
@@ -138,8 +183,9 @@ export function MobileMenu({ items }: MobileMenuProps) {
                   )}
                   <button
                     onClick={() => toggleItem(i)}
-                    aria-label={isExpanded ? 'Réduire' : 'Développer'}
+                    aria-label={isExpanded ? `Réduire ${item.label}` : `Développer ${item.label}`}
                     aria-expanded={isExpanded}
+                    aria-controls={`submenu-${i}`}
                     className="px-4 py-3 text-white/70 hover:text-white transition-colors"
                   >
                     <span
@@ -152,7 +198,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
                 </div>
 
                 {isExpanded && (
-                  <div>
+                  <div id={`submenu-${i}`}>
                     {item.children!.map((child, j) => (
                       <Link
                         key={j}

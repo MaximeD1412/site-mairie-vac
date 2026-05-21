@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import React from 'react'
 
@@ -167,5 +167,23 @@ describe('MobileMenu', () => {
     render(<MobileMenu items={items} />)
     fireEvent.click(screen.getByRole('button', { name: /développer/i }))
     expect(screen.getByRole('link', { name: 'Conseil' })).toHaveAttribute('href', '/conseil-municipal')
+  })
+
+  it('returns focus to hamburger button when drawer closes', () => {
+    vi.useFakeTimers()
+    render(<MobileMenu items={[]} />)
+    const hamburger = screen.getByRole('button', { name: /ouvrir le menu/i })
+    fireEvent.click(hamburger)
+    fireEvent.click(screen.getByRole('button', { name: /fermer le menu/i }))
+    vi.runAllTimers()
+    expect(document.activeElement).toBe(hamburger)
+    vi.useRealTimers()
+  })
+
+  it('accordion expand button has aria-controls pointing to submenu', () => {
+    const items = [groupItem('Mairie', [simpleItem('Conseil', 'conseil')])]
+    render(<MobileMenu items={items} />)
+    const btn = screen.getByRole('button', { name: /développer mairie/i })
+    expect(btn).toHaveAttribute('aria-controls', 'submenu-0')
   })
 })
