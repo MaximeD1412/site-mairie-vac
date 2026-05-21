@@ -14,6 +14,7 @@ try {
   await seedAssociations(payload)
   await seedElectedOfficials(payload)
   await seedNews(payload)
+  await seedEventCategories(payload)
   await seedEvents(payload)
   await seedPages(payload)
   await seedGlobals(payload)
@@ -190,8 +191,20 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
   await seedCollection(payload, 'news', items, 'slug')
 }
 
+async function seedEventCategories(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const items = [
+    { name: 'Municipal',     slug: 'municipal',    color: '#1D4ED8' },
+    { name: 'Association',   slug: 'association',  color: '#7C3AED' },
+    { name: 'Culture',       slug: 'culture',      color: '#DB2777' },
+    { name: 'Sport',         slug: 'sport',        color: '#059669' },
+    { name: 'École',         slug: 'ecole',        color: '#D97706' },
+    { name: 'Bibliothèque',  slug: 'bibliotheque', color: '#0891B2' },
+    { name: 'Autre',         slug: 'autre',        color: '#6B7280' },
+  ]
+  await seedCollection(payload, 'event-categories', items, 'slug')
+}
+
 async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
-  // Résolution des IDs d'associations
   const assocResult = await payload.find({
     collection: 'associations',
     overrideAccess: true,
@@ -202,6 +215,16 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
     assocByName[a.name] = a.id
   }
 
+  const catResult = await payload.find({
+    collection: 'event-categories',
+    overrideAccess: true,
+    limit: 20,
+  })
+  const catBySlug: Record<string, number> = {}
+  for (const c of catResult.docs) {
+    catBySlug[c.slug] = c.id
+  }
+
   const items = [
     {
       title: 'Conseil municipal de juin 2026',
@@ -209,7 +232,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-06-10T19:00:00.000Z',
       endDate: '2026-06-10T21:00:00.000Z',
       location: 'Salle du conseil municipal — Mairie de Vacqueyras',
-      category: 'municipal',
+      category: catBySlug['municipal'] ?? undefined,
       _status: 'published',
     },
     {
@@ -218,7 +241,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-05-31T08:00:00.000Z',
       endDate: '2026-05-31T17:00:00.000Z',
       location: 'Parking de la salle polyvalente',
-      category: 'association',
+      category: catBySlug['association'] ?? undefined,
       organizer: assocByName['FC Vacqueyras'] ?? undefined,
       _status: 'published',
     },
@@ -228,7 +251,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-06-06T10:00:00.000Z',
       endDate: '2026-06-29T18:00:00.000Z',
       location: 'Salle polyvalente de Vacqueyras',
-      category: 'culture',
+      category: catBySlug['culture'] ?? undefined,
       organizer: assocByName['Amis du Patrimoine'] ?? undefined,
       _status: 'published',
     },
@@ -238,7 +261,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-07-05T09:00:00.000Z',
       endDate: '2026-07-05T18:00:00.000Z',
       location: 'Stade municipal',
-      category: 'sport',
+      category: catBySlug['sport'] ?? undefined,
       organizer: assocByName['FC Vacqueyras'] ?? undefined,
       _status: 'published',
     },
@@ -248,7 +271,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-06-20T09:00:00.000Z',
       endDate: '2026-06-20T11:00:00.000Z',
       location: 'Mairie de Vacqueyras — bureau du maire',
-      category: 'municipal',
+      category: catBySlug['municipal'] ?? undefined,
       _status: 'published',
     },
     {
@@ -257,7 +280,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-05-23T10:00:00.000Z',
       endDate: '2026-05-23T12:00:00.000Z',
       location: 'Jardin partagé — chemin de la Garenne',
-      category: 'autre',
+      category: catBySlug['autre'] ?? undefined,
       _status: 'published',
     },
     {
@@ -266,7 +289,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-06-21T18:00:00.000Z',
       endDate: '2026-06-21T23:30:00.000Z',
       location: 'Place de la Mairie',
-      category: 'culture',
+      category: catBySlug['culture'] ?? undefined,
       _status: 'published',
     },
     {
@@ -275,7 +298,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       startDate: '2026-12-13T10:00:00.000Z',
       endDate: '2026-12-13T19:00:00.000Z',
       location: 'Place du village',
-      category: 'culture',
+      category: catBySlug['culture'] ?? undefined,
       _status: 'published',
     },
   ]
