@@ -66,7 +66,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
       {isOpen && (
         <div
           data-testid="mobile-menu-overlay"
-          className="fixed inset-0 bg-black/50 z-200"
+          className="fixed inset-0 bg-black/50 z-[200]"
           onClick={close}
           aria-hidden="true"
         />
@@ -76,11 +76,12 @@ export function MobileMenu({ items }: MobileMenuProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Menu de navigation"
-        className={`fixed top-0 left-0 h-full w-70 max-w-[85vw] bg-brand z-210 flex flex-col transition-transform duration-300 ease-out ${
+        inert={!isOpen || undefined}
+        className={`fixed top-0 left-0 h-full w-[280px] max-w-[85vw] bg-brand z-[210] flex flex-col transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between px-5 h-17 shrink-0 border-b border-white/10">
+        <div className="flex items-center justify-between px-5 h-[68px] shrink-0 border-b border-white/10">
           <Link href="/" onClick={close} className="flex items-center gap-3 no-underline">
             <div className="w-8 h-8 rounded-lg bg-brand-light flex items-center justify-center text-brand font-bold text-sm">
               M

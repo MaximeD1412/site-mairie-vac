@@ -51,6 +51,17 @@ describe('MobileMenu', () => {
     expect(screen.getByRole('dialog')).toHaveClass('-translate-x-full')
   })
 
+  it('drawer is inert when closed', () => {
+    render(<MobileMenu items={[simpleItem('Agenda')]} />)
+    expect(screen.getByRole('dialog')).toHaveAttribute('inert')
+  })
+
+  it('drawer is not inert when open', () => {
+    render(<MobileMenu items={[simpleItem('Agenda')]} />)
+    fireEvent.click(screen.getByRole('button', { name: /ouvrir le menu/i }))
+    expect(screen.getByRole('dialog')).not.toHaveAttribute('inert')
+  })
+
   it('opens drawer on hamburger click', () => {
     render(<MobileMenu items={[]} />)
     fireEvent.click(screen.getByRole('button', { name: /ouvrir le menu/i }))
