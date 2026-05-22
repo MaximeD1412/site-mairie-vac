@@ -14,7 +14,9 @@ case "${1}" in
   reset)
     echo "Resetting dev environment..."
     $COMPOSE down -v
-    echo "Initializing schema and seeding data..."
+    echo "Running migrations..."
+    $COMPOSE run --rm app node_modules/.bin/payload migrate
+    echo "Seeding data..."
     $COMPOSE run --rm app npm run seed
     echo "Starting dev server..."
     $COMPOSE up -d app
