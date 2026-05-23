@@ -1,6 +1,8 @@
 node_modules
 .next
 .env
+.env.dev
+.env.prod
 .env.local
 data/*.db
 data/*.db-*

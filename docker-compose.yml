@@ -4,7 +4,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    env_file: .env
+    env_file: .env.prod
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -19,7 +19,7 @@ services:
     build:
       context: .
       network: host
-    env_file: .env
+    env_file: .env.prod
     depends_on:
       postgres:
         condition: service_healthy
@@ -31,7 +31,7 @@ services:
     image: postgres:18-alpine
     ports:
       - "5432:5432"
-    env_file: .env
+    env_file: .env.prod
     volumes:
       - postgres_data:/var/lib/postgresql
     healthcheck:
@@ -47,7 +47,7 @@ services:
     build:
       context: ./docker/backup
       network: host
-    env_file: .env
+    env_file: .env.prod
     depends_on:
       postgres:
         condition: service_healthy
