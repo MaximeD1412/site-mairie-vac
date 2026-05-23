@@ -17,6 +17,7 @@ try {
   await seedEventCategories(payload)
   await seedEvents(payload)
   await seedPages(payload)
+  await seedNavigation(payload)
   await seedGlobals(payload)
   console.log('[seed] Done.')
 } catch (err) {
@@ -456,4 +457,79 @@ async function seedGlobals(payload: Awaited<ReturnType<typeof getPayload>>) {
   } else {
     console.log('[seed] homepage-settings: skipped (already set)')
   }
+}
+
+async function seedNavigation(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const pagesResult = await payload.find({
+    collection: 'pages',
+    where: { slug: { in: ['notre-commune', 'contact'] } },
+    overrideAccess: true,
+    limit: 10,
+  })
+  const pageBySlug: Record<string, number> = {}
+  for (const p of pagesResult.docs) {
+    pageBySlug[p.slug] = p.id
+  }
+
+  const menus = [
+    {
+      name: 'Menu principal',
+      location: 'main',
+      items: [
+        {
+          label: 'La Mairie',
+          kind: 'page',
+          page: pageBySlug['notre-commune'],
+          children: [
+            { label: 'Notre commune', kind: 'page', page: pageBySlug['notre-commune'] },
+            { label: 'Contact', kind: 'page', page: pageBySlug['contact'] },
+          ],
+        },
+        { label: 'Actualités', kind: 'newsArchive' },
+        { label: 'Agenda', kind: 'eventsArchive' },
+        {
+          label: 'Vie locale',
+          kind: 'external',
+          url: '#',
+          children: [
+            { label: 'Associations', kind: 'associationsArchive' },
+            { label: 'Documents', kind: 'documentsArchive' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Menu footer',
+      location: 'footer',
+      items: [
+        { label: 'Notre commune', kind: 'page', page: pageBySlug['notre-commune'] },
+        { label: 'Actualités', kind: 'external', url: '/actualites' },
+        { label: 'Agenda', kind: 'external', url: '/agenda' },
+        { label: 'Associations', kind: 'external', url: '/associations' },
+        { label: 'Contact', kind: 'page', page: pageBySlug['contact'] },
+      ],
+    },
+  ]
+
+  let inserted = 0
+  let skipped = 0
+
+  for (const menu of menus) {
+    const existing = await payload.find({
+      collection: 'navigation',
+      where: { location: { equals: menu.location } },
+      overrideAccess: true,
+      limit: 1,
+    })
+
+    if (existing.totalDocs > 0) {
+      skipped++
+      continue
+    }
+
+    await payload.create({ collection: 'navigation', data: menu as any, overrideAccess: true })
+    inserted++
+  }
+
+  console.log(`[seed] navigation: ${inserted} inserted, ${skipped} skipped`)
 }
