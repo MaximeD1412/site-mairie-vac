@@ -22,7 +22,7 @@
     "cross-env": "latest",
     "dotenv": "latest",
     "lucide-react": "^1.14.0",
-    "next": "latest",
+    "next": "^15",
     "payload": "latest",
     "payloadcms-lexical-ext": "^0.5.3",
     "pg": "latest",

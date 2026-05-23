@@ -14,16 +14,20 @@ case "${1}" in
   reset)
     echo "Resetting dev environment..."
     $COMPOSE down -v
-    echo "Running migrations..."
-    $COMPOSE run --rm app node_modules/.bin/payload migrate
-    echo "Seeding data..."
-    $COMPOSE run --rm app npm run seed
     echo "Starting dev server..."
-    $COMPOSE up -d app
+    $COMPOSE up -d
+    echo "Waiting for Next.js to be ready..."
+    until $COMPOSE logs app 2>&1 | grep -q "Ready in"; do
+      sleep 2
+    done
+    echo "Running migrations..."
+    $COMPOSE exec -T app node_modules/.bin/payload migrate
+    echo "Seeding data..."
+    $COMPOSE exec -T app npm run seed
     echo "Done — http://localhost:3000"
     ;;
   seed)
-    $COMPOSE exec app npm run seed
+    $COMPOSE exec -T app npm run seed
     ;;
   logs)
     $COMPOSE logs -f app
