@@ -10,6 +10,7 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Navigation } from './collections/Navigation'
 import { News } from './collections/News'
+import { EventCategories } from './collections/EventCategories'
 import { Events } from './collections/Events'
 import { Documents } from './collections/Documents'
 import { Associations } from './collections/Associations'
@@ -46,6 +47,7 @@ export default buildConfig({
     Pages,
     Navigation,
     News,
+    EventCategories,
     Events,
     Documents,
     Associations,

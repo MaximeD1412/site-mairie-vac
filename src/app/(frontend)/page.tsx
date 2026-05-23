@@ -10,7 +10,9 @@ export const revalidate = 60
 export default async function HomePage() {
   const payload = await getPayloadClient()
 
-  const [newsResult, eventsResult, docsResult, siteSettings, homepageSettings] = await Promise.all([
+  const nowISO = new Date().toISOString()
+
+  const [newsResult, carouselEventsResult, calendarEventsResult, docsResult, siteSettings, homepageSettings] = await Promise.all([
     payload.find({
       collection: 'news',
       limit: 3,
@@ -22,7 +24,31 @@ export default async function HomePage() {
       collection: 'events',
       limit: 4,
       sort: 'startDate',
-      where: { startDate: { greater_than: new Date().toISOString() } },
+      depth: 1,
+      where: {
+        and: [
+          { _status: { equals: 'published' } },
+          { startDate: { greater_than: nowISO } },
+        ],
+      },
+    }).catch(() => ({ docs: [] })),
+
+    payload.find({
+      collection: 'events',
+      limit: 50,
+      sort: 'startDate',
+      depth: 1,
+      where: {
+        and: [
+          { _status: { equals: 'published' } },
+          {
+            or: [
+              { startDate: { greater_than_equal: nowISO } },
+              { endDate: { greater_than_equal: nowISO } },
+            ],
+          },
+        ],
+      },
     }).catch(() => ({ docs: [] })),
 
     payload.find({
@@ -41,7 +67,10 @@ export default async function HomePage() {
       <Hero settings={siteSettings as any} />
       <QuickLinksBar settings={homepageSettings as any} />
       <ActuPanneauSection news={newsResult.docs as any} settings={siteSettings as any} />
-      <AgendaSection events={eventsResult.docs as any} />
+      <AgendaSection
+          carouselEvents={carouselEventsResult.docs as any}
+          calendarEvents={calendarEventsResult.docs as any}
+        />
       <PublicationsSection documents={docsResult.docs as any} />
     </>
   )
