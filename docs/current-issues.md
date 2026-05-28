@@ -6,7 +6,6 @@ Issues créées lors de la revue du plan projet (2026-05-28).
 
 | # | Titre | Type |
 |---|-------|------|
-| [#22](https://github.com/MaximeD1412/site-mairie-vac/issues/22) | feat: bloc Button (CTA) | AFK |
 | [#23](https://github.com/MaximeD1412/site-mairie-vac/issues/23) | feat: bloc Map (OpenStreetMap + Leaflet) | AFK |
 | [#24](https://github.com/MaximeD1412/site-mairie-vac/issues/24) | feat: bloc Accordion | AFK |
 | [#25](https://github.com/MaximeD1412/site-mairie-vac/issues/25) | feat: bloc Gallery (grille + lightbox) | AFK |
