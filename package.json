@@ -27,7 +27,8 @@
     "pg": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "sharp": "latest"
+    "sharp": "latest",
+    "yet-another-react-lightbox": "^3.32.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",
