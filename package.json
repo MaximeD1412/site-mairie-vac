@@ -30,8 +30,9 @@
     "pg": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "sharp": "latest",
+    "yet-another-react-lightbox": "^3.32.0"
     "react-leaflet": "^5.0.0",
-    "sharp": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",

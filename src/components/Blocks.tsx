@@ -3,6 +3,7 @@ import { ImageBlock } from './blocks/ImageBlock'
 import { QuickLinksBlock } from './blocks/QuickLinksBlock'
 import { CollectionListBlock } from './blocks/CollectionListBlock'
 import { PanneauPocketBlock } from './blocks/PanneauPocketBlock'
+import { GalleryBlock } from './blocks/GalleryBlock'
 import { AccordionBlock } from './blocks/AccordionBlock'
 import { MapBlock } from './blocks/MapBlock'
 import { ButtonBlock } from './blocks/ButtonBlock'
@@ -30,6 +31,8 @@ export function RenderBlocks({ blocks }: { blocks?: any[] }) {
             )
           case 'panneauPocket':
             return <PanneauPocketBlock key={index} title={block.title} widgetUrl={block.widgetUrl} />
+          case 'gallery':
+            return <GalleryBlock key={index} images={block.images} />
           case 'accordion':
             return <AccordionBlock key={index} items={block.items} />
           case 'map':
