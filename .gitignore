@@ -1,7 +1,8 @@
 node_modules
 .next
+.next.bak
 .env
-.env.local
+.env.*
 data/*.db
 data/*.db-*
 .backups
