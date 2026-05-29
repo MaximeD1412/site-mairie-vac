@@ -2,7 +2,6 @@
 
 | # | Titre | URL | Blocked by |
 |---|-------|-----|------------|
-| 26 | feat: bloc Contact (formulaire email via Resend) | https://github.com/MaximeD1412/site-mairie-vac/issues/26 | — |
 | 27 | fix: restreindre l'accès Admin vs Agent mairie | https://github.com/MaximeD1412/site-mairie-vac/issues/27 | — |
 | 28 | feat: script de crawl du site Joomla | https://github.com/MaximeD1412/site-mairie-vac/issues/28 | — |
 | 29 | chore: consolider le seed demo (développement) | https://github.com/MaximeD1412/site-mairie-vac/issues/29 | — |
