@@ -5,6 +5,7 @@ import { ImageBlock } from '../blocks/ImageBlock'
 import { QuickLinksBlock } from '../blocks/QuickLinksBlock'
 import { CollectionListBlock } from '../blocks/CollectionListBlock'
 import { PanneauPocketBlock } from '../blocks/PanneauPocketBlock'
+import { ContactBlock } from '../blocks/ContactBlock'
 import { GalleryBlock } from '../blocks/GalleryBlock'
 import { AccordionBlock } from '../blocks/AccordionBlock'
 import { MapBlock } from '../blocks/MapBlock'
@@ -30,7 +31,7 @@ export const Pages: CollectionConfig = {
       name: 'layout',
       label: 'Blocs de contenu',
       type: 'blocks',
-      blocks: [RichTextBlock, ImageBlock, QuickLinksBlock, CollectionListBlock, PanneauPocketBlock, ButtonBlock, MapBlock, AccordionBlock, GalleryBlock]
+      blocks: [RichTextBlock, ImageBlock, QuickLinksBlock, CollectionListBlock, PanneauPocketBlock, ContactBlock, ButtonBlock, MapBlock, AccordionBlock, GalleryBlock]
     },
     {
       name: 'seo',
