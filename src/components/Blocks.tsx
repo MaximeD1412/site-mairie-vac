@@ -3,6 +3,7 @@ import { ImageBlock } from './blocks/ImageBlock'
 import { QuickLinksBlock } from './blocks/QuickLinksBlock'
 import { CollectionListBlock } from './blocks/CollectionListBlock'
 import { PanneauPocketBlock } from './blocks/PanneauPocketBlock'
+import { ContactBlock } from './blocks/ContactBlock'
 
 export function RenderBlocks({ blocks }: { blocks?: any[] }) {
   if (!blocks?.length) return null
@@ -27,6 +28,8 @@ export function RenderBlocks({ blocks }: { blocks?: any[] }) {
             )
           case 'panneauPocket':
             return <PanneauPocketBlock key={index} title={block.title} widgetUrl={block.widgetUrl} />
+          case 'contact':
+            return <ContactBlock key={index} title={block.title} />
           default:
             return null
         }
