@@ -2,7 +2,9 @@ node_modules
 .next
 .next.bak
 .env
-.env.*
+.env.dev
+.env.prod
+.env.local
 data/*.db
 data/*.db-*
 .backups

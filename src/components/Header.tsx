@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Search, Menu, X, ChevronDown } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
+import { MobileMenu } from './MobileMenu'
 
 interface NavChild {
   label: string
@@ -117,6 +118,7 @@ export function Header({ navigation }: HeaderProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-2 shrink-0">
+            <MobileMenu items={items} />
             <button
               aria-label="Rechercher sur le site"
               className="w-9 h-9 rounded-full bg-white/12 text-white flex items-center justify-center hover:bg-white/22 transition-colors"

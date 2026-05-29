@@ -27,16 +27,8 @@ export const Events: CollectionConfig = {
     {
       name: 'category',
       label: 'Catégorie',
-      type: 'select',
-      options: [
-        { label: 'Municipal', value: 'municipal' },
-        { label: 'Association', value: 'association' },
-        { label: 'Culture', value: 'culture' },
-        { label: 'Sport', value: 'sport' },
-        { label: 'École', value: 'ecole' },
-        { label: 'Bibliothèque', value: 'bibliotheque' },
-        { label: 'Autre', value: 'autre' },
-      ],
+      type: 'relationship',
+      relationTo: 'event-categories',
     },
     {
       name: 'organizer',
