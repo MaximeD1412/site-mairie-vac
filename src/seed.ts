@@ -523,6 +523,7 @@ async function seedNavigation(payload: Awaited<ReturnType<typeof getPayload>>) {
     })
 
     if (existing.totalDocs > 0) {
+      await payload.update({ collection: 'navigation', id: existing.docs[0].id, data: menu as any, overrideAccess: true })
       skipped++
       continue
     }
