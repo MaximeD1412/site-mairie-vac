@@ -3,11 +3,10 @@
 import { Resend } from 'resend'
 import { getPayloadClient } from '@/lib/payload'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export type ContactState = { success: true } | { error: string } | null
 
 export async function sendContact(prevState: ContactState, formData: FormData): Promise<ContactState> {
+  const resend = new Resend(process.env.RESEND_API_KEY)
   const nom = (formData.get('nom') as string)?.trim()
   const email = (formData.get('email') as string)?.trim()
   const message = (formData.get('message') as string)?.trim()
