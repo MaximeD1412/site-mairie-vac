@@ -53,6 +53,22 @@ http://localhost:3000/admin
 
 Au premier lancement, Payload propose la création du premier utilisateur.
 
+## Seed de démonstration
+
+Pour pré-remplir la base avec des données fictives couvrant toutes les collections et tous les blocs CMS :
+
+```bash
+npm run seed
+# ou
+npm run seed:demo
+```
+
+Le seed est idempotent : il peut être relancé sans créer de doublons. Il ne fonctionne qu'en `NODE_ENV=development` et refuse de tourner en production.
+
+Données insérées : associations, élus, actualités, catégories d'événements, événements, pages (avec blocs richText, quickLinks, collectionList, accordion, button, contact, map), navigation principale et footer, et globals (mairie-info, site-settings, homepage-settings).
+
+> Les blocs `GalleryBlock` et `ImageBlock` nécessitent des médias importés manuellement et ne sont pas inclus dans le seed.
+
 ## Variables importantes
 
 ```env
@@ -107,7 +123,6 @@ Deux options :
 - Paramètres globaux du site : adresse, horaires, téléphone, réseaux sociaux.
 - Déclaration d’accessibilité, mentions légales, politique de confidentialité.
 - Redirections depuis les anciennes URLs Joomla.
-- Script de seed initial : menus, page accueil, contact, démarches.
 - Sauvegardes SQLite.
 
 ## Notes RGAA
