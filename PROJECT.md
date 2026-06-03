@@ -1,4 +1,4 @@
-# 🏛️ Refonte du site d’une commune — Next.js + Payload CMS
+# 🏛️ Refonte du site d'une commune — Next.js + Payload CMS
 
 ---
 
@@ -11,8 +11,7 @@ Créer un site web moderne pour une commune avec :
 * une gestion de contenu flexible (CMS)
 * une intégration PanneauPocket
 * une migration partielle depuis Joomla
-* un coût d’hébergement minimal (~5–15€/mois)
-* une architecture évolutive (SQLite → PostgreSQL)
+* un coût d'hébergement minimal (~5–15€/mois)
 
 ---
 
@@ -22,7 +21,7 @@ Créer un site web moderne pour une commune avec :
 
 * Next.js (App Router)
 * React + TypeScript
-* Tailwind CSS ou SCSS Modules
+* Tailwind CSS
 
 ## Backend / CMS
 
@@ -30,21 +29,33 @@ Créer un site web moderne pour une commune avec :
 
 ## Base de données
 
-* SQLite (démarrage)
-* PostgreSQL (évolution)
+* PostgreSQL
 
 ## Stockage fichiers
 
-* Cellar (S3 compatible)
-* utilisé pour PDF, images, documents
+* OVH Object Storage (S3 compatible)
+* utilisé pour médias (images, PDF) et backups
 
 ## Hébergement
 
-* Clever Cloud (Node.js)
+* OVH Cloud VPS
+
+## Infrastructure
+
+* Docker Compose — Caddy + Next.js + PostgreSQL + service backup
 
 ---
 
 # 🏗️ Architecture globale
+
+```txt
+OVH Cloud VPS
+└── Docker Compose
+    ├── caddy          (reverse proxy HTTPS)
+    ├── app            (Next.js + Payload)
+    ├── postgres       (base de données)
+    └── backup         (pg_dump → OVH Object Storage toutes les 6h)
+```
 
 ```txt
 Next.js + Payload (monorepo)
@@ -55,72 +66,16 @@ Next.js + Payload (monorepo)
 ├── /components (UI)
 ├── /lib (utils)
 │
-├── SQLite (runtime local)
-└── Cellar (backups + fichiers)
+└── PostgreSQL (runtime local + volume Docker)
 ```
 
 ---
 
-# 🧠 Architecture SQLite sécurisée
-
-## Problème
-
-Le filesystem Clever Cloud est **éphémère**.
-
-## Solution
+# 💾 Backups
 
 ```txt
-SQLite (runtime)
-+ backup automatique vers Cellar
-+ restore automatique au démarrage
-```
-
----
-
-## 🔁 Flow complet
-
-### 1. Démarrage app
-
-```txt
-Si data.db existe → OK
-Sinon → télécharger backups/latest.db depuis Cellar
-```
-
----
-
-### 2. Runtime
-
-```txt
-Payload utilise SQLite normalement
-```
-
----
-
-### 3. Backup automatique
-
-```txt
-Toutes les 6h :
-→ copier data.db
-→ upload vers Cellar
-→ maj latest.db
-```
-
----
-
-### 4. Rotation
-
-```txt
-7 backups journaliers
-4 hebdomadaires
-2 mensuels
-```
-
----
-
-## 💰 Coût
-
-```txt
-< 0.10€/mois (négligeable)
+Service Docker dédié :
+pg_dump → OVH Object Storage toutes les 6h
 ```
 
 ---
@@ -276,7 +231,7 @@ Cards
 
 # ♿ Accessibilité RGAA
 
-À implémenter dès le départ :
+Conformité partielle A + AA :
 
 ```txt
 HTML sémantique
@@ -286,6 +241,7 @@ contraste couleurs
 alt images
 labels formulaires
 structure titres
+déclaration d'accessibilité sous /accessibilite
 ```
 
 Tests :
@@ -298,9 +254,8 @@ Tests :
 # 👥 Rôles utilisateurs
 
 ```txt
-Admin
-Agent mairie
-Lecteur (optionnel)
+Admin         — accès complet (tout + users + globals)
+Agent mairie  — contenu éditorial (News, Events, Documents, Associations, Pages)
 ```
 
 ---
@@ -311,12 +266,6 @@ Intégration via :
 
 * iframe ou script
 * bloc CMS
-
-Usage :
-
-```txt
-alertes / infos rapides
-```
 
 ---
 
@@ -332,8 +281,6 @@ bulletins
 documents
 images
 ```
-
----
 
 ## Script de migration
 
@@ -367,68 +314,60 @@ Ne pas migrer tout
 → reconstruire
 ```
 
----
-
-# 💰 Optimisation coût
-
-## Version économique
-
-```txt
-Node nano
-SQLite
-Cellar
-```
-
-≈ 5€/mois
+Note : le site Joomla disparaîtra entièrement (même domaine) — les redirections d'URLs ne sont pas possibles. Réécriture manuelle des pages dans Payload avant basculement de domaine.
 
 ---
 
-## Version évoluée
+# 💰 Coût estimé
 
 ```txt
-Node +
-PostgreSQL
-Cellar
+OVH Cloud VPS       ~5–10€/mois
+OVH Object Storage  ~0.01€/Go/mois (négligeable)
 ```
-
-≈ 10–20€/mois
 
 ---
 
 # 🚀 Déploiement
 
 ```txt
-git push → Clever Cloud
-env configurées
-build Next
-Payload lancé automatiquement
+OVH Cloud VPS (Ubuntu)
+→ docker compose up --build
+→ Caddy gère le HTTPS automatiquement
+```
+
+Scripts :
+
+```bash
+./prod.sh up    # démarrer (build inclus)
+./prod.sh down  # arrêter
 ```
 
 ---
 
 # 📋 Roadmap
 
-## Phase 1
+## Phase 1 ✅
 
 * setup projet
 * collections CMS
 
-## Phase 2
+## Phase 2 ✅
 
 * UI
-* navigation
-* blocs
+* navigation (mega menu)
+* blocs CMS
 
-## Phase 3
+## Phase 3 ✅
 
-* migration contenu
+* seed démo + seed init production
+* accessibilité RGAA A + AA
+* infrastructure Docker + PostgreSQL + OVH VPS
 * PanneauPocket
 
-## Phase 4
+## Phase 4 — en cours
 
-* accessibilité
-* optimisation
-* prod
+* migration contenu Joomla
+* mise en production
 
 ---
 
@@ -443,33 +382,12 @@ coût minimal
 
 ---
 
-# 🤖 Prompt agent IA
-
-Créer un projet Next.js + Payload CMS avec :
-
-* pages CMS dynamiques
-* actualités
-* agenda
-* documents
-* associations
-* navigation admin
-* blocs CMS
-* SQLite sécurisé avec backup Cellar
-* intégration PanneauPocket
-* UI moderne commune
-* RGAA de base
-
-Ne pas coder un CMS custom.
-
----
-
 # ✅ Résultat attendu
 
 ```txt
 site moderne
 CMS simple
 agents autonomes
-coût faible
+coût faible (~5–10€/mois)
 maintenance simple
-évolutif PostgreSQL
 ```
