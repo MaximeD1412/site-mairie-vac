@@ -23,7 +23,7 @@ export function NewsArticle({ title, publishedAt, summary, image, content }: New
   const hasRichTextContent = Boolean(content?.root?.children?.length)
 
   return (
-    <main>
+    <article>
       {img?.url && (
         <div className="relative h-64 w-full overflow-hidden bg-brand">
           <Image src={img.url} alt="" aria-hidden="true" fill className="object-cover" />
@@ -37,7 +37,7 @@ export function NewsArticle({ title, publishedAt, summary, image, content }: New
           ← Retour aux actualités
         </Link>
         <div className="mt-6 flex items-center gap-3">
-          <span className="inline-block bg-teal-light text-teal rounded px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide">
+          <span className="inline-block bg-teal-light text-teal-dark rounded px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide">
             Actualité
           </span>
           {publishedAt && (
@@ -59,6 +59,6 @@ export function NewsArticle({ title, publishedAt, summary, image, content }: New
           </>
         )}
       </div>
-    </main>
+    </article>
   )
 }
