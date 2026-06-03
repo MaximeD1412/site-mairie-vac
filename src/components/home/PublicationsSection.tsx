@@ -64,7 +64,7 @@ export function PublicationsSection({ documents }: PublicationsSectionProps) {
                       <FileText size={32} aria-hidden={true} />
                     </div>
                     <div className="p-3.5">
-                      <div className="text-[10px] font-bold uppercase tracking-wide text-teal mb-1">
+                      <div className="text-[10px] font-bold uppercase tracking-wide text-teal-dark mb-1">
                         {doc.category ? (CATEGORY_LABELS[doc.category] ?? doc.category) : ''}
                       </div>
                       <strong className="block text-[12.5px] font-semibold text-text leading-snug">{doc.title}</strong>

@@ -68,7 +68,7 @@ export function Header({ navigation }: HeaderProps) {
             </div>
             <div className="text-white leading-tight">
               <strong className="block text-[15px] font-bold">La Ville-aux-Clercs</strong>
-              <span className="text-[11px] text-white/70">Site officiel de la mairie</span>
+              <span className="text-[11px] text-white/85">Site officiel de la mairie</span>
             </div>
           </Link>
 

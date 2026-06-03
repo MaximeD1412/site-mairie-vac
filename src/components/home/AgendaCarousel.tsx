@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Pause, Play } from 'lucide-react'
 
 export interface CarouselCategory {
   name?: string | null
@@ -62,6 +63,8 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
   const count = events.length
   const renderedEvents = count > 1 ? [...events, events[0]] : events
 
+  const visibleIndex = current === count ? 0 : current
+
   const clearTimer = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
   }, [])
@@ -109,22 +112,30 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
   if (count === 0) return null
 
   return (
-    <div
+    <section
+      aria-label="Carrousel des prochains événements"
+      aria-roledescription="carrousel"
       className="relative overflow-hidden rounded-2xl bg-white shadow-sm"
       style={{ height: CONTAINER_H }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
+      {/* Visually-hidden live region: announces the current slide to screen readers */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {events[visibleIndex]?.title} — événement {visibleIndex + 1} sur {count}
+      </div>
+
       {/* Slides track */}
       <div
         data-testid="carousel-track"
-        data-current-index={current === count ? 0 : current}
+        data-current-index={visibleIndex}
         className={transitionEnabled ? 'transition-transform duration-500 ease-in-out' : ''}
         style={{ transform: `translateY(${-current * SLIDE_H}px)` }}
       >
         {renderedEvents.map((event, i) => {
           const img = event.image && typeof event.image === 'object' ? event.image : null
           const color = event.category?.color ?? DEFAULT_COLOR
+          const isHidden = i === renderedEvents.length - 1 && count > 1
           return (
             <Link
               key={`${event.id}-${i}`}
@@ -133,7 +144,8 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
               className="flex no-underline border-b border-border last:border-0"
               style={{ height: SLIDE_H }}
               aria-label={event.title}
-              aria-hidden={i === renderedEvents.length - 1 && count > 1 ? true : undefined}
+              aria-hidden={isHidden || undefined}
+              tabIndex={isHidden ? -1 : undefined}
             >
               {img?.url && (
                 <div className="relative w-[40%] shrink-0 overflow-hidden">
@@ -169,19 +181,30 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
         })}
       </div>
 
-      {/* Navigation arrows */}
+      {/* Controls: pause/play + navigation arrows */}
       {count > 1 && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-10">
           <button
             onClick={() => navigate('prev')}
-            aria-label="Précédent"
+            aria-label="Événement précédent"
             className="flex items-center justify-center w-7 h-7 rounded-full bg-white/90 shadow text-brand text-xs hover:bg-white transition-colors"
           >
             ▲
           </button>
           <button
+            onClick={() => setPaused(p => !p)}
+            aria-label={paused ? 'Reprendre le défilement automatique' : 'Mettre en pause le défilement automatique'}
+            aria-pressed={paused}
+            className="flex items-center justify-center w-7 h-7 rounded-full bg-white/90 shadow text-brand hover:bg-white transition-colors"
+          >
+            {paused
+              ? <Play size={12} aria-hidden="true" />
+              : <Pause size={12} aria-hidden="true" />
+            }
+          </button>
+          <button
             onClick={() => navigate('next')}
-            aria-label="Suivant"
+            aria-label="Événement suivant"
             className="flex items-center justify-center w-7 h-7 rounded-full bg-white/90 shadow text-brand text-xs hover:bg-white transition-colors"
           >
             ▼
@@ -190,17 +213,17 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
       )}
 
       {/* Position indicators */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10" aria-hidden="true">
         {events.map((_, i) => (
           <span
             key={i}
             data-testid="carousel-dot"
             className={`h-1.5 rounded-full transition-all ${
-              i === (current === count ? 0 : current) ? 'w-4 bg-brand' : 'w-1.5 bg-brand/30'
+              i === visibleIndex ? 'w-4 bg-brand' : 'w-1.5 bg-brand/30'
             }`}
           />
         ))}
       </div>
-    </div>
+    </section>
   )
 }

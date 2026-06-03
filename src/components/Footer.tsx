@@ -41,7 +41,7 @@ export function Footer({ mairieInfo, footerNav }: FooterProps) {
         {/* Colonne 1 — identité + coordonnées */}
         <div>
           <strong className="block text-white text-[17px] mb-1">La Ville-aux-Clercs</strong>
-          <span className="text-white/60 text-[11px]">Site officiel · 41160</span>
+          <span className="text-white/85 text-[11px]">Site officiel · 41160</span>
           <p className="mt-4 text-[13px] leading-7">
             {mairieInfo?.address ?? '1 Rue de la Mairie, 41160 La Ville-aux-Clercs'}<br />
             {mairieInfo?.phone && <>{mairieInfo.phone}<br /></>}
@@ -51,7 +51,7 @@ export function Footer({ mairieInfo, footerNav }: FooterProps) {
 
         {/* Colonne 2 — liens nav footer */}
         <div>
-          <h2 className="text-brand-light text-[11px] uppercase tracking-widest font-bold mb-3">
+          <h2 className="text-white text-[11px] uppercase tracking-widest font-bold mb-3">
             Navigation
           </h2>
           <ul className="space-y-2 list-none p-0 m-0">
@@ -59,7 +59,7 @@ export function Footer({ mairieInfo, footerNav }: FooterProps) {
               <li key={item.label ?? i}>
                 <Link
                   href={item.url ?? (item.page?.slug ? `/${item.page.slug}` : '#')}
-                  className="text-white/75 hover:text-white text-[13px] no-underline transition-colors"
+                  className="text-white/85 hover:text-white text-[13px] no-underline transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -70,18 +70,18 @@ export function Footer({ mairieInfo, footerNav }: FooterProps) {
 
         {/* Colonne 3 — horaires */}
         <div>
-          <h2 className="text-brand-light text-[11px] uppercase tracking-widest font-bold mb-3">
+          <h2 className="text-white text-[11px] uppercase tracking-widest font-bold mb-3">
             Horaires mairie
           </h2>
           <ul className="space-y-2 list-none p-0 m-0">
             {hours.length > 0
               ? hours.map((h, i) => (
-                  <li key={h.id ?? i} className="text-[13px] text-white/75">{h.days} : {h.hours}</li>
+                  <li key={h.id ?? i} className="text-[13px] text-white/85">{h.days} : {h.hours}</li>
                 ))
               : (
                 <>
-                  <li className="text-[13px] text-white/75">Lun–Ven : 9h–12h</li>
-                  <li className="text-[13px] text-white/75">Mar–Jeu : 14h–17h</li>
+                  <li className="text-[13px] text-white/85">Lun–Ven : 9h–12h</li>
+                  <li className="text-[13px] text-white/85">Mar–Jeu : 14h–17h</li>
                 </>
               )}
           </ul>
@@ -89,7 +89,7 @@ export function Footer({ mairieInfo, footerNav }: FooterProps) {
 
         {/* Colonne 4 — légal */}
         <div>
-          <h2 className="text-brand-light text-[11px] uppercase tracking-widest font-bold mb-3">
+          <h2 className="text-white text-[11px] uppercase tracking-widest font-bold mb-3">
             Informations
           </h2>
           <ul className="space-y-2 list-none p-0 m-0">
@@ -100,9 +100,9 @@ export function Footer({ mairieInfo, footerNav }: FooterProps) {
 
       </div>
 
-      <div className="border-t border-white/10 mx-auto max-w-7xl px-6 py-4 flex justify-between text-[12px] text-white/50">
-        <span>© {new Date().getFullYear()} Mairie de La Ville-aux-Clercs</span>
-        <span>Tous droits réservés</span>
+      <div className="border-t border-white/10 mx-auto max-w-7xl px-6 py-4 flex justify-between text-[12px]">
+        <span className="text-white/70">© {new Date().getFullYear()} Mairie de La Ville-aux-Clercs</span>
+        <span className="text-white/70">Tous droits réservés</span>
       </div>
     </footer>
   )
