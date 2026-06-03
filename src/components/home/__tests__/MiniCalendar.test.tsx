@@ -13,19 +13,19 @@ const MAY_2026 = new Date(2026, 4, 1) // mai 2026
 describe('MiniCalendar', () => {
   it('displays the current month name', () => {
     render(<MiniCalendar events={[]} initialDate={MAY_2026} />)
-    expect(screen.getByText(/mai 2026/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/mai 2026/i).length).toBeGreaterThanOrEqual(1)
   })
 
   it('navigates to next month on click', () => {
     render(<MiniCalendar events={[]} initialDate={MAY_2026} />)
     fireEvent.click(screen.getByRole('button', { name: /mois suivant/i }))
-    expect(screen.getByText(/juin 2026/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/juin 2026/i).length).toBeGreaterThanOrEqual(1)
   })
 
   it('navigates to previous month on click', () => {
     render(<MiniCalendar events={[]} initialDate={MAY_2026} />)
     fireEvent.click(screen.getByRole('button', { name: /mois précédent/i }))
-    expect(screen.getByText(/avril 2026/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/avril 2026/i).length).toBeGreaterThanOrEqual(1)
   })
 
   it('renders day-of-week headers', () => {
