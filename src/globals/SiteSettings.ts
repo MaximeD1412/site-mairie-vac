@@ -1,11 +1,11 @@
 import type { GlobalConfig } from 'payload'
-import { isAgentOrAdmin } from '../access'
+import { isAdmin } from '../access'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Paramètres du site',
-  admin: { group: 'Paramètres' },
-  access: { read: () => true, update: isAgentOrAdmin },
+  admin: { group: 'Paramètres', hidden: ({ user }) => user?.role !== 'admin' },
+  access: { read: () => true, update: isAdmin },
   fields: [
     {
       name: 'heroImage',

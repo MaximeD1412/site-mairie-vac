@@ -5,7 +5,7 @@ export const Users: CollectionConfig = {
   slug: 'users',
   labels: { singular: 'Utilisateur', plural: 'Utilisateurs' },
   auth: true,
-  admin: { useAsTitle: 'email', group: 'Administration' },
+  admin: { useAsTitle: 'email', group: 'Administration', hidden: ({ user }) => user?.role !== 'admin' },
   access: {
     read: isAdmin,
     create: isAdmin,
