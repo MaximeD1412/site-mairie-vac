@@ -1,3 +1,13 @@
+// =============================================================
+// SEED DE DÉMONSTRATION — données fictives, développement uniquement
+// Couvre toutes les collections et tous les blocs CMS seables :
+//   associations, élus, actualités, catégories d'événements,
+//   événements, pages (richText, quickLinks, collectionList,
+//   accordion, button, contact, map), navigation, globals.
+// GalleryBlock et ImageBlock nécessitent des médias importés
+//   manuellement et ne sont pas inclus dans ce seed.
+// Ne tourne jamais en production (NODE_ENV !== 'development').
+// =============================================================
 import 'dotenv/config'
 import { getPayload } from 'payload'
 import type { CollectionSlug } from 'payload'
@@ -369,8 +379,9 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
   await seedCollection(payload, 'events', items, 'slug')
 }
 
+// Pages use upsert (update if exists) so the seed definition is always the source of truth.
 async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
-  const items = [
+  const pages = [
     {
       title: 'Notre commune',
       slug: 'notre-commune',
@@ -378,7 +389,23 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
       layout: [
         {
           blockType: 'richText',
-          content: richText("Vacqueyras est une commune du Vaucluse (84) située dans le département de Vaucluse, dans la région Provence-Alpes-Côte d'Azur. Elle compte environ 1 000 habitants et est connue pour son vignoble d'appellation Vacqueyras AOC. La mairie assure les services publics locaux et l'animation du territoire."),
+          content: richText("Vacqueyras est une commune du Vaucluse (84) située dans la région Provence-Alpes-Côte d'Azur. Elle compte environ 1 000 habitants et est connue pour son vignoble d'appellation Vacqueyras AOC. La mairie assure les services publics locaux et l'animation du territoire."),
+        },
+        {
+          blockType: 'quickLinks',
+          links: [
+            { label: 'Actualités', url: '/actualites', description: 'Informations municipales' },
+            { label: 'Agenda', url: '/agenda', description: 'Événements à venir' },
+            { label: 'Associations', url: '/associations', description: 'Vie associative' },
+            { label: 'Documents', url: '/documents', description: 'Bulletins, arrêtés, formulaires' },
+            { label: 'Démarches', url: '/demarches', description: 'Vos démarches administratives' },
+          ],
+        },
+        {
+          blockType: 'collectionList',
+          title: 'Dernières actualités',
+          collection: 'news',
+          limit: 3,
         },
       ],
       _status: 'published',
@@ -392,11 +419,123 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
           blockType: 'richText',
           content: richText("Mairie de Vacqueyras\nPlace de la Mairie\n84190 Vacqueyras\n\nTéléphone : 04 90 00 00 00\nEmail : mairie@vacqueyras-fictif.fr\n\nHoraires d'ouverture :\nLundi, mercredi, vendredi : 9h–12h\nMardi, jeudi : 9h–12h et 14h–17h"),
         },
+        {
+          blockType: 'map',
+          title: 'Où nous trouver',
+          address: 'Place de la Mairie, 84190 Vacqueyras',
+          lat: 44.0512,
+          lng: 5.0011,
+        },
+        {
+          blockType: 'contact',
+          title: 'Nous contacter',
+        },
+      ],
+      _status: 'published',
+    },
+    {
+      title: 'Vie locale',
+      slug: 'vie-locale',
+      summary: "Associations, initiatives et dynamiques de la vie locale à Vacqueyras.",
+      layout: [
+        {
+          blockType: 'richText',
+          content: richText("Vacqueyras dispose d'un tissu associatif actif qui anime la vie du village tout au long de l'année : sport, culture, solidarité. Retrouvez ici les associations locales, leurs activités et comment les rejoindre."),
+        },
+        {
+          blockType: 'collectionList',
+          title: 'Associations locales',
+          collection: 'associations',
+          limit: 6,
+        },
+        {
+          blockType: 'accordion',
+          items: [
+            {
+              title: 'Comment créer une association à Vacqueyras ?',
+              content: richText("Pour créer une association loi 1901, déposez votre déclaration en préfecture ou en ligne sur le site service-public.fr. La mairie peut vous accompagner dans vos démarches et vous renseigner sur les aides disponibles."),
+            },
+            {
+              title: 'Comment réserver la salle polyvalente ?',
+              content: richText("La salle polyvalente est disponible pour les associations locales et les particuliers. Contactez le secrétariat de la mairie pour vérifier les disponibilités et signer une convention de mise à disposition."),
+            },
+            {
+              title: 'Quelles aides la commune apporte-t-elle aux associations ?',
+              content: richText("La commune attribue chaque année des subventions aux associations locales sur présentation d'un dossier. Les critères d'attribution sont présentés lors du conseil municipal de début d'année."),
+            },
+          ],
+        },
+        {
+          blockType: 'button',
+          text: 'Nous contacter pour votre projet associatif',
+          url: '/contact',
+          variant: 'primary',
+        },
+      ],
+      _status: 'published',
+    },
+    {
+      title: 'Démarches',
+      slug: 'demarches',
+      summary: "Vos démarches administratives courantes : état civil, urbanisme, élections.",
+      layout: [
+        {
+          blockType: 'richText',
+          content: richText("La mairie de Vacqueyras vous accompagne dans vos démarches administratives. Retrouvez ci-dessous les principales procédures et les documents nécessaires."),
+        },
+        {
+          blockType: 'accordion',
+          items: [
+            {
+              title: 'Demande d'acte de naissance, mariage ou décès',
+              content: richText("Vous pouvez demander un acte d'état civil directement à la mairie ou en ligne sur service-public.fr. Munissez-vous de votre pièce d'identité et précisez la nature de l'acte et la date de l'événement."),
+            },
+            {
+              title: 'Inscription sur les listes électorales',
+              content: richText("L'inscription est possible toute l'année en ligne sur mon.service-public.fr ou directement à la mairie. Pour voter lors d'une élection, l'inscription doit être faite avant le 31 décembre de l'année précédente."),
+            },
+            {
+              title: 'Demande de permis de construire ou déclaration de travaux',
+              content: richText("Déposez votre dossier en mairie ou via le guichet numérique des autorisations d'urbanisme (GNAU). Le délai d'instruction est de 1 à 3 mois selon la nature des travaux."),
+            },
+            {
+              title: 'Certificat d'urbanisme',
+              content: richText("Le certificat d'urbanisme informe sur les règles applicables à un terrain. Déposez votre demande en mairie avec le formulaire Cerfa n°13410. Le délai de réponse est d'un mois (informatif) ou deux mois (opérationnel)."),
+            },
+          ],
+        },
+        {
+          blockType: 'button',
+          text: 'Accéder à service-public.fr',
+          url: 'https://www.service-public.fr',
+          variant: 'secondary',
+        },
       ],
       _status: 'published',
     },
   ]
-  await seedCollection(payload, 'pages', items, 'slug')
+
+  let inserted = 0
+  let updated = 0
+
+  for (const page of pages) {
+    const existing = await payload.find({
+      collection: 'pages',
+      where: { slug: { equals: page.slug } },
+      overrideAccess: true,
+      limit: 1,
+    })
+
+    if (existing.totalDocs > 0) {
+      await payload.update({ collection: 'pages', id: existing.docs[0].id, data: page as any, overrideAccess: true })
+      updated++
+    } else {
+      await payload.create({ collection: 'pages', data: page as any, overrideAccess: true })
+      inserted++
+    }
+  }
+
+  console.log(`[seed] pages: ${inserted} inserted, ${updated} updated`)
 }
 
 async function seedGlobals(payload: Awaited<ReturnType<typeof getPayload>>) {
@@ -462,7 +601,7 @@ async function seedGlobals(payload: Awaited<ReturnType<typeof getPayload>>) {
 async function seedNavigation(payload: Awaited<ReturnType<typeof getPayload>>) {
   const pagesResult = await payload.find({
     collection: 'pages',
-    where: { slug: { in: ['notre-commune', 'contact'] } },
+    where: { slug: { in: ['notre-commune', 'contact', 'vie-locale', 'demarches'] } },
     overrideAccess: true,
     limit: 10,
   })
@@ -482,6 +621,7 @@ async function seedNavigation(payload: Awaited<ReturnType<typeof getPayload>>) {
           page: pageBySlug['notre-commune'],
           children: [
             { label: 'Notre commune', kind: 'page', page: pageBySlug['notre-commune'] },
+            { label: 'Démarches', kind: 'page', page: pageBySlug['demarches'] },
             { label: 'Contact', kind: 'page', page: pageBySlug['contact'] },
           ],
         },
@@ -489,8 +629,8 @@ async function seedNavigation(payload: Awaited<ReturnType<typeof getPayload>>) {
         { label: 'Agenda', kind: 'eventsArchive' },
         {
           label: 'Vie locale',
-          kind: 'external',
-          url: '#',
+          kind: 'page',
+          page: pageBySlug['vie-locale'],
           children: [
             { label: 'Associations', kind: 'associationsArchive' },
             { label: 'Documents', kind: 'documentsArchive' },
@@ -506,6 +646,7 @@ async function seedNavigation(payload: Awaited<ReturnType<typeof getPayload>>) {
         { label: 'Actualités', kind: 'external', url: '/actualites' },
         { label: 'Agenda', kind: 'external', url: '/agenda' },
         { label: 'Associations', kind: 'external', url: '/associations' },
+        { label: 'Démarches', kind: 'page', page: pageBySlug['demarches'] },
         { label: 'Contact', kind: 'page', page: pageBySlug['contact'] },
       ],
     },
