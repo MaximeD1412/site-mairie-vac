@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAgentOrAdmin } from '../access'
+import { isAdmin } from '../access'
 
 const navItemFields = [
   { name: 'label', label: 'Libellé', type: 'text', required: true },
@@ -61,12 +61,12 @@ const navItemFields = [
 export const Navigation: CollectionConfig = {
   slug: 'navigation',
   labels: { singular: 'Menu', plural: 'Menus' },
-  admin: { useAsTitle: 'name', group: 'Structure du site' },
+  admin: { useAsTitle: 'name', group: 'Structure du site', hidden: ({ user }) => user?.role !== 'admin' },
   access: {
     read: () => true,
-    create: isAgentOrAdmin,
-    update: isAgentOrAdmin,
-    delete: isAgentOrAdmin,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   fields: [
     { name: 'name', label: 'Nom', type: 'text', required: true },

@@ -10,7 +10,8 @@
     "payload": "payload",
     "generate:types": "payload generate:types",
     "test": "vitest",
-    "seed": "cross-env NODE_ENV=development payload run src/seed.ts"
+    "seed": "cross-env NODE_ENV=development payload run src/seed.ts",
+    "seed:demo": "cross-env NODE_ENV=development payload run src/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "latest",
