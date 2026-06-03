@@ -47,6 +47,11 @@ export function MiniCalendar({ events, initialDate }: MiniCalendarProps) {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-4 select-none">
+      {/* Live region: announces month changes to screen readers */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {MONTHS_FR[month]} {year}
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <button
