@@ -91,23 +91,23 @@ async function seedCollection<T extends Record<string, unknown>>(
 async function seedAssociations(payload: Awaited<ReturnType<typeof getPayload>>) {
   const items = [
     {
-      name: 'FC Vacqueyras',
+      name: 'Association Sportive La Percheronne',
       category: 'Sport',
-      email: 'fc@vacqueyras-fictif.fr',
-      phone: '04 90 11 22 33',
-      website: 'https://fcvacqueyras-fictif.fr',
+      email: 'lapercheronne@lavilleauxclercs-fictif.fr',
+      phone: '02 54 11 22 33',
+      website: 'https://lapercheronne-fictif.fr',
     },
     {
       name: 'Amis du Patrimoine',
       category: 'Culture',
-      email: 'patrimoine@vacqueyras-fictif.fr',
-      phone: '04 90 11 22 44',
+      email: 'patrimoine@lavilleauxclercs-fictif.fr',
+      phone: '02 54 11 22 44',
     },
     {
       name: 'Entraide Locale',
       category: 'Solidarité',
-      email: 'entraide@vacqueyras-fictif.fr',
-      phone: '04 90 11 22 55',
+      email: 'entraide@lavilleauxclercs-fictif.fr',
+      phone: '02 54 11 22 55',
     },
   ]
   await seedCollection(payload, 'associations', items, 'name')
@@ -132,16 +132,16 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: 'La commune inaugure sa nouvelle salle polyvalente ce samedi en présence des élus et des habitants.',
       publishedAt: '2026-04-15T10:00:00.000Z',
       featured: true,
-      content: richText("La nouvelle salle polyvalente de Vacqueyras a été inaugurée samedi 15 avril en présence du conseil municipal et d'une centaine d'habitants. Cet équipement de 300 places permettra d'accueillir les événements associatifs, culturels et municipaux de la commune."),
+      content: richText("La nouvelle salle polyvalente de La Ville-aux-Clercs a été inaugurée samedi 15 avril en présence du conseil municipal et d'une centaine d'habitants. Cet équipement de 300 places permettra d'accueillir les événements associatifs, culturels et municipaux de la commune."),
       _status: 'published',
     },
     {
-      title: 'Travaux sur la RD7 : perturbations à prévoir',
+      title: 'Travaux sur la RD 10 : perturbations à prévoir',
       slug: 'travaux-route-departementale',
-      summary: 'Des travaux de voirie débutent sur la RD7 du 1er au 20 juin. Circulation alternée mise en place.',
+      summary: 'Des travaux de voirie débutent sur la RD 10 du 1er au 20 juin. Circulation alternée mise en place.',
       publishedAt: '2026-05-10T08:00:00.000Z',
       featured: false,
-      content: richText("Le Département de Vaucluse engage des travaux de réfection de la chaussée sur la RD7 entre Vacqueyras et Sarrians. Ces travaux se dérouleront du 1er au 20 juin 2026. Une circulation alternée sera mise en place en semaine de 8h à 18h."),
+      content: richText("Le Département de Loir-et-Cher engage des travaux de réfection de la chaussée sur la RD 10 entre La-Ville-aux-Clercs et Mondoubleau. Ces travaux se dérouleront du 1er au 20 juin 2026. Une circulation alternée sera mise en place en semaine de 8h à 18h."),
       _status: 'published',
     },
     {
@@ -156,7 +156,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
     {
       title: 'La fête du village revient le 14 juillet',
       slug: 'fete-du-village-2026',
-      summary: "La fête communale de Vacqueyras aura lieu le 14 juillet avec bal, feu d'artifice et repas partagé.",
+      summary: "La fête communale de La Ville-aux-Clercs aura lieu le 14 juillet avec bal, feu d'artifice et repas partagé.",
       publishedAt: '2026-05-01T10:00:00.000Z',
       featured: true,
       content: richText("La fête du village est de retour le 14 juillet 2026 ! Au programme : apéritif offert par la municipalité dès 18h, repas partagé en plein air (inscription avant le 5 juillet), bal folk à partir de 21h et feu d'artifice à 22h30. Entrée libre."),
@@ -168,7 +168,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: "Depuis le 1er avril, la déchetterie intercommunale adopte de nouveaux horaires d'ouverture.",
       publishedAt: '2026-04-01T07:00:00.000Z',
       featured: false,
-      content: richText("Suite à la réorganisation du service intercommunal de collecte des déchets, la déchetterie de Sarrians est désormais ouverte du lundi au samedi de 8h à 12h et de 14h à 18h. Elle est fermée le dimanche et les jours fériés."),
+      content: richText("Suite à la réorganisation du service intercommunal de collecte des déchets, la déchetterie intercommunale est désormais ouverte du lundi au samedi de 8h à 12h et de 14h à 18h. Elle est fermée le dimanche et les jours fériés."),
       _status: 'published',
     },
     {
@@ -177,16 +177,16 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: "Dans le cadre du plan de végétalisation, 30 arbres fruitiers et d'ombrage ont été plantés dans le parc.",
       publishedAt: '2026-02-20T10:00:00.000Z',
       featured: false,
-      content: richText("Dans le cadre du plan communal de végétalisation, 30 arbres ont été plantés en février dans le parc municipal. On y trouve des micocouliers, des tilleuls, des amandiers et des figuiers, choisis pour leur résistance à la sécheresse et leur valeur pour la biodiversité locale."),
+      content: richText("Dans le cadre du plan communal de végétalisation, 30 arbres ont été plantés en février dans le parc municipal. On y trouve des chênes, des frênes, des tilleuls et des pommiers, choisis pour leur résistance et leur valeur pour la biodiversité locale."),
       _status: 'published',
     },
     {
       title: 'Résultats des élections locales',
       slug: 'resultats-elections-locales',
-      summary: 'Jean-Pierre Faure est réélu maire de Vacqueyras avec 68 % des suffrages exprimés.',
+      summary: 'Jean-Pierre Faure est réélu maire de La Ville-aux-Clercs avec 68 % des suffrages exprimés.',
       publishedAt: '2026-01-15T18:00:00.000Z',
       featured: false,
-      content: richText("Les élections municipales complémentaires du 13 janvier 2026 ont vu la réélection de Jean-Pierre Faure à la tête de la commune de Vacqueyras avec 68 % des suffrages exprimés. Le nouveau conseil municipal se réunit pour la première fois le 28 janvier."),
+      content: richText("Les élections municipales complémentaires du 13 janvier 2026 ont vu la réélection de Jean-Pierre Faure à la tête de la commune de La Ville-aux-Clercs avec 68 % des suffrages exprimés. Le nouveau conseil municipal se réunit pour la première fois le 28 janvier."),
       _status: 'published',
     },
     {
@@ -195,7 +195,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: 'Le budget primitif 2026 a été voté en conseil municipal. Découvrez les grandes orientations financières.',
       publishedAt: '2026-03-28T09:00:00.000Z',
       featured: false,
-      content: richText("Le budget primitif 2026 de la commune de Vacqueyras s'élève à 1 250 000 € en section de fonctionnement et 320 000 € en section d'investissement. Les principaux projets financés : réfection des trottoirs du centre bourg, rénovation énergétique de l'école primaire, et acquisition d'un nouveau véhicule de voirie."),
+      content: richText("Le budget primitif 2026 de la commune de La Ville-aux-Clercs s'élève à 1 250 000 € en section de fonctionnement et 320 000 € en section d'investissement. Les principaux projets financés : réfection des trottoirs du centre bourg, rénovation énergétique de l'école primaire, et acquisition d'un nouveau véhicule de voirie."),
       _status: 'published',
     },
   ]
@@ -242,26 +242,26 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       slug: 'conseil-municipal-juin-2026',
       startDate: '2026-06-10T19:00:00.000Z',
       endDate: '2026-06-10T21:00:00.000Z',
-      location: 'Salle du conseil municipal — Mairie de Vacqueyras',
+      location: 'Salle du conseil municipal — Mairie de La Ville-aux-Clercs',
       category: catBySlug['municipal'] ?? undefined,
       _status: 'published',
     },
     {
-      title: 'Vide-grenier du FC Vacqueyras',
-      slug: 'vide-grenier-fc-vacqueyras',
+      title: "Vide-grenier de l'AS La Percheronne",
+      slug: 'vide-grenier-as-percheronne',
       startDate: '2026-05-31T08:00:00.000Z',
       endDate: '2026-05-31T17:00:00.000Z',
       location: 'Parking de la salle polyvalente',
       category: catBySlug['association'] ?? undefined,
-      organizer: assocByName['FC Vacqueyras'] ?? undefined,
+      organizer: assocByName['Association Sportive La Percheronne'] ?? undefined,
       _status: 'published',
     },
     {
-      title: 'Exposition : 100 ans de Vacqueyras',
+      title: 'Exposition : 100 ans de La Ville-aux-Clercs',
       slug: 'exposition-patrimoine',
       startDate: '2026-06-06T10:00:00.000Z',
       endDate: '2026-06-29T18:00:00.000Z',
-      location: 'Salle polyvalente de Vacqueyras',
+      location: 'Salle polyvalente de La Ville-aux-Clercs',
       category: catBySlug['culture'] ?? undefined,
       organizer: assocByName['Amis du Patrimoine'] ?? undefined,
       _status: 'published',
@@ -273,7 +273,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       endDate: '2026-07-05T18:00:00.000Z',
       location: 'Stade municipal',
       category: catBySlug['sport'] ?? undefined,
-      organizer: assocByName['FC Vacqueyras'] ?? undefined,
+      organizer: assocByName['Association Sportive La Percheronne'] ?? undefined,
       _status: 'published',
     },
     {
@@ -281,7 +281,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       slug: 'permanence-maire-juin',
       startDate: '2026-06-20T09:00:00.000Z',
       endDate: '2026-06-20T11:00:00.000Z',
-      location: 'Mairie de Vacqueyras — bureau du maire',
+      location: 'Mairie de La Ville-aux-Clercs — bureau du maire',
       category: catBySlug['municipal'] ?? undefined,
       _status: 'published',
     },
@@ -314,14 +314,14 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
     },
     // Événement en cours (startDate passé, endDate futur) — teste le fix "ongoing events in calendar query"
     {
-      title: 'Exposition "Racines Provençales"',
-      slug: 'exposition-racines-provencales',
+      title: 'Exposition "Racines du Perche"',
+      slug: 'exposition-racines-du-perche',
       startDate: '2026-05-10T10:00:00.000Z',
       endDate: '2026-06-01T18:00:00.000Z',
-      location: 'Salle polyvalente de Vacqueyras',
+      location: 'Salle polyvalente de La Ville-aux-Clercs',
       category: catBySlug['culture'] ?? undefined,
       organizer: assocByName['Amis du Patrimoine'] ?? undefined,
-      description: richText("Exposition retraçant l'histoire viticole et agricole de la région, organisée par l'association Amis du Patrimoine. Entrée libre."),
+      description: richText("Exposition retraçant l'histoire agricole et patrimoniale de la région, organisée par l'association Amis du Patrimoine. Entrée libre."),
       _status: 'published',
     },
     // Deux événements le même jour (samedi 23 mai) — teste les points multiples (isMultiEvent) dans MiniCalendar
@@ -332,7 +332,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       endDate: '2026-05-23T18:00:00.000Z',
       location: 'Boulodrome municipal',
       category: catBySlug['sport'] ?? undefined,
-      organizer: assocByName['FC Vacqueyras'] ?? undefined,
+      organizer: assocByName['Association Sportive La Percheronne'] ?? undefined,
       _status: 'published',
     },
     {
@@ -346,21 +346,21 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
     },
     // Événements des prochains jours — remplissent le carousel
     {
-      title: 'Réunion publique — Plan local d\'urbanisme',
+      title: "Réunion publique — Plan local d'urbanisme",
       slug: 'reunion-publique-urbanisme-mai',
       startDate: '2026-05-27T19:00:00.000Z',
       endDate: '2026-05-27T21:00:00.000Z',
-      location: 'Salle du conseil municipal — Mairie de Vacqueyras',
+      location: 'Salle du conseil municipal — Mairie de La Ville-aux-Clercs',
       category: catBySlug['municipal'] ?? undefined,
       description: richText("La mairie vous invite à une réunion publique de présentation du projet de révision du Plan Local d'Urbanisme. Venez poser vos questions et contribuer à l'avenir de notre commune."),
       _status: 'published',
     },
     {
-      title: 'Sortie nature avec l\'école primaire',
+      title: "Sortie nature avec l'école primaire",
       slug: 'sortie-ecole-nature-mai',
       startDate: '2026-05-28T08:30:00.000Z',
       endDate: '2026-05-28T16:30:00.000Z',
-      location: 'Forêt communale — sentier des Garrigues',
+      location: 'Forêt communale — sentier des Charmes',
       category: catBySlug['ecole'] ?? undefined,
       _status: 'published',
     },
@@ -372,7 +372,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       location: 'Place de la Fontaine',
       category: catBySlug['association'] ?? undefined,
       organizer: assocByName['Entraide Locale'] ?? undefined,
-      description: richText("La Fête des voisins revient à Vacqueyras ! Venez partager un moment convivial avec vos voisins autour d'un apéritif et d'un repas partagé. Chacun apporte un plat ou une boisson."),
+      description: richText("La Fête des voisins revient à La Ville-aux-Clercs ! Venez partager un moment convivial avec vos voisins autour d'un apéritif et d'un repas partagé. Chacun apporte un plat ou une boisson."),
       _status: 'published',
     },
   ]
@@ -385,11 +385,11 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
     {
       title: 'Notre commune',
       slug: 'notre-commune',
-      summary: "Découvrez l'histoire, la géographie et la vie de la commune de Vacqueyras.",
+      summary: "Découvrez l'histoire, la géographie et la vie de la commune de La Ville-aux-Clercs.",
       layout: [
         {
           blockType: 'richText',
-          content: richText("Vacqueyras est une commune du Vaucluse (84) située dans la région Provence-Alpes-Côte d'Azur. Elle compte environ 1 000 habitants et est connue pour son vignoble d'appellation Vacqueyras AOC. La mairie assure les services publics locaux et l'animation du territoire."),
+          content: richText("La Ville-aux-Clercs est une commune de Loir-et-Cher (41) située dans la région Centre-Val de Loire, dans le Perche vendômois. Elle compte environ 1 200 habitants. La mairie assure les services publics locaux et l'animation du territoire."),
         },
         {
           blockType: 'quickLinks',
@@ -413,18 +413,18 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
     {
       title: 'Contact',
       slug: 'contact',
-      summary: "Coordonnées et horaires d'ouverture de la mairie de Vacqueyras.",
+      summary: "Coordonnées et horaires d'ouverture de la mairie de La Ville-aux-Clercs.",
       layout: [
         {
           blockType: 'richText',
-          content: richText("Mairie de Vacqueyras\nPlace de la Mairie\n84190 Vacqueyras\n\nTéléphone : 04 90 00 00 00\nEmail : mairie@vacqueyras-fictif.fr\n\nHoraires d'ouverture :\nLundi, mercredi, vendredi : 9h–12h\nMardi, jeudi : 9h–12h et 14h–17h"),
+          content: richText("Mairie de La Ville-aux-Clercs\n1 Rue de la Mairie\n41160 La Ville-aux-Clercs\n\nTéléphone : 02 54 00 00 00\nEmail : mairie@lavilleauxclercs-fictif.fr\n\nHoraires d'ouverture :\nLundi, mercredi, vendredi : 9h–12h\nMardi, jeudi : 9h–12h et 14h–17h"),
         },
         {
           blockType: 'map',
           title: 'Où nous trouver',
-          address: 'Place de la Mairie, 84190 Vacqueyras',
-          lat: 44.0512,
-          lng: 5.0011,
+          address: '1 Rue de la Mairie, 41160 La Ville-aux-Clercs',
+          lat: 47.97,
+          lng: 0.99,
         },
         {
           blockType: 'contact',
@@ -436,11 +436,11 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
     {
       title: 'Vie locale',
       slug: 'vie-locale',
-      summary: "Associations, initiatives et dynamiques de la vie locale à Vacqueyras.",
+      summary: "Associations, initiatives et dynamiques de la vie locale à La Ville-aux-Clercs.",
       layout: [
         {
           blockType: 'richText',
-          content: richText("Vacqueyras dispose d'un tissu associatif actif qui anime la vie du village tout au long de l'année : sport, culture, solidarité. Retrouvez ici les associations locales, leurs activités et comment les rejoindre."),
+          content: richText("La Ville-aux-Clercs dispose d'un tissu associatif actif qui anime la vie du village tout au long de l'année : sport, culture, solidarité. Retrouvez ici les associations locales, leurs activités et comment les rejoindre."),
         },
         {
           blockType: 'collectionList',
@@ -452,7 +452,7 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
           blockType: 'accordion',
           items: [
             {
-              title: 'Comment créer une association à Vacqueyras ?',
+              title: 'Comment créer une association à La Ville-aux-Clercs ?',
               content: richText("Pour créer une association loi 1901, déposez votre déclaration en préfecture ou en ligne sur le site service-public.fr. La mairie peut vous accompagner dans vos démarches et vous renseigner sur les aides disponibles."),
             },
             {
@@ -477,11 +477,11 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
     {
       title: "Déclaration d'accessibilité",
       slug: 'accessibilite',
-      summary: "État de conformité du site de la mairie de Vacqueyras au référentiel RGAA 4.1.",
+      summary: "État de conformité du site de la mairie de La Ville-aux-Clercs au référentiel RGAA 4.1.",
       layout: [
         {
           blockType: 'richText',
-          content: richText("La mairie de Vacqueyras s'engage à rendre son site internet accessible conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005. Cette déclaration d'accessibilité s'applique au site officiel de la mairie de Vacqueyras."),
+          content: richText("La mairie de La Ville-aux-Clercs s'engage à rendre son site internet accessible conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005. Cette déclaration d'accessibilité s'applique au site officiel de la mairie de La Ville-aux-Clercs."),
         },
         {
           blockType: 'richText',
@@ -497,7 +497,7 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
         },
         {
           blockType: 'richText',
-          content: richText("Contact accessibilité : Si vous rencontrez un obstacle qui vous empêche d'accéder à un contenu ou à une fonctionnalité de ce site, merci de nous contacter. Vous pouvez nous joindre par email à mairie@vacqueyras-fictif.fr ou par courrier à Mairie de Vacqueyras, Place de la Mairie, 84190 Vacqueyras. Nous nous engageons à vous répondre dans un délai de 5 jours ouvrés."),
+          content: richText("Contact accessibilité : Si vous rencontrez un obstacle qui vous empêche d'accéder à un contenu ou à une fonctionnalité de ce site, merci de nous contacter. Vous pouvez nous joindre par email à mairie@lavilleauxclercs-fictif.fr ou par courrier à Mairie de La Ville-aux-Clercs, 1 Rue de la Mairie, 41160 La Ville-aux-Clercs. Nous nous engageons à vous répondre dans un délai de 5 jours ouvrés."),
         },
       ],
       _status: 'published',
@@ -509,7 +509,7 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
       layout: [
         {
           blockType: 'richText',
-          content: richText("La mairie de Vacqueyras vous accompagne dans vos démarches administratives. Retrouvez ci-dessous les principales procédures et les documents nécessaires."),
+          content: richText("La mairie de La Ville-aux-Clercs vous accompagne dans vos démarches administratives. Retrouvez ci-dessous les principales procédures et les documents nécessaires."),
         },
         {
           blockType: 'accordion',
@@ -574,9 +574,9 @@ async function seedGlobals(payload: Awaited<ReturnType<typeof getPayload>>) {
       slug: 'mairie-info',
       overrideAccess: true,
       data: {
-        address: 'Place de la Mairie, 84190 Vacqueyras',
-        phone: '04 90 00 00 00',
-        email: 'mairie@vacqueyras-fictif.fr',
+        address: '1 Rue de la Mairie, 41160 La Ville-aux-Clercs',
+        phone: '02 54 00 00 00',
+        email: 'mairie@lavilleauxclercs-fictif.fr',
         openingHours: [
           { days: 'Lundi, Mercredi, Vendredi', hours: '9h – 12h' },
           { days: 'Mardi, Jeudi', hours: '9h – 12h et 14h – 17h' },
@@ -595,8 +595,8 @@ async function seedGlobals(payload: Awaited<ReturnType<typeof getPayload>>) {
       slug: 'site-settings',
       overrideAccess: true,
       data: {
-        heroTitle: 'Vacqueyras',
-        heroSubtitle: 'Commune du Vaucluse — Provence',
+        heroTitle: 'La Ville-aux-Clercs',
+        heroSubtitle: 'Commune de Loir-et-Cher — Perche vendômois',
       },
     })
     console.log('[seed] site-settings: updated')
