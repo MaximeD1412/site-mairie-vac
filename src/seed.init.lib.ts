@@ -33,6 +33,17 @@ export async function runSeedInit(payload: Payload): Promise<void> {
     overrideAccess: true,
   })
 
+  await payload.create({
+    collection: 'pages',
+    data: {
+      title: "Déclaration d'accessibilité",
+      slug: 'accessibilite',
+      summary: "État de conformité du site de la mairie au référentiel RGAA 4.1.",
+      layout: [],
+    },
+    overrideAccess: true,
+  })
+
   const adminEmail = process.env.SEED_ADMIN_EMAIL
   const adminPassword = process.env.SEED_ADMIN_PASSWORD
   if (!adminEmail || !adminPassword) {
