@@ -38,7 +38,7 @@ function NewsCard({ item, featured }: { item: NewsItem; featured?: boolean }) {
         )}
       </div>
       <div className="p-5 flex flex-col gap-2">
-        <span className="inline-block bg-teal-light text-teal rounded px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide w-fit">
+        <span className="inline-block bg-teal-light text-teal-dark rounded px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide w-fit">
           {featured ? 'À la une' : 'Actualité'}
         </span>
         <strong className="text-[15px] font-bold text-text leading-snug">{item.title}</strong>

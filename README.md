@@ -6,10 +6,11 @@ Starter pensé pour une petite commune : site vitrine moderne, back-office clair
 
 - Next.js App Router
 - Payload CMS intégré dans la même app
-- SQLite au démarrage pour réduire le coût
-- Cellar / S3 compatible pour les médias en production
+- PostgreSQL
+- OVH Object Storage (S3 compatible) pour les médias en production
 - Tailwind CSS
-- Clever Cloud Node nano recommandé
+- Docker Compose (Caddy + Next.js + PostgreSQL + service backup)
+- OVH Cloud VPS
 
 ## Structure fonctionnelle
 
@@ -40,9 +41,9 @@ Utilisateurs                Admin technique / Agent mairie
 ## Installation locale
 
 ```bash
-cp .env.example .env
-npm install
-npm run dev
+cp .env.example .env.dev
+# remplir .env.dev avec vos valeurs
+./dev.sh up
 ```
 
 Puis ouvrir :
@@ -53,66 +54,127 @@ http://localhost:3000/admin
 
 Au premier lancement, Payload propose la création du premier utilisateur.
 
-## Variables importantes
+### Commandes dev disponibles
+
+```bash
+./dev.sh up      # démarrer l'environnement Docker
+./dev.sh down    # arrêter
+./dev.sh reset   # reset complet (volumes + migrations + seed démo)
+./dev.sh seed    # relancer le seed démo
+./dev.sh logs    # suivre les logs de l'app
+```
+
+## Seed de démonstration
+
+Pour pré-remplir la base avec des données fictives couvrant toutes les collections et tous les blocs CMS :
+
+```bash
+./dev.sh seed
+# ou directement dans le conteneur :
+docker compose -f docker-compose.dev.yml exec app npm run seed
+```
+
+Le seed est idempotent : il peut être relancé sans créer de doublons. Il ne fonctionne qu'en `NODE_ENV=development` et refuse de tourner en production.
+
+Données insérées : associations, élus, actualités, catégories d'événements, événements, pages (avec blocs richText, quickLinks, collectionList, accordion, button, contact, map), navigation principale et footer, et globals (mairie-info, site-settings, homepage-settings).
+
+> Les blocs `GalleryBlock` et `ImageBlock` nécessitent des médias importés manuellement et ne sont pas inclus dans le seed.
+
+### Seed init production
+
+Pour initialiser la structure minimale en production (sans données fictives) :
+
+```bash
+docker compose exec app npm run seed:init
+```
+
+## Variables d'environnement
+
+Copier `.env.example` comme base :
+
+```bash
+cp .env.example .env.dev    # développement
+cp .env.example .env.prod   # production
+```
+
+Variables principales :
 
 ```env
 PAYLOAD_SECRET=...
-DATABASE_URI=file:./payload.db
-S3_ENABLED=false
-NEXT_PUBLIC_PANNEAUPOCKET_WIDGET_URL=
+
+POSTGRES_DB=mairie
+POSTGRES_USER=mairie
+POSTGRES_PASSWORD=...
+DATABASE_URL=postgresql://mairie:...@postgres:5432/mairie
+
+NEXT_PUBLIC_SITE_URL=https://mairie.exemple.fr
 ```
 
-## Production Clever Cloud économique
+Variables production (OVH Object Storage) :
+
+```env
+# Médias Payload
+S3_ENABLED=true
+S3_BUCKET=mairie-media
+S3_REGION=gra
+S3_ENDPOINT=https://s3.gra.io.cloud.ovh.net
+S3_ACCESS_KEY_ID=...
+S3_SECRET_ACCESS_KEY=...
+
+# Backups pg_dump
+BACKUP_S3_ENDPOINT=https://s3.gra.io.cloud.ovh.net
+BACKUP_S3_REGION=gra
+BACKUP_S3_BUCKET=mairie-backups
+BACKUP_S3_ACCESS_KEY_ID=...
+BACKUP_S3_SECRET_ACCESS_KEY=...
+
+# Caddy
+DOMAIN=mairie.exemple.fr
+
+# PanneauPocket (optionnel)
+NEXT_PUBLIC_PANNEAUPOCKET_WIDGET_URL=
+
+# Resend (bloc Contact)
+RESEND_API_KEY=re_xxxxxxxxxxxx
+RESEND_FROM_EMAIL=noreply@mairie-vac.fr
+```
+
+## Déploiement production (OVH Cloud VPS)
 
 Architecture cible :
 
 ```txt
-Clever Cloud Node nano
-├── Next.js + Payload
-├── SQLite fichier
-└── Cellar pour images/PDF
+OVH Cloud VPS
+└── Docker Compose
+    ├── caddy     (reverse proxy — HTTPS automatique via Let's Encrypt)
+    ├── app       (Next.js + Payload)
+    ├── postgres  (PostgreSQL 18)
+    └── backup    (pg_dump → OVH Object Storage toutes les 6h)
 ```
 
-Conditions à respecter :
+Commandes :
 
-1. Une seule instance Node tant que SQLite est utilisé.
-2. Activer Cellar pour ne pas stocker les médias dans le filesystem applicatif.
-3. Mettre en place une sauvegarde régulière du fichier SQLite.
-4. Prévoir une migration vers PostgreSQL si le site devient plus utilisé ou plus métier.
-
-## Cellar / S3
-
-Activer dans `.env` :
-
-```env
-S3_ENABLED=true
-S3_BUCKET=...
-S3_REGION=fr
-S3_ENDPOINT=https://cellar-c2.services.clever-cloud.com
-S3_ACCESS_KEY_ID=...
-S3_SECRET_ACCESS_KEY=...
+```bash
+cp .env.example .env.prod
+# remplir .env.prod
+./prod.sh up     # build + démarrage
+./prod.sh down   # arrêt
 ```
+
+## OVH Object Storage / S3
+
+Activer dans `.env.prod` les variables `S3_*` (médias) et `BACKUP_S3_*` (backups pg_dump).
 
 ## PanneauPocket
 
 Deux options :
 
 1. définir `NEXT_PUBLIC_PANNEAUPOCKET_WIDGET_URL`,
-2. ou créer un bloc `PanneauPocket` dans une page et remplir l’URL du widget.
-
-## À compléter avant production
-
-- Rendu propre du rich text Lexical au lieu du placeholder JSON.
-- Pages détails `/actualites/[slug]` et `/agenda/[slug]`.
-- Paramètres globaux du site : adresse, horaires, téléphone, réseaux sociaux.
-- Déclaration d’accessibilité, mentions légales, politique de confidentialité.
-- Redirections depuis les anciennes URLs Joomla.
-- Script de seed initial : menus, page accueil, contact, démarches.
-- Sauvegardes SQLite.
+2. ou créer un bloc `PanneauPocket` dans une page et remplir l'URL du widget.
 
 ## Notes RGAA
 
-Base à respecter dès le début :
+Conformité partielle A + AA :
 
 - un seul H1 par page,
 - liens explicites,
@@ -121,43 +183,8 @@ Base à respecter dès le début :
 - alt images,
 - navigation clavier,
 - formulaires avec labels,
-- pas de carrousel obligatoire,
-- déclaration d’accessibilité.
+- déclaration d'accessibilité sous `/accessibilite`.
 
 ## Philosophie du starter
 
 Les menus et la majorité des pages sont administrables. Les contenus répétables restent dans des collections dédiées pour garder un back-office simple pour les agents.
-
-## SQLite sécurisé + backups Cellar
-
-Le starter inclut maintenant un flow complet pour utiliser SQLite en production légère :
-
-```txt
-./data/payload.db
-→ backup périodique vers Cellar
-→ restauration automatique au démarrage si la DB locale n'existe pas
-```
-
-Scripts utiles :
-
-```bash
-npm run sqlite:backup
-npm run sqlite:restore
-npm run sqlite:restore:force
-npm start
-```
-
-En production, `npm start` exécute :
-
-1. restauration depuis `backups/sqlite/latest.db` si `data/payload.db` n'existe pas ;
-2. démarrage Next.js/Payload ;
-3. sauvegarde périodique vers Cellar.
-
-Documentation détaillée :
-
-```txt
-docs/sqlite-backup-cellar.md
-docs/clever-cloud.md
-```
-
-> Important : cette stratégie est prévue pour une seule instance Node. Pour du multi-instance ou beaucoup d'écritures, passer sur PostgreSQL.

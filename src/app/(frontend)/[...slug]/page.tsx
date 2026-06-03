@@ -11,10 +11,10 @@ export default async function CMSPage({ params }: { params: Promise<{ slug: stri
   if (!page) notFound()
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-12">
+    <div className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="text-4xl font-bold">{page.title}</h1>
       {page.summary && <p className="mt-4 text-xl text-slate-600">{page.summary}</p>}
       <RenderBlocks blocks={(page as any).layout} />
-    </main>
+    </div>
   )
 }

@@ -1,11 +1,11 @@
 import type { GlobalConfig } from 'payload'
-import { isAgentOrAdmin } from '../access'
+import { isAdmin } from '../access'
 
 export const HomepageSettings: GlobalConfig = {
   slug: 'homepage-settings',
   label: "Page d'accueil",
-  admin: { group: 'Paramètres' },
-  access: { read: () => true, update: isAgentOrAdmin },
+  admin: { group: 'Paramètres', hidden: ({ user }) => user?.role !== 'admin' },
+  access: { read: () => true, update: isAdmin },
   fields: [
     {
       name: 'quickLinks',

@@ -72,6 +72,7 @@ export interface Config {
     pages: Page;
     navigation: Navigation;
     news: News;
+    'event-categories': EventCategory;
     events: Event;
     documents: Document;
     associations: Association;
@@ -88,6 +89,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    'event-categories': EventCategoriesSelect<false> | EventCategoriesSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     associations: AssociationsSelect<false> | AssociationsSelect<true>;
@@ -279,6 +281,66 @@ export interface Page {
             blockName?: string | null;
             blockType: 'panneauPocket';
           }
+        | {
+            title?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contact';
+          }
+        | {
+            text: string;
+            url: string;
+            variant: 'primary' | 'secondary';
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'button';
+          }
+        | {
+            title?: string | null;
+            address?: string | null;
+            lat: number;
+            lng: number;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'map';
+          }
+        | {
+            items?:
+              | {
+                  title: string;
+                  content: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'accordion';
+          }
+        | {
+            images?:
+              | {
+                  image: number | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gallery';
+          }
       )[]
     | null;
   seo?: {
@@ -351,6 +413,21 @@ export interface News {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-categories".
+ */
+export interface EventCategory {
+  id: number;
+  name: string;
+  slug: string;
+  /**
+   * Couleur hexadécimale (ex: #3B82F6)
+   */
+  color: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -360,7 +437,7 @@ export interface Event {
   startDate: string;
   endDate?: string | null;
   location?: string | null;
-  category?: ('municipal' | 'association' | 'culture' | 'sport' | 'ecole' | 'bibliotheque' | 'autre') | null;
+  category?: (number | null) | EventCategory;
   /**
    * Laisser vide pour un événement municipal
    */
@@ -495,6 +572,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'news';
         value: number | News;
+      } | null)
+    | ({
+        relationTo: 'event-categories';
+        value: number | EventCategory;
       } | null)
     | ({
         relationTo: 'events';
@@ -678,6 +759,57 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        contact?:
+          | T
+          | {
+              title?: T;
+              id?: T;
+              blockName?: T;
+            };
+        button?:
+          | T
+          | {
+              text?: T;
+              url?: T;
+              variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        map?:
+          | T
+          | {
+              title?: T;
+              address?: T;
+              lat?: T;
+              lng?: T;
+              id?: T;
+              blockName?: T;
+            };
+        accordion?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    title?: T;
+                    content?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        gallery?:
+          | T
+          | {
+              images?:
+                | T
+                | {
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   seo?:
     | T
@@ -732,6 +864,17 @@ export interface NewsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-categories_select".
+ */
+export interface EventCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  color?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

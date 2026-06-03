@@ -9,7 +9,10 @@
     "start": "next start",
     "payload": "payload",
     "generate:types": "payload generate:types",
-    "test": "vitest"
+    "test": "vitest",
+    "seed": "cross-env NODE_ENV=development payload run src/seed.ts",
+    "seed:demo": "cross-env NODE_ENV=development payload run src/seed.ts",
+    "seed:init": "cross-env payload run src/seed.init.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "latest",
@@ -18,19 +21,25 @@
     "@payloadcms/plugin-seo": "latest",
     "@payloadcms/richtext-lexical": "latest",
     "@payloadcms/storage-s3": "latest",
+    "@types/leaflet": "^1.9.21",
     "cross-env": "latest",
     "dotenv": "latest",
+    "leaflet": "^1.9.4",
     "lucide-react": "^1.14.0",
-    "next": "latest",
+    "next": "^15",
     "payload": "latest",
     "payloadcms-lexical-ext": "^0.5.3",
     "pg": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "sharp": "latest"
+    "react-leaflet": "^5.0.0",
+    "resend": "^6.12.4",
+    "sharp": "latest",
+    "yet-another-react-lightbox": "^3.32.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "latest",
@@ -38,6 +47,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "^6.0.2",
+    "drizzle-kit": "^0.31.10",
     "jsdom": "^29.1.1",
     "tailwindcss": "latest",
     "typescript": "latest",
