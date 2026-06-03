@@ -475,6 +475,34 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
       _status: 'published',
     },
     {
+      title: "Déclaration d'accessibilité",
+      slug: 'accessibilite',
+      summary: "État de conformité du site de la mairie de Vacqueyras au référentiel RGAA 4.1.",
+      layout: [
+        {
+          blockType: 'richText',
+          content: richText("La mairie de Vacqueyras s'engage à rendre son site internet accessible conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005. Cette déclaration d'accessibilité s'applique au site officiel de la mairie de Vacqueyras."),
+        },
+        {
+          blockType: 'richText',
+          content: richText("État de conformité : Le site est en conformité partielle avec le Référentiel Général d'Amélioration de l'Accessibilité (RGAA) version 4.1. Audit réalisé le 3 juin 2026. Périmètre audité : page d'accueil, page d'actualité, page CMS générique."),
+        },
+        {
+          blockType: 'richText',
+          content: richText("Critères conformes : H1 unique par page avec hiérarchie cohérente — HTML sémantique (landmarks header, nav, main, footer) — Navigation clavier complète — Focus visible sur tous les éléments interactifs — Contraste des couleurs AA (4,5:1) pour les textes principaux — Attributs alt sur toutes les images — Labels associés à tous les champs de formulaire — Liens avec intitulés explicites — Contrôle du défilement automatique (bouton pause/play) — Annonces live region pour les composants dynamiques (calendrier, carrousel) — Langue de la page déclarée (lang=\"fr\") — Lien d'évitement vers le contenu principal."),
+        },
+        {
+          blockType: 'richText',
+          content: richText("Critère partiellement conforme : Couleurs des badges de catégorie d'événements — définies librement dans le CMS, la couleur par défaut peut présenter un ratio de contraste inférieur au seuil AA (4,5:1). Impact faible. Recommandation aux éditeurs : choisir des couleurs suffisamment foncées pour les catégories."),
+        },
+        {
+          blockType: 'richText',
+          content: richText("Contact accessibilité : Si vous rencontrez un obstacle qui vous empêche d'accéder à un contenu ou à une fonctionnalité de ce site, merci de nous contacter. Vous pouvez nous joindre par email à mairie@vacqueyras-fictif.fr ou par courrier à Mairie de Vacqueyras, Place de la Mairie, 84190 Vacqueyras. Nous nous engageons à vous répondre dans un délai de 5 jours ouvrés."),
+        },
+      ],
+      _status: 'published',
+    },
+    {
       title: 'Démarches',
       slug: 'demarches',
       summary: "Vos démarches administratives courantes : état civil, urbanisme, élections.",

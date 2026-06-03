@@ -133,5 +133,16 @@ describe('runSeedInit', () => {
         expect.objectContaining({ slug: 'homepage-settings' }),
       )
     })
+
+    it('creates accessibilite page with slug "accessibilite"', async () => {
+      const payload = makePayload()
+      await runSeedInit(payload as any)
+      expect(payload.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          collection: 'pages',
+          data: expect.objectContaining({ slug: 'accessibilite' }),
+        }),
+      )
+    })
   })
 })
