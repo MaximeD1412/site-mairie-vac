@@ -1,11 +1,5 @@
 # Issues en cours
 
-## Auth & navigation
-
-| # | Titre | Type | Bloqué par |
-|---|-------|------|------------|
-| [#65](https://github.com/MaximeD1412/site-mairie-vac/issues/65) | feat: boutons Modifier/Créer sur le frontend (visibilité conditionnelle) | AFK | — |
-
 ## Éditeur de contenu
 
 | # | Titre | Type | Bloqué par |
