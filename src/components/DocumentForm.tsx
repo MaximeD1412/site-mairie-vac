@@ -85,12 +85,13 @@ export function DocumentForm({ action, document, deleteAction }: Props) {
 
         <div>
           <label className="block text-sm font-medium text-slate-700" htmlFor="date">
-            Date
+            Date <span aria-hidden>*</span>
           </label>
           <input
             id="date"
             name="date"
             type="date"
+            required
             defaultValue={document?.date ? document.date.slice(0, 10) : undefined}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
