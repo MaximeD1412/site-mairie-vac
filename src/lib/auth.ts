@@ -15,5 +15,13 @@ export function resolveMiddlewareRedirect(pathname: string, token: string | unde
     if (decoded?.role === 'agent') return '/'
     return null
   }
+
+  if (pathname === '/documents/new' || /^\/documents\/\d+\/modifier$/.test(pathname)) {
+    if (!token) return '/connexion'
+    const decoded = decodePayloadToken(token)
+    if (decoded?.role !== 'admin' && decoded?.role !== 'agent') return '/connexion'
+    return null
+  }
+
   return null
 }
