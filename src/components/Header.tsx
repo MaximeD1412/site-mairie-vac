@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { HeaderClient } from './HeaderClient'
+import { decodePayloadToken } from '@/lib/auth'
 
 interface NavChild {
   label: string
@@ -20,8 +22,11 @@ interface HeaderProps {
   navigation?: { items?: NavItem[] }
 }
 
-export function Header({ navigation }: HeaderProps) {
+export async function Header({ navigation }: HeaderProps) {
   const items = navigation?.items ?? []
+  const cookieStore = await cookies()
+  const token = cookieStore.get('payload-token')?.value
+  const role = token ? (decodePayloadToken(token)?.role ?? null) : null
 
   return (
     <>
@@ -45,7 +50,7 @@ export function Header({ navigation }: HeaderProps) {
           </Link>
 
           {/* Nav + méga menu + actions — partie interactive côté client */}
-          <HeaderClient items={items} />
+          <HeaderClient items={items} role={role as 'admin' | 'agent' | null} />
 
         </div>
       </header>
