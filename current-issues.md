@@ -4,9 +4,8 @@
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
-| [#50](https://github.com/MaximeD1412/site-mairie-vac/issues/50) | feat: auth agent — login custom + blocage /admin | AFK | — |
 | [#51](https://github.com/MaximeD1412/site-mairie-vac/issues/51) | chore: migrer News.content et Events.description vers HTML | AFK | — |
-| [#53](https://github.com/MaximeD1412/site-mairie-vac/issues/53) | feat: shell Espace agents (layout, navigation, logout) | AFK | #50 |
+| [#53](https://github.com/MaximeD1412/site-mairie-vac/issues/53) | feat: shell Espace agents (layout, navigation, logout) | AFK | — |
 | [#54](https://github.com/MaximeD1412/site-mairie-vac/issues/54) | feat: éditeur Tiptap — base (gras, italique, titres, listes) | AFK | #51 |
 | [#56](https://github.com/MaximeD1412/site-mairie-vac/issues/56) | feat: éditeur Tiptap — médiathèque (images: sélecteur + upload) | AFK | #54 |
 | [#57](https://github.com/MaximeD1412/site-mairie-vac/issues/57) | feat: éditeur Tiptap — documents (lien, PDF viewer, vidéo inline) | AFK | #54 |
