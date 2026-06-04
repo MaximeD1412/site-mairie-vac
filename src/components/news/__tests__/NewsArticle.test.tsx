@@ -10,23 +10,12 @@ vi.mock('next/link', () => ({
   default: ({ href, children, ...rest }: any) => <a href={href} {...rest}>{children}</a>,
 }))
 
-vi.mock('@/components/blocks/RichTextBlock', () => ({
-  RichTextBlock: ({ content }: any) =>
-    content?.root?.children?.length ? <div data-testid="rich-text" /> : null,
+vi.mock('@/components/HtmlContent', () => ({
+  HtmlContent: ({ html, className }: any) =>
+    html ? <div data-testid="html-content" className={className} dangerouslySetInnerHTML={{ __html: html }} /> : null,
 }))
 
 import { NewsArticle } from '../NewsArticle'
-
-const contentWithChildren = {
-  root: {
-    children: [
-      {
-        type: 'paragraph',
-        children: [{ type: 'text', text: 'Contenu', format: 0 }],
-      },
-    ],
-  },
-}
 
 describe('NewsArticle', () => {
   it('renders the article title as h1', () => {
@@ -68,21 +57,21 @@ describe('NewsArticle', () => {
     expect(screen.queryByRole('img')).toBeNull()
   })
 
-  it('renders richtext content and a separator when content has children', () => {
-    const { container } = render(<NewsArticle title="Titre" content={contentWithChildren} />)
-    expect(screen.getByTestId('rich-text')).toBeInTheDocument()
+  it('renders HTML content and a separator when content is provided', () => {
+    const { container } = render(<NewsArticle title="Titre" content="<p>Contenu</p>" />)
+    expect(screen.getByTestId('html-content')).toBeInTheDocument()
     expect(container.querySelector('hr')).toBeInTheDocument()
   })
 
-  it('does not render richtext or separator when content is empty', () => {
-    const { container } = render(<NewsArticle title="Titre" content={{ root: { children: [] } }} />)
-    expect(screen.queryByTestId('rich-text')).toBeNull()
+  it('does not render content or separator when content is empty string', () => {
+    const { container } = render(<NewsArticle title="Titre" content="" />)
+    expect(screen.queryByTestId('html-content')).toBeNull()
     expect(container.querySelector('hr')).toBeNull()
   })
 
-  it('does not render richtext or separator when content is absent', () => {
+  it('does not render content or separator when content is absent', () => {
     const { container } = render(<NewsArticle title="Titre" />)
-    expect(screen.queryByTestId('rich-text')).toBeNull()
+    expect(screen.queryByTestId('html-content')).toBeNull()
     expect(container.querySelector('hr')).toBeNull()
   })
 

@@ -38,6 +38,6 @@ export const Events: CollectionConfig = {
       admin: { description: 'Laisser vide pour un événement municipal' },
     },
     { name: 'image', label: 'Image', type: 'upload', relationTo: 'media' },
-    { name: 'description', label: 'Description', type: 'richText' }
+    { name: 'description', label: 'Description', type: 'textarea' },
   ]
 }

@@ -22,6 +22,7 @@
     "@payloadcms/richtext-lexical": "latest",
     "@payloadcms/storage-s3": "latest",
     "@types/leaflet": "^1.9.21",
+    "@types/sanitize-html": "^2.16.1",
     "cross-env": "latest",
     "dotenv": "latest",
     "graphql": "latest",
@@ -34,6 +35,7 @@
     "react-dom": "latest",
     "react-leaflet": "^5.0.0",
     "resend": "^6.12.4",
+    "sanitize-html": "^2.17.4",
     "sharp": "latest",
     "sonner": "^2.0.7",
     "yet-another-react-lightbox": "^3.32.0"

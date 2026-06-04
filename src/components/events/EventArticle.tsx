@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { RichTextBlock } from '@/components/blocks/RichTextBlock'
+import { HtmlContent } from '@/components/HtmlContent'
 
 interface EventImage {
   url?: string | null
@@ -24,7 +24,7 @@ interface EventArticleProps {
   category?: EventCategory | null
   organizer?: EventOrganizer | number | null
   image?: EventImage | string | null
-  description?: any
+  description?: string | null
 }
 
 const DAY_FMT: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }
@@ -105,7 +105,7 @@ export function EventArticle({
           )}
         </div>
 
-        {description && <RichTextBlock content={description} />}
+        <HtmlContent html={description} className="my-8 text-text text-[15px]" />
       </div>
     </main>
   )
