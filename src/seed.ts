@@ -515,7 +515,7 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
           blockType: 'accordion',
           items: [
             {
-              title: 'Demande d'acte de naissance, mariage ou décès',
+              title: "Demande d'acte de naissance, mariage ou décès",
               content: richText("Vous pouvez demander un acte d'état civil directement à la mairie ou en ligne sur service-public.fr. Munissez-vous de votre pièce d'identité et précisez la nature de l'acte et la date de l'événement."),
             },
             {
@@ -527,7 +527,7 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
               content: richText("Déposez votre dossier en mairie ou via le guichet numérique des autorisations d'urbanisme (GNAU). Le délai d'instruction est de 1 à 3 mois selon la nature des travaux."),
             },
             {
-              title: 'Certificat d'urbanisme',
+              title: "Certificat d'urbanisme",
               content: richText("Le certificat d'urbanisme informe sur les règles applicables à un terrain. Déposez votre demande en mairie avec le formulaire Cerfa n°13410. Le délai de réponse est d'un mois (informatif) ou deux mois (opérationnel)."),
             },
           ],
