@@ -4,7 +4,6 @@
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
-| [#64](https://github.com/MaximeD1412/site-mairie-vac/issues/64) | feat: bouton déconnexion dans le Header | AFK | — |
 | [#65](https://github.com/MaximeD1412/site-mairie-vac/issues/65) | feat: boutons Modifier/Créer sur le frontend (visibilité conditionnelle) | AFK | — |
 
 ## Éditeur de contenu
