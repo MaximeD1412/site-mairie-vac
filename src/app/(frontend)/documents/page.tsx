@@ -12,9 +12,12 @@ export default async function DocumentsArchive() {
       </div>
       <div className="mt-8 grid gap-4">
         {documents.docs.map((item: any) => (
-          <article key={item.id} className="rounded-2xl bg-white p-5 shadow-sm">
-            <strong>{item.title}</strong>
-            <p className="mt-2 text-slate-600">{item.category}</p>
+          <article key={item.id} className="flex items-center justify-between rounded-2xl bg-white p-5 shadow-sm">
+            <div>
+              <strong>{item.title}</strong>
+              <p className="mt-2 text-slate-600">{item.category}</p>
+            </div>
+            <EditButton href={`/documents/${item.id}/modifier`} label="Modifier" variant="secondary" />
           </article>
         ))}
       </div>
