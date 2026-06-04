@@ -1,6 +1,7 @@
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 // @ts-ignore — no type declarations for this CSS export
 import '@payloadcms/next/css'
+import './custom.scss'
 import React from 'react'
 import config from '@/payload.config'
 import { importMap } from './admin/importMap.js'

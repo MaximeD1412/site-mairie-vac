@@ -27,8 +27,14 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     meta: {
-      titleSuffix: '- Site communal'
-    }
+      titleSuffix: '- La Ville-aux-Clercs'
+    },
+    components: {
+      graphics: {
+        Logo: '@/components/admin/Logo',
+        Icon: '@/components/admin/Icon',
+      },
+    },
   },
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET!,
