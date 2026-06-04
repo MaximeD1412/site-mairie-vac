@@ -4,7 +4,6 @@
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
-| [#56](https://github.com/MaximeD1412/site-mairie-vac/issues/56) | feat: composant RichEditor — images (médiathèque + upload) | AFK | — |
 | [#57](https://github.com/MaximeD1412/site-mairie-vac/issues/57) | feat: composant RichEditor — documents (lien texte, PDF viewer, vidéo inline) | AFK | — |
 
 ## Édition de contenu
