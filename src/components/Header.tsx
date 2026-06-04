@@ -26,7 +26,9 @@ export async function Header({ navigation }: HeaderProps) {
   const items = navigation?.items ?? []
   const cookieStore = await cookies()
   const token = cookieStore.get('payload-token')?.value
-  const role = token ? (decodePayloadToken(token)?.role ?? null) : null
+  const decoded = token ? decodePayloadToken(token) : null
+  const role = decoded?.role ?? null
+  const userName = decoded?.name ?? decoded?.email ?? null
 
   return (
     <>
@@ -50,7 +52,7 @@ export async function Header({ navigation }: HeaderProps) {
           </Link>
 
           {/* Nav + méga menu + actions — partie interactive côté client */}
-          <HeaderClient items={items} role={role as 'admin' | 'agent' | null} />
+          <HeaderClient items={items} role={role as 'admin' | 'agent' | null} userName={userName} />
 
         </div>
       </header>

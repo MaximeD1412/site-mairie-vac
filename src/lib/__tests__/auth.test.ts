@@ -23,8 +23,8 @@ describe('resolveMiddlewareRedirect', () => {
     expect(resolveMiddlewareRedirect('/admin', token)).toBeNull()
   })
 
-  it("laisse passer un accès sans cookie sur /admin (Payload gère son propre login)", () => {
-    expect(resolveMiddlewareRedirect('/admin', undefined)).toBeNull()
+  it("redirige un accès sans cookie sur /admin vers /?auth=required", () => {
+    expect(resolveMiddlewareRedirect('/admin', undefined)).toBe('/?auth=required')
   })
 
   it('retourne null pour une route non concernée', () => {

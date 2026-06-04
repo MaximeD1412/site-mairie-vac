@@ -19,11 +19,12 @@ export const Users: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'agent',
+      saveToJWT: true,
       options: [
         { label: 'Administrateur technique', value: 'admin' },
         { label: 'Agent mairie', value: 'agent' }
       ]
     },
-    { name: 'name', label: 'Nom', type: 'text' }
+    { name: 'name', label: 'Nom', type: 'text', saveToJWT: true }
   ]
 }

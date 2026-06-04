@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { LogOut } from 'lucide-react'
+import { LogOut, LogIn } from 'lucide-react'
+import { LoginForm } from './LoginForm'
 import { hrefFromNavItem } from '@/lib/links'
 
 interface NavChild {
@@ -24,6 +25,31 @@ interface MobileMenuProps {
   items: NavItem[]
   role?: 'admin' | 'agent' | null
   onLogout?: () => void
+}
+
+function MobileLoginSection({ onSuccess }: { onSuccess: () => void }) {
+  const [showForm, setShowForm] = useState(false)
+
+  if (showForm) {
+    return (
+      <div className="shrink-0 border-t border-white/10 p-4 text-white">
+        <LoginForm onSuccess={onSuccess} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="shrink-0 border-t border-white/10 p-4">
+      <button
+        onClick={() => setShowForm(true)}
+        aria-label="Se connecter"
+        className="flex items-center gap-2 px-4 py-2 text-[13px] text-white/70 hover:text-white/90 transition-colors"
+      >
+        <LogIn size={13} aria-hidden="true" />
+        Se connecter
+      </button>
+    </div>
+  )
 }
 
 export function MobileMenu({ items, role, onLogout }: MobileMenuProps) {
@@ -239,6 +265,10 @@ export function MobileMenu({ items, role, onLogout }: MobileMenuProps) {
               Déconnexion
             </button>
           </div>
+        )}
+
+        {role == null && (
+          <MobileLoginSection onSuccess={close} />
         )}
       </div>
     </>
