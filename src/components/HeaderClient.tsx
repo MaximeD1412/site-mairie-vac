@@ -26,12 +26,18 @@ interface NavItem {
 interface HeaderClientProps {
   items: NavItem[]
   role: 'admin' | 'agent' | null
+  userName?: string | null
 }
 
 const navItemClass =
   'flex items-center gap-1 h-[68px] px-4 text-[13.5px] font-semibold uppercase tracking-[0.4px] border-b-[3px] transition-all no-underline'
 
-export function HeaderClient({ items, role }: HeaderClientProps) {
+const roleLabel: Record<string, string> = {
+  admin: 'Administrateur',
+  agent: 'Agent mairie',
+}
+
+export function HeaderClient({ items, role, userName }: HeaderClientProps) {
   const router = useRouter()
   const [openItem, setOpenItem] = useState<number | null>(null)
 
@@ -99,6 +105,13 @@ export function HeaderClient({ items, role }: HeaderClientProps) {
 
       {/* Actions */}
       <div className="flex items-center gap-2 shrink-0">
+        {role != null && userName && (
+          <div className="hidden md:flex flex-col items-end leading-tight mr-1">
+            <strong className="text-white text-[13px] font-bold">{userName}</strong>
+            <span className="text-white/70 text-[11px]">{roleLabel[role] ?? role}</span>
+          </div>
+        )}
+
         {role === 'admin' && (
           <Link
             href="/admin"
