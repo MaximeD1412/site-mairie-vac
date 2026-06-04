@@ -10,7 +10,7 @@ export function decodePayloadToken(token: string): { role?: string } | null {
 
 export function resolveMiddlewareRedirect(pathname: string, token: string | undefined): string | null {
   if (pathname.startsWith('/admin')) {
-    if (!token) return null
+    if (!token) return '/?auth=required'
     const decoded = decodePayloadToken(token)
     if (decoded?.role === 'agent') return '/'
     return null

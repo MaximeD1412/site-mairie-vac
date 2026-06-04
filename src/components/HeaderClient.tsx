@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Search, ChevronDown, LogOut } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
 import { MobileMenu } from './MobileMenu'
+import { LoginPopover } from './LoginPopover'
 
 interface NavChild {
   label: string
@@ -116,6 +117,12 @@ export function HeaderClient({ items, role }: HeaderClientProps) {
             <LogOut size={13} aria-hidden="true" />
             Déconnexion
           </button>
+        )}
+
+        {role == null && (
+          <div className="hidden md:block">
+            <LoginPopover />
+          </div>
         )}
 
         <button
