@@ -34,7 +34,14 @@ function NewsCard({ item, featured }: { item: NewsItem; featured?: boolean }) {
     >
       <div className={`bg-gradient-to-br from-brand-light to-brand-mid relative ${featured ? 'h-[200px]' : 'w-[130px] shrink-0'}`}>
         {image?.url && (
-          <Image src={image.url} alt="" aria-hidden="true" fill className="object-cover" />
+          <Image
+            src={image.url}
+            alt=""
+            aria-hidden="true"
+            fill
+            sizes={featured ? '(max-width: 768px) 100vw, calc(min(1280px, 100vw) - 460px)' : '130px'}
+            className="object-cover"
+          />
         )}
       </div>
       <div className="p-5 flex flex-col gap-2">

@@ -153,6 +153,7 @@ export function AgendaCarousel({ events }: { events: CarouselEvent[] }) {
                     src={img.url}
                     alt={img.alt ?? event.title}
                     fill
+                    sizes="(max-width: 768px) 40vw, 25vw"
                     className="object-cover"
                   />
                 </div>

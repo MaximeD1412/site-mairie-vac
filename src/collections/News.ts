@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical'
-import { YoutubeFeature } from 'payloadcms-lexical-ext'
+import { YoutubeFeature } from '@/features/youtube/feature.server'
 import { publishedOrLoggedIn, isAgentOrAdmin } from '../access'
 
 export const News: CollectionConfig = {

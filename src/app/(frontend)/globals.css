@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'yet-another-react-lightbox/styles.css';
 
 @theme {
   --color-brand:        #1a61ab;

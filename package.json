@@ -28,14 +28,14 @@
     "lucide-react": "^1.14.0",
     "next": "^15",
     "payload": "latest",
-    "payloadcms-lexical-ext": "^0.5.3",
     "pg": "latest",
     "react": "latest",
     "react-dom": "latest",
     "react-leaflet": "^5.0.0",
     "resend": "^6.12.4",
     "sharp": "latest",
-    "yet-another-react-lightbox": "^3.32.0"
+    "yet-another-react-lightbox": "^3.32.0",
+    "graphql": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "latest",

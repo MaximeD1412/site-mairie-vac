@@ -1,6 +1,6 @@
 import type { Block } from 'payload'
 import { lexicalEditor, UploadFeature } from '@payloadcms/richtext-lexical'
-import { YoutubeFeature } from 'payloadcms-lexical-ext'
+import { YoutubeFeature } from '@/features/youtube/feature.server'
 
 export const RichTextBlock: Block = {
   slug: 'richText',
