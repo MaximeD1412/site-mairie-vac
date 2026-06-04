@@ -10,7 +10,6 @@
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
-| [#67](https://github.com/MaximeD1412/site-mairie-vac/issues/67) | feat: CRUD Actualités — édition contextuelle depuis le frontend | AFK | — |
 | [#68](https://github.com/MaximeD1412/site-mairie-vac/issues/68) | feat: CRUD Événements — édition contextuelle depuis le frontend | AFK | — |
 
 ## Panel admin
