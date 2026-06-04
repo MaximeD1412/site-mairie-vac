@@ -27,6 +27,5 @@
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
-| [#52](https://github.com/MaximeD1412/site-mairie-vac/issues/52) | feat: Panel admin — branding Payload (logo + couleurs commune) | AFK | — |
-| [#55](https://github.com/MaximeD1412/site-mairie-vac/issues/55) | feat: Panel admin — dashboard d'accueil custom | AFK | #52 |
+| [#55](https://github.com/MaximeD1412/site-mairie-vac/issues/55) | feat: Panel admin — dashboard d'accueil custom | AFK | — |
 | [#61](https://github.com/MaximeD1412/site-mairie-vac/issues/61) | feat: passer l'interface /admin Payload en français | AFK | — |
