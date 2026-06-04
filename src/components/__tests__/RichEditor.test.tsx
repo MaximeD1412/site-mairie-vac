@@ -20,6 +20,7 @@ const mockEditor = vi.hoisted(() => ({
       setLink: () => ({ run: mockRun }),
       unsetLink: () => ({ run: mockRun }),
       setImage: () => ({ run: mockRun }),
+      insertContent: () => ({ run: mockRun }),
     }),
   }),
   isActive: mockIsActive,
@@ -46,17 +47,39 @@ vi.mock('../MediaLibraryModal', () => ({
   ),
 }))
 
+type DocumentInsertMode =
+  | { type: 'link'; href: string; label: string }
+  | { type: 'pdf-viewer'; src: string; title: string }
+  | { type: 'video'; src: string; mimeType: string }
+
+let capturedOnDocInsert: ((mode: DocumentInsertMode) => void) | undefined
+
+vi.mock('../DocumentLibraryModal', () => ({
+  DocumentLibraryModal: ({ onInsert, onClose }: { onInsert: (mode: DocumentInsertMode) => void; onClose: () => void }) => {
+    capturedOnDocInsert = onInsert
+    return (
+      <div role="dialog" data-testid="document-library-modal">
+        <button onClick={() => onInsert({ type: 'link', href: '/media/doc.pdf', label: 'Mon doc' })}>Insérer lien</button>
+        <button onClick={() => onInsert({ type: 'pdf-viewer', src: '/media/doc.pdf', title: 'Mon doc' })}>Insérer PDF</button>
+        <button onClick={() => onInsert({ type: 'video', src: '/media/vid.mp4', mimeType: 'video/mp4' })}>Insérer vidéo</button>
+        <button onClick={onClose}>Fermer</button>
+      </div>
+    )
+  },
+}))
+
 import { RichEditor } from '../RichEditor'
 
 beforeEach(() => {
   vi.clearAllMocks()
   capturedOnUpdate = undefined
+  capturedOnDocInsert = undefined
   mockIsActive.mockReturnValue(false)
   mockGetHTML.mockReturnValue('<p></p>')
 })
 
 describe('RichEditor', () => {
-  it('affiche les 8 boutons de la barre d\'outils avec aria-label', () => {
+  it('affiche les 9 boutons de la barre d\'outils avec aria-label', () => {
     render(<RichEditor value="" onChange={vi.fn()} />)
 
     expect(screen.getByRole('button', { name: 'Gras' })).toBeInTheDocument()
@@ -67,6 +90,7 @@ describe('RichEditor', () => {
     expect(screen.getByRole('button', { name: 'Liste numérotée' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Lien' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Image' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Document' })).toBeInTheDocument()
   })
 
   it('la barre d\'outils a le rôle toolbar', () => {
@@ -126,5 +150,29 @@ describe('RichEditor', () => {
     expect(screen.getByTestId('media-library-modal')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Fermer' }))
     expect(screen.queryByTestId('media-library-modal')).not.toBeInTheDocument()
+  })
+
+  it('cliquer sur Document ouvre le modal de documents', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    expect(screen.queryByTestId('document-library-modal')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Document' }))
+    expect(screen.getByTestId('document-library-modal')).toBeInTheDocument()
+  })
+
+  it('fermer le modal de documents le cache', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Document' }))
+    expect(screen.getByTestId('document-library-modal')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Fermer' }))
+    expect(screen.queryByTestId('document-library-modal')).not.toBeInTheDocument()
+  })
+
+  it('insérer un lien depuis le modal appelle la commande insertContent et ferme le modal', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Document' }))
+    expect(screen.getByTestId('document-library-modal')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Insérer lien' }))
+    expect(mockRun).toHaveBeenCalled()
+    expect(screen.queryByTestId('document-library-modal')).not.toBeInTheDocument()
   })
 })
