@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, ChevronDown } from 'lucide-react'
+import { Search, ChevronDown, LogOut } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
 import { MobileMenu } from './MobileMenu'
 
@@ -30,6 +31,7 @@ const navItemClass =
   'flex items-center gap-1 h-[68px] px-4 text-[13.5px] font-semibold uppercase tracking-[0.4px] border-b-[3px] transition-all no-underline'
 
 export function HeaderClient({ items, role }: HeaderClientProps) {
+  const router = useRouter()
   const [openItem, setOpenItem] = useState<number | null>(null)
 
   useEffect(() => {
@@ -48,6 +50,11 @@ export function HeaderClient({ items, role }: HeaderClientProps) {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
+
+  async function handleLogout() {
+    await fetch('/api/users/logout', { method: 'POST' })
+    router.refresh()
+  }
 
   return (
     <>
@@ -99,13 +106,25 @@ export function HeaderClient({ items, role }: HeaderClientProps) {
             Administration
           </Link>
         )}
+
+        {role != null && (
+          <button
+            onClick={handleLogout}
+            aria-label="Se déconnecter"
+            className="hidden md:flex items-center gap-1.5 h-9 px-3 rounded bg-white/15 text-white text-[13px] font-medium hover:bg-red-500/80 hover:text-white transition-colors"
+          >
+            <LogOut size={13} aria-hidden="true" />
+            Déconnexion
+          </button>
+        )}
+
         <button
           aria-label="Rechercher sur le site"
           className="w-9 h-9 rounded-full bg-white/12 text-white flex items-center justify-center hover:bg-white/22 transition-colors"
         >
           <Search size={16} aria-hidden="true" />
         </button>
-        <MobileMenu items={items} />
+        <MobileMenu items={items} role={role} onLogout={handleLogout} />
       </div>
 
       {/* Mega menu panel — absolute, full width, below header bar */}
