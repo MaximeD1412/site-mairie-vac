@@ -34,6 +34,11 @@ export default buildConfig({
         Logo: '@/components/admin/Logo',
         Icon: '@/components/admin/Icon',
       },
+      views: {
+        dashboard: {
+          Component: '@/components/admin/Dashboard',
+        },
+      },
     },
   },
   editor: lexicalEditor({}),
