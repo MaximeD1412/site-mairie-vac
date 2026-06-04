@@ -6,8 +6,11 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
 import sanitizeHtml from 'sanitize-html'
-import { Bold, Italic, Heading2, Heading3, List, ListOrdered, Link2, ImageIcon } from 'lucide-react'
+import { Bold, Italic, Heading2, Heading3, List, ListOrdered, Link2, ImageIcon, FileText } from 'lucide-react'
 import { MediaLibraryModal } from './MediaLibraryModal'
+import { DocumentLibraryModal, type DocumentInsertMode } from './DocumentLibraryModal'
+import { DocumentPdfViewer } from './tiptap-extensions/DocumentPdfViewer'
+import { DocumentVideoPlayer } from './tiptap-extensions/DocumentVideoPlayer'
 
 interface RichEditorProps {
   value: string
@@ -16,22 +19,28 @@ interface RichEditorProps {
 }
 
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
-  allowedTags: ['p', 'br', 'strong', 'em', 'h2', 'h3', 'ul', 'ol', 'li', 'a', 'img'],
+  allowedTags: ['p', 'br', 'strong', 'em', 'h2', 'h3', 'ul', 'ol', 'li', 'a', 'img', 'iframe', 'video', 'source'],
   allowedAttributes: {
     a: ['href', 'target', 'rel'],
     img: ['src', 'alt', 'width', 'height'],
+    iframe: ['src', 'title', 'allowfullscreen', 'class', 'style'],
+    video: ['controls', 'class', 'style'],
+    source: ['src', 'type'],
   },
   allowedSchemes: ['https', 'http', 'mailto'],
 }
 
 export function RichEditor({ value, onChange, className }: RichEditorProps) {
   const [mediaOpen, setMediaOpen] = useState(false)
+  const [docOpen, setDocOpen] = useState(false)
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ heading: { levels: [2, 3] } }),
       Link.configure({ openOnClick: false }),
       Image.configure({ inline: false }),
+      DocumentPdfViewer,
+      DocumentVideoPlayer,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -52,6 +61,26 @@ export function RichEditor({ value, onChange, className }: RichEditorProps) {
   const handleImageSelect = (url: string, alt: string) => {
     editor?.chain().focus().setImage({ src: url, alt }).run()
     setMediaOpen(false)
+  }
+
+  const handleDocumentInsert = (mode: DocumentInsertMode) => {
+    if (!editor) return
+    if (mode.type === 'link') {
+      editor
+        .chain()
+        .focus()
+        .insertContent(`<a href="${mode.href}" target="_blank" rel="noopener noreferrer">${mode.label}</a>`)
+        .run()
+    } else if (mode.type === 'pdf-viewer') {
+      editor.chain().focus().insertContent({ type: 'documentPdfViewer', attrs: { src: mode.src, title: mode.title } }).run()
+    } else if (mode.type === 'video') {
+      editor
+        .chain()
+        .focus()
+        .insertContent({ type: 'documentVideoPlayer', attrs: { src: mode.src, mimeType: mode.mimeType } })
+        .run()
+    }
+    setDocOpen(false)
   }
 
   return (
@@ -113,6 +142,13 @@ export function RichEditor({ value, onChange, className }: RichEditorProps) {
         >
           <ImageIcon size={15} />
         </ToolbarButton>
+        <ToolbarButton
+          onClick={() => setDocOpen(true)}
+          aria-label="Document"
+          aria-pressed={false}
+        >
+          <FileText size={15} />
+        </ToolbarButton>
       </div>
       <EditorContent
         editor={editor}
@@ -122,6 +158,12 @@ export function RichEditor({ value, onChange, className }: RichEditorProps) {
         <MediaLibraryModal
           onSelect={handleImageSelect}
           onClose={() => setMediaOpen(false)}
+        />
+      )}
+      {docOpen && (
+        <DocumentLibraryModal
+          onInsert={handleDocumentInsert}
+          onClose={() => setDocOpen(false)}
         />
       )}
     </div>
