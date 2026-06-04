@@ -7,8 +7,8 @@ vi.mock('next/headers', () => ({
 }))
 
 vi.mock('next/link', () => ({
-  default: ({ href, children }: { href: string; children: React.ReactNode }) => (
-    <a href={href}>{children}</a>
+  default: ({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) => (
+    <a href={href} className={className}>{children}</a>
   ),
 }))
 
@@ -66,5 +66,23 @@ describe('EditButton', () => {
     mockToken('visitor')
     const element = await EditButton({ href: '/actualites/new', label: 'Nouvelle actualité' })
     expect(element).toBeNull()
+  })
+
+  it('applies primary styles by default', async () => {
+    mockToken('admin')
+    const element = await EditButton({ href: '/actualites/new', label: 'Test' })
+    render(element as React.ReactElement)
+    const link = screen.getByRole('link')
+    expect(link.className.split(' ')).toContain('bg-brand')
+    expect(link.className.split(' ')).not.toContain('border-brand')
+  })
+
+  it('applies secondary styles when variant="secondary"', async () => {
+    mockToken('admin')
+    const element = await EditButton({ href: '/actualites/new', label: 'Test', variant: 'secondary' })
+    render(element as React.ReactElement)
+    const link = screen.getByRole('link')
+    expect(link.className.split(' ')).toContain('border-brand')
+    expect(link.className.split(' ')).not.toContain('bg-brand')
   })
 })
