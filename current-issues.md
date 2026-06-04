@@ -1,17 +1,28 @@
 # Issues en cours
 
-## Espace agents
+## Auth & navigation
+
+| # | Titre | Type | Bloqué par |
+|---|-------|------|------------|
+| [#64](https://github.com/MaximeD1412/site-mairie-vac/issues/64) | feat: bouton déconnexion dans le Header | AFK | — |
+| [#65](https://github.com/MaximeD1412/site-mairie-vac/issues/65) | feat: boutons Modifier/Créer sur le frontend (visibilité conditionnelle) | AFK | — |
+
+## Éditeur de contenu
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
 | [#51](https://github.com/MaximeD1412/site-mairie-vac/issues/51) | chore: migrer News.content et Events.description vers HTML | AFK | — |
-| [#53](https://github.com/MaximeD1412/site-mairie-vac/issues/53) | feat: shell Espace agents (layout, navigation, logout) | AFK | — |
-| [#54](https://github.com/MaximeD1412/site-mairie-vac/issues/54) | feat: éditeur Tiptap — base (gras, italique, titres, listes) | AFK | #51 |
-| [#56](https://github.com/MaximeD1412/site-mairie-vac/issues/56) | feat: éditeur Tiptap — médiathèque (images: sélecteur + upload) | AFK | #54 |
-| [#57](https://github.com/MaximeD1412/site-mairie-vac/issues/57) | feat: éditeur Tiptap — documents (lien, PDF viewer, vidéo inline) | AFK | #54 |
-| [#58](https://github.com/MaximeD1412/site-mairie-vac/issues/58) | feat: CRUD Actualités (Espace agents) | AFK | #53, #54 |
-| [#59](https://github.com/MaximeD1412/site-mairie-vac/issues/59) | feat: CRUD Événements (Espace agents) | AFK | #53, #54 |
-| [#60](https://github.com/MaximeD1412/site-mairie-vac/issues/60) | feat: CRUD Documents (Espace agents) | AFK | #53 |
+| [#54](https://github.com/MaximeD1412/site-mairie-vac/issues/54) | feat: composant RichEditor — base (gras, italique, titres, listes, liens) | AFK | #51 |
+| [#56](https://github.com/MaximeD1412/site-mairie-vac/issues/56) | feat: composant RichEditor — images (médiathèque + upload) | AFK | #54 |
+| [#57](https://github.com/MaximeD1412/site-mairie-vac/issues/57) | feat: composant RichEditor — documents (lien texte, PDF viewer, vidéo inline) | AFK | #54 |
+
+## Édition de contenu
+
+| # | Titre | Type | Bloqué par |
+|---|-------|------|------------|
+| [#66](https://github.com/MaximeD1412/site-mairie-vac/issues/66) | feat: CRUD Documents — édition contextuelle depuis le frontend | AFK | — |
+| [#67](https://github.com/MaximeD1412/site-mairie-vac/issues/67) | feat: CRUD Actualités — édition contextuelle depuis le frontend | AFK | #54, #51 |
+| [#68](https://github.com/MaximeD1412/site-mairie-vac/issues/68) | feat: CRUD Événements — édition contextuelle depuis le frontend | AFK | #54, #51 |
 
 ## Panel admin
 
