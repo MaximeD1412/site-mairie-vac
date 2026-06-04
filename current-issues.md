@@ -1,11 +1,5 @@
 # Issues en cours
 
-## Édition de contenu
-
-| # | Titre | Type | Bloqué par |
-|---|-------|------|------------|
-| [#68](https://github.com/MaximeD1412/site-mairie-vac/issues/68) | feat: CRUD Événements — édition contextuelle depuis le frontend | AFK | — |
-
 ## Panel admin
 
 | # | Titre | Type | Bloqué par |
