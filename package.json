@@ -21,6 +21,7 @@
     "@payloadcms/plugin-seo": "latest",
     "@payloadcms/richtext-lexical": "latest",
     "@payloadcms/storage-s3": "latest",
+    "@tiptap/extension-image": "^3.25.0",
     "@tiptap/extension-link": "^3.25.0",
     "@tiptap/pm": "^3.25.0",
     "@tiptap/react": "^3.25.0",

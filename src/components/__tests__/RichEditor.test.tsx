@@ -19,6 +19,7 @@ const mockEditor = vi.hoisted(() => ({
       toggleOrderedList: () => ({ run: mockRun }),
       setLink: () => ({ run: mockRun }),
       unsetLink: () => ({ run: mockRun }),
+      setImage: () => ({ run: mockRun }),
     }),
   }),
   isActive: mockIsActive,
@@ -35,6 +36,15 @@ vi.mock('@tiptap/react', () => ({
 
 vi.mock('@tiptap/starter-kit', () => ({ default: { configure: vi.fn(() => ({})) } }))
 vi.mock('@tiptap/extension-link', () => ({ default: { configure: vi.fn(() => ({})) } }))
+vi.mock('@tiptap/extension-image', () => ({ default: { configure: vi.fn(() => ({})) } }))
+vi.mock('../MediaLibraryModal', () => ({
+  MediaLibraryModal: ({ onSelect, onClose }: { onSelect: (url: string, alt: string) => void; onClose: () => void }) => (
+    <div role="dialog" data-testid="media-library-modal">
+      <button onClick={() => onSelect('/media/test.jpg', 'Test')}>Choisir</button>
+      <button onClick={onClose}>Fermer</button>
+    </div>
+  ),
+}))
 
 import { RichEditor } from '../RichEditor'
 
@@ -46,7 +56,7 @@ beforeEach(() => {
 })
 
 describe('RichEditor', () => {
-  it('affiche les 7 boutons de la barre d\'outils avec aria-label', () => {
+  it('affiche les 8 boutons de la barre d\'outils avec aria-label', () => {
     render(<RichEditor value="" onChange={vi.fn()} />)
 
     expect(screen.getByRole('button', { name: 'Gras' })).toBeInTheDocument()
@@ -56,6 +66,7 @@ describe('RichEditor', () => {
     expect(screen.getByRole('button', { name: 'Liste à puces' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Liste numérotée' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Lien' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Image' })).toBeInTheDocument()
   })
 
   it('la barre d\'outils a le rôle toolbar', () => {
@@ -93,5 +104,27 @@ describe('RichEditor', () => {
     render(<RichEditor value="" onChange={vi.fn()} />)
     fireEvent.click(screen.getByRole('button', { name: 'Gras' }))
     expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur Image ouvre le modal médiathèque', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    expect(screen.queryByTestId('media-library-modal')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Image' }))
+    expect(screen.getByTestId('media-library-modal')).toBeInTheDocument()
+  })
+
+  it('choisir une image depuis le modal insère l\'image dans l\'éditeur', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Image' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Choisir' }))
+    expect(mockRun).toHaveBeenCalled()
+  })
+
+  it('fermer le modal cache la médiathèque', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Image' }))
+    expect(screen.getByTestId('media-library-modal')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Fermer' }))
+    expect(screen.queryByTestId('media-library-modal')).not.toBeInTheDocument()
   })
 })
