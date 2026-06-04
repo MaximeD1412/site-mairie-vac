@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'development') {
 const payload = await getPayload({ config })
 
 try {
+  await seedUsers(payload)
   await seedAssociations(payload)
   await seedElectedOfficials(payload)
   await seedNews(payload)
@@ -57,6 +58,28 @@ function richText(text: string) {
       version: 1 as const,
     },
   }
+}
+
+async function seedUsers(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const email = 'admin@test.fr'
+  const existing = await payload.find({
+    collection: 'users',
+    where: { email: { equals: email } },
+    overrideAccess: true,
+    limit: 1,
+  })
+
+  if (existing.totalDocs > 0) {
+    console.log('[seed] users: 0 inserted, 1 skipped')
+    return
+  }
+
+  await payload.create({
+    collection: 'users',
+    data: { email, password: 'admin', name: 'Administrateur', role: 'admin' },
+    overrideAccess: true,
+  })
+  console.log('[seed] users: 1 inserted, 0 skipped')
 }
 
 async function seedCollection<T extends Record<string, unknown>>(
