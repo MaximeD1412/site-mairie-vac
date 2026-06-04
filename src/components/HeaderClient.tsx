@@ -23,12 +23,13 @@ interface NavItem {
 
 interface HeaderClientProps {
   items: NavItem[]
+  role: 'admin' | 'agent' | null
 }
 
 const navItemClass =
   'flex items-center gap-1 h-[68px] px-4 text-[13.5px] font-semibold uppercase tracking-[0.4px] border-b-[3px] transition-all no-underline'
 
-export function HeaderClient({ items }: HeaderClientProps) {
+export function HeaderClient({ items, role }: HeaderClientProps) {
   const [openItem, setOpenItem] = useState<number | null>(null)
 
   useEffect(() => {
@@ -90,6 +91,14 @@ export function HeaderClient({ items }: HeaderClientProps) {
 
       {/* Actions */}
       <div className="flex items-center gap-2 shrink-0">
+        {role === 'admin' && (
+          <Link
+            href="/admin"
+            className="hidden md:flex items-center h-9 px-3 rounded bg-white/15 text-white text-[13px] font-medium hover:bg-white/25 transition-colors no-underline"
+          >
+            Administration
+          </Link>
+        )}
         <button
           aria-label="Rechercher sur le site"
           className="w-9 h-9 rounded-full bg-white/12 text-white flex items-center justify-center hover:bg-white/22 transition-colors"
