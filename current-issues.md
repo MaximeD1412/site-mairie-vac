@@ -1,11 +1,5 @@
 # Issues en cours
 
-## Affichage de contenu
-
-| # | Titre | Type | Bloqué par |
-|---|-------|------|------------|
-| [#81](https://github.com/MaximeD1412/site-mairie-vac/issues/81) | fix: date obligatoire dans DocumentForm | AFK | — |
-
 ## Édition de contenu
 
 | # | Titre | Type | Bloqué par |
