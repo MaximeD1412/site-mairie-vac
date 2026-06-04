@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Event } from '@/payload-types'
 import { getPayloadClient } from '@/lib/payload'
+import { EditButton } from '@/components/EditButton'
 
 export default async function EventsArchive() {
   const payload = await getPayloadClient()
@@ -13,7 +14,10 @@ export default async function EventsArchive() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-12">
-      <h1 className="text-4xl font-bold">Agenda</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-4xl font-bold">Agenda</h1>
+        <EditButton href="/agenda/new" label="Nouvel événement" />
+      </div>
       <div className="mt-8 grid gap-4">
         {events.docs.map((item: Event) => (
           <Link

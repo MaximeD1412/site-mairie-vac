@@ -27,6 +27,10 @@ vi.mock('@/components/news/NewsArticle', () => ({
   ),
 }))
 
+vi.mock('@/components/EditButton', () => ({
+  EditButton: () => null,
+}))
+
 const mockGetPayloadClient = vi.mocked(getPayloadClient)
 const mockNotFound = vi.mocked(notFound)
 
