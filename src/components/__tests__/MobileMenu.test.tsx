@@ -2,6 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import React from 'react'
 
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ refresh: vi.fn() }),
+}))
+
 vi.mock('next/link', () => ({
   default: ({ href, children, ...rest }: any) => <a href={href} {...rest}>{children}</a>,
 }))
@@ -178,6 +182,23 @@ describe('MobileMenu', () => {
     vi.runAllTimers()
     expect(document.activeElement).toBe(hamburger)
     vi.useRealTimers()
+  })
+
+  it('affiche un bouton "Se connecter" quand role est null', () => {
+    render(<MobileMenu items={[]} role={null} />)
+    expect(screen.getByRole('button', { name: /se connecter/i })).toBeInTheDocument()
+  })
+
+  it("n'affiche pas le bouton \"Se connecter\" quand role est défini", () => {
+    render(<MobileMenu items={[]} role="agent" onLogout={vi.fn()} />)
+    expect(screen.queryByRole('button', { name: /se connecter/i })).toBeNull()
+  })
+
+  it('affiche le formulaire de connexion après clic sur "Se connecter"', async () => {
+    render(<MobileMenu items={[]} role={null} />)
+    fireEvent.click(screen.getByRole('button', { name: /se connecter/i }))
+    expect(screen.getByLabelText(/e-mail/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/mot de passe/i)).toBeInTheDocument()
   })
 
   it('accordion expand button has aria-controls pointing to submenu', () => {

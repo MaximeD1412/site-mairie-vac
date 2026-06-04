@@ -1,26 +1,22 @@
-import type { ComponentProps } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { RichTextBlock } from '@/components/blocks/RichTextBlock'
+import { HtmlContent } from '@/components/HtmlContent'
 
 interface NewsImage {
   url?: string | null
   alt?: string | null
 }
 
-type RichTextContent = ComponentProps<typeof RichTextBlock>['content']
-
 interface NewsArticleProps {
   title: string
   publishedAt?: string | null
   summary?: string | null
   image?: NewsImage | number | string | null
-  content?: RichTextContent | null
+  content?: string | null
 }
 
 export function NewsArticle({ title, publishedAt, summary, image, content }: NewsArticleProps) {
-  const img = image && typeof image === 'object' ? image : null
-  const hasRichTextContent = Boolean(content?.root?.children?.length)
+  const img = image && typeof image === 'object' ? image as NewsImage : null
 
   return (
     <article>
@@ -52,10 +48,10 @@ export function NewsArticle({ title, publishedAt, summary, image, content }: New
         </div>
         <h1 className="mt-3 text-3xl font-extrabold text-text leading-tight">{title}</h1>
         {summary && <p className="mt-3 text-lg text-muted">{summary}</p>}
-        {hasRichTextContent && (
+        {content && (
           <>
             <hr className="my-6 border-border" />
-            <RichTextBlock content={content ?? undefined} />
+            <HtmlContent html={content} className="my-8 text-text text-[15px]" />
           </>
         )}
       </div>

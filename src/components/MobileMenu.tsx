@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
+import { LogOut, LogIn } from 'lucide-react'
+import { LoginForm } from './LoginForm'
 import { hrefFromNavItem } from '@/lib/links'
 
 interface NavChild {
@@ -21,9 +23,36 @@ interface NavItem {
 
 interface MobileMenuProps {
   items: NavItem[]
+  role?: 'admin' | 'agent' | null
+  onLogout?: () => void
 }
 
-export function MobileMenu({ items }: MobileMenuProps) {
+function MobileLoginSection({ onSuccess }: { onSuccess: () => void }) {
+  const [showForm, setShowForm] = useState(false)
+
+  if (showForm) {
+    return (
+      <div className="shrink-0 border-t border-white/10 p-4 text-white">
+        <LoginForm onSuccess={onSuccess} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="shrink-0 border-t border-white/10 p-4">
+      <button
+        onClick={() => setShowForm(true)}
+        aria-label="Se connecter"
+        className="flex items-center gap-2 px-4 py-2 text-[13px] text-white/70 hover:text-white/90 transition-colors"
+      >
+        <LogIn size={13} aria-hidden="true" />
+        Se connecter
+      </button>
+    </div>
+  )
+}
+
+export function MobileMenu({ items, role, onLogout }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [openItems, setOpenItems] = useState<Set<number>>(new Set())
 
@@ -142,6 +171,16 @@ export function MobileMenu({ items }: MobileMenuProps) {
         </div>
 
         <nav className="flex-1 overflow-y-auto py-2" aria-label="Menu principal">
+          {role === 'admin' && (
+            <Link
+              href="/admin"
+              onClick={close}
+              className="flex items-center px-5 py-3 text-white/90 hover:text-white hover:bg-white/10 text-[14px] font-semibold no-underline transition-colors border-b border-white/10"
+            >
+              Administration
+            </Link>
+          )}
+
           {items.map((item, i) => {
             const href = hrefFromNavItem(item)
             const hasChildren = Array.isArray(item.children) && item.children.length > 0
@@ -215,6 +254,22 @@ export function MobileMenu({ items }: MobileMenuProps) {
             )
           })}
         </nav>
+
+        {role != null && (
+          <div className="shrink-0 border-t border-white/10 p-4">
+            <button
+              onClick={() => { onLogout?.(); close() }}
+              className="flex items-center gap-2 w-full px-4 py-2.5 rounded text-[13px] font-semibold text-white/90 bg-white/10 hover:bg-red-500/80 hover:text-white transition-colors"
+            >
+              <LogOut size={14} aria-hidden="true" />
+              Déconnexion
+            </button>
+          </div>
+        )}
+
+        {role == null && (
+          <MobileLoginSection onSuccess={close} />
+        )}
       </div>
     </>
   )
