@@ -10,8 +10,7 @@
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
-| [#51](https://github.com/MaximeD1412/site-mairie-vac/issues/51) | chore: migrer News.content et Events.description vers HTML | AFK | — |
-| [#54](https://github.com/MaximeD1412/site-mairie-vac/issues/54) | feat: composant RichEditor — base (gras, italique, titres, listes, liens) | AFK | #51 |
+| [#54](https://github.com/MaximeD1412/site-mairie-vac/issues/54) | feat: composant RichEditor — base (gras, italique, titres, listes, liens) | AFK | — |
 | [#56](https://github.com/MaximeD1412/site-mairie-vac/issues/56) | feat: composant RichEditor — images (médiathèque + upload) | AFK | #54 |
 | [#57](https://github.com/MaximeD1412/site-mairie-vac/issues/57) | feat: composant RichEditor — documents (lien texte, PDF viewer, vidéo inline) | AFK | #54 |
 
@@ -20,8 +19,8 @@
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
 | [#66](https://github.com/MaximeD1412/site-mairie-vac/issues/66) | feat: CRUD Documents — édition contextuelle depuis le frontend | AFK | — |
-| [#67](https://github.com/MaximeD1412/site-mairie-vac/issues/67) | feat: CRUD Actualités — édition contextuelle depuis le frontend | AFK | #54, #51 |
-| [#68](https://github.com/MaximeD1412/site-mairie-vac/issues/68) | feat: CRUD Événements — édition contextuelle depuis le frontend | AFK | #54, #51 |
+| [#67](https://github.com/MaximeD1412/site-mairie-vac/issues/67) | feat: CRUD Actualités — édition contextuelle depuis le frontend | AFK | #54 |
+| [#68](https://github.com/MaximeD1412/site-mairie-vac/issues/68) | feat: CRUD Événements — édition contextuelle depuis le frontend | AFK | #54 |
 
 ## Panel admin
 
