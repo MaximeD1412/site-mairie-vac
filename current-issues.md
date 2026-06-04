@@ -4,8 +4,7 @@
 
 | # | Titre | Type | Bloqué par |
 |---|-------|------|------------|
-| [#80](https://github.com/MaximeD1412/site-mairie-vac/issues/80) | feat: refonte de /documents — affichage et filtres par catégorie | AFK | PR #79 |
-| [#81](https://github.com/MaximeD1412/site-mairie-vac/issues/81) | fix: date obligatoire dans DocumentForm | AFK | PR #79 |
+| [#81](https://github.com/MaximeD1412/site-mairie-vac/issues/81) | fix: date obligatoire dans DocumentForm | AFK | — |
 
 ## Édition de contenu
 
