@@ -29,7 +29,7 @@ export async function createEvent(
   const location = (formData.get('location') as string)?.trim() || null
   const categoryRaw = formData.get('category') as string
   const organizerRaw = formData.get('organizer') as string
-  const description = (formData.get('description') as string) || null
+  const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
 
   if (!title || !slug || !startDate) {
@@ -60,7 +60,7 @@ export async function createEvent(
       ...(location && { location }),
       ...(categoryRaw && { category: Number(categoryRaw) }),
       ...(organizerRaw && { organizer: Number(organizerRaw) }),
-      ...(description && { description }),
+      layout: JSON.parse(layoutJson),
       _status: 'published',
       ...(imageId !== undefined && { image: imageId }),
     } as any,
@@ -85,7 +85,7 @@ export async function updateEvent(
   const location = (formData.get('location') as string)?.trim() || null
   const categoryRaw = formData.get('category') as string
   const organizerRaw = formData.get('organizer') as string
-  const description = (formData.get('description') as string) || null
+  const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
 
   if (!title || !slug || !startDate) {
@@ -102,7 +102,7 @@ export async function updateEvent(
     location,
     category: categoryRaw ? Number(categoryRaw) : null,
     organizer: organizerRaw ? Number(organizerRaw) : null,
-    description,
+    layout: JSON.parse(layoutJson),
   }
 
   if (imageFile && imageFile.size > 0) {

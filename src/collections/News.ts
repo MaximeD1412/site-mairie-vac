@@ -14,6 +14,6 @@ export const News: CollectionConfig = {
     { name: 'image', label: 'Image', type: 'upload', relationTo: 'media' },
     { name: 'publishedAt', label: 'Date de publication', type: 'date', required: true },
     { name: 'featured', label: 'Mettre en avant', type: 'checkbox', defaultValue: false },
-    { name: 'content', label: 'Contenu', type: 'textarea' },
+    { name: 'layout', label: 'Contenu', type: 'json' },
   ],
 }

@@ -7,14 +7,16 @@ vi.mock('react', async (importOriginal) => {
   return { ...actual, useActionState: vi.fn() }
 })
 
-vi.mock('@/components/RichEditor', () => ({
-  RichEditor: ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
-    <div data-testid="rich-editor">
-      <textarea
-        data-testid="rich-editor-textarea"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
+vi.mock('@/components/BlockEditor', () => ({
+  BlockEditor: ({ value, onChange }: { value: unknown[]; onChange: (v: unknown[]) => void }) => (
+    <div data-testid="block-editor">
+      <button
+        type="button"
+        data-testid="block-editor-add"
+        onClick={() => onChange([...value, { id: 'test-id', type: 'richText', html: '<p>Bloc test</p>' }])}
+      >
+        + Texte
+      </button>
     </div>
   ),
 }))
@@ -38,7 +40,7 @@ describe('NewsForm', () => {
     expect(screen.getByLabelText(/image de couverture/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/date de publication/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/mettre en avant/i)).toBeInTheDocument()
-    expect(screen.getByTestId('rich-editor')).toBeInTheDocument()
+    expect(screen.getByTestId('block-editor')).toBeInTheDocument()
   })
 
   it('affiche le bouton "Créer" en mode création', () => {
@@ -49,7 +51,7 @@ describe('NewsForm', () => {
   it('affiche le bouton "Modifier" en mode édition', () => {
     const news = {
       id: 1, title: 'Test', slug: 'test', summary: 'Résumé',
-      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, content: null,
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: null,
       updatedAt: '', createdAt: '',
     }
     render(<NewsForm action={vi.fn()} news={news as any} />)
@@ -64,7 +66,7 @@ describe('NewsForm', () => {
   it('le bouton Supprimer est présent quand deleteAction est fournie', () => {
     const news = {
       id: 1, title: 'Test', slug: 'test', summary: 'Résumé',
-      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, content: null,
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: null,
       updatedAt: '', createdAt: '',
     }
     render(<NewsForm action={vi.fn()} news={news as any} deleteAction={vi.fn()} />)
@@ -82,7 +84,7 @@ describe('NewsForm', () => {
   it('le slug est pré-rempli en mode édition', () => {
     const news = {
       id: 1, title: 'Titre existant', slug: 'titre-existant', summary: 'Résumé',
-      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, content: null,
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: null,
       updatedAt: '', createdAt: '',
     }
     render(<NewsForm action={vi.fn()} news={news as any} />)
@@ -112,11 +114,24 @@ describe('NewsForm', () => {
     expect(btn).toBeDisabled()
   })
 
-  it('le contenu RichEditor est synchronisé dans un champ caché', () => {
+  it('le layout BlockEditor est sérialisé en JSON dans un champ caché', () => {
     render(<NewsForm action={vi.fn()} />)
-    const textarea = screen.getByTestId('rich-editor-textarea')
-    fireEvent.change(textarea, { target: { value: '<p>Contenu riche</p>' } })
-    const hiddenInput = document.querySelector('input[name="content"]') as HTMLInputElement
-    expect(hiddenInput?.value).toBe('<p>Contenu riche</p>')
+    const hiddenInput = document.querySelector('input[name="layout"]') as HTMLInputElement
+    expect(hiddenInput?.value).toBe('[]')
+
+    fireEvent.click(screen.getByTestId('block-editor-add'))
+    expect(JSON.parse(hiddenInput?.value ?? '[]')).toHaveLength(1)
+  })
+
+  it('le layout est pré-rempli depuis news.layout en mode édition', () => {
+    const existingLayout = [{ id: 'abc', type: 'richText', html: '<p>Contenu existant</p>' }]
+    const news = {
+      id: 1, title: 'Test', slug: 'test', summary: 'Résumé',
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: existingLayout,
+      updatedAt: '', createdAt: '',
+    }
+    render(<NewsForm action={vi.fn()} news={news as any} />)
+    const hiddenInput = document.querySelector('input[name="layout"]') as HTMLInputElement
+    expect(JSON.parse(hiddenInput?.value ?? '[]')).toEqual(existingLayout)
   })
 })

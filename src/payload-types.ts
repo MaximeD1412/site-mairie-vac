@@ -392,7 +392,7 @@ export interface News {
   image?: (number | null) | Media;
   publishedAt: string;
   featured?: boolean | null;
-  content?: string | null;
+  layout?: unknown | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -429,7 +429,7 @@ export interface Event {
    */
   organizer?: (number | null) | Association;
   image?: (number | null) | Media;
-  description?: string | null;
+  layout?: unknown | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
