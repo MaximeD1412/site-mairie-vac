@@ -244,7 +244,7 @@ export function EventForm({ action, event, deleteAction, categories, association
 
       {deleteAction && (
         <form
-          action={deleteAction}
+          action={async (formData) => { await deleteAction(formData) }}
           onSubmit={(e) => {
             if (!confirm('Supprimer cet événement définitivement ?')) e.preventDefault()
           }}

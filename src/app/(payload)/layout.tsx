@@ -10,9 +10,9 @@ type Args = {
   children: React.ReactNode
 }
 
-const serverFunction = async (...args: Parameters<typeof handleServerFunctions>) => {
+const serverFunction = async (args: { args: Record<string, unknown>; name: string }) => {
   'use server'
-  return handleServerFunctions({ ...args[0], config, importMap })
+  return handleServerFunctions({ ...args, config, importMap })
 }
 
 export default function Layout({ children }: Args) {
