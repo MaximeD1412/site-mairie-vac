@@ -10,7 +10,7 @@ import type {
 import React from 'react'
 
 export type SerializedYouTubeNode = Spread<
-  { id: string; type: 'youtube'; version: 1 },
+  { id: string; type: 'youtube'; version: 1; format: ElementFormatType },
   SerializedLexicalNode
 >
 

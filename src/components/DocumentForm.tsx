@@ -121,7 +121,7 @@ export function DocumentForm({ action, document, deleteAction }: Props) {
 
       {deleteAction && (
         <form
-          action={deleteAction}
+          action={async (formData) => { await deleteAction(formData) }}
           onSubmit={(e) => {
             if (!confirm('Supprimer ce document définitivement ?')) e.preventDefault()
           }}
