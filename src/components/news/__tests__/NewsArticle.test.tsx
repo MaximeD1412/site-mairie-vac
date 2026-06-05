@@ -15,6 +15,11 @@ vi.mock('@/components/HtmlContent', () => ({
     html ? <div data-testid="html-content" className={className} dangerouslySetInnerHTML={{ __html: html }} /> : null,
 }))
 
+vi.mock('@/components/Blocks', () => ({
+  RenderBlocks: ({ blocks }: { blocks?: any[] }) =>
+    blocks?.length ? <div data-testid="render-blocks" /> : null,
+}))
+
 import { NewsArticle } from '../NewsArticle'
 
 describe('NewsArticle', () => {
@@ -57,26 +62,45 @@ describe('NewsArticle', () => {
     expect(screen.queryByRole('img')).toBeNull()
   })
 
-  it('renders HTML content and a separator when content is provided', () => {
-    const { container } = render(<NewsArticle title="Titre" content="<p>Contenu</p>" />)
-    expect(screen.getByTestId('html-content')).toBeInTheDocument()
+  it('renders a separator when layout blocks are provided', () => {
+    const { container } = render(
+      <NewsArticle title="Titre" layout={[{ type: 'richText', html: '<p>Hi</p>' }]} />,
+    )
     expect(container.querySelector('hr')).toBeInTheDocument()
   })
 
-  it('does not render content or separator when content is empty string', () => {
-    const { container } = render(<NewsArticle title="Titre" content="" />)
-    expect(screen.queryByTestId('html-content')).toBeNull()
+  it('does not render a separator when layout is absent', () => {
+    const { container } = render(<NewsArticle title="Titre" />)
     expect(container.querySelector('hr')).toBeNull()
   })
 
-  it('does not render content or separator when content is absent', () => {
-    const { container } = render(<NewsArticle title="Titre" />)
-    expect(screen.queryByTestId('html-content')).toBeNull()
+  it('does not render a separator when layout is an empty array', () => {
+    const { container } = render(<NewsArticle title="Titre" layout={[]} />)
     expect(container.querySelector('hr')).toBeNull()
   })
 
   it('renders a link back to /actualites', () => {
     render(<NewsArticle title="Titre" />)
     expect(screen.getByRole('link', { name: /retour aux actualit/i })).toHaveAttribute('href', '/actualites')
+  })
+
+  it('renders layout blocks via RenderBlocks when layout is provided', () => {
+    render(
+      <NewsArticle
+        title="Titre"
+        layout={[{ type: 'richText', html: '<p>Contenu</p>' }]}
+      />,
+    )
+    expect(screen.getByTestId('render-blocks')).toBeInTheDocument()
+  })
+
+  it('does not render RenderBlocks when layout is absent', () => {
+    render(<NewsArticle title="Titre" />)
+    expect(screen.queryByTestId('render-blocks')).toBeNull()
+  })
+
+  it('does not render RenderBlocks when layout is an empty array', () => {
+    render(<NewsArticle title="Titre" layout={[]} />)
+    expect(screen.queryByTestId('render-blocks')).toBeNull()
   })
 })

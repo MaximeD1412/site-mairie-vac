@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { HtmlContent } from '@/components/HtmlContent'
+import { RenderBlocks } from '@/components/Blocks'
 
 interface EventImage {
   url?: string | null
@@ -24,7 +24,7 @@ interface EventArticleProps {
   category?: EventCategory | null
   organizer?: EventOrganizer | number | null
   image?: EventImage | string | null
-  description?: string | null
+  layout?: any[]
 }
 
 const DAY_FMT: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }
@@ -55,7 +55,7 @@ export function EventArticle({
   category,
   organizer,
   image,
-  description,
+  layout,
 }: EventArticleProps) {
   const img = image && typeof image === 'object' ? image as EventImage : null
   const org = organizer && typeof organizer === 'object' ? organizer as EventOrganizer : null
@@ -105,7 +105,7 @@ export function EventArticle({
           )}
         </div>
 
-        <HtmlContent html={description} className="my-8 text-text text-[15px]" />
+        <RenderBlocks blocks={layout} />
       </div>
     </main>
   )

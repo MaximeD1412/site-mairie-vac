@@ -56,6 +56,7 @@ export default async function NewsDetailPage(
         publishedAt={article.publishedAt}
         summary={article.summary}
         image={article.image}
+        layout={Array.isArray(article.layout) ? article.layout : undefined}
       />
       <EditButton href={`/actualites/${slug}/modifier`} label="Modifier" />
     </>
