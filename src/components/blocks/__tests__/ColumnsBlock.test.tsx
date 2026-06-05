@@ -28,8 +28,8 @@ describe('ColumnsBlock', () => {
     expect(cols).toHaveLength(2)
   })
 
-  it('applies widthPct as inline flex-basis style', () => {
-    render(
+  it('applies widthPct values as fr units in gridTemplateColumns', () => {
+    const { container } = render(
       <ColumnsBlock
         columns={[
           { id: 'c1', widthPct: 33, blocks: [] },
@@ -37,17 +37,16 @@ describe('ColumnsBlock', () => {
         ]}
       />,
     )
-    const cols = screen.getAllByRole('region')
-    expect(cols[0]).toHaveStyle({ flexBasis: '33%' })
-    expect(cols[1]).toHaveStyle({ flexBasis: '67%' })
+    const wrapper = container.firstChild as HTMLElement
+    expect(wrapper).toHaveStyle({ gridTemplateColumns: '33fr 67fr' })
   })
 
-  it('uses flex-wrap on the container for responsiveness', () => {
+  it('uses CSS grid for layout', () => {
     const { container } = render(
       <ColumnsBlock columns={[{ id: 'c1', widthPct: 50, blocks: [] }]} />,
     )
     const wrapper = container.firstChild as HTMLElement
-    expect(wrapper).toHaveStyle({ flexWrap: 'wrap' })
+    expect(wrapper).toHaveStyle({ gridTemplateColumns: '50fr' })
   })
 
   it('renders sub-blocks inside each column via RenderBlocks', () => {

@@ -323,11 +323,14 @@ function ColumnsBlockEditor({
   }
 
   const handleResizeStart = (idx: number, e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault()
     const container = containerRef.current
     if (!container) return
     const containerWidth = container.getBoundingClientRect().width || 1
     const startX = e.clientX
     const startWidths = block.columns.map((c) => c.widthPct)
+
+    document.body.style.userSelect = 'none'
 
     const onMove = (ev: PointerEvent) => {
       const delta = ((ev.clientX - startX) / containerWidth) * 100
@@ -339,6 +342,7 @@ function ColumnsBlockEditor({
     }
 
     const onUp = () => {
+      document.body.style.userSelect = ''
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerup', onUp)
     }
@@ -349,7 +353,7 @@ function ColumnsBlockEditor({
 
   return (
     <div>
-      <div ref={containerRef} className="flex flex-wrap">
+      <div ref={containerRef} className="flex">
         {block.columns.map((col, idx) => (
           <React.Fragment key={col.id}>
             <section

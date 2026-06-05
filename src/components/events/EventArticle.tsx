@@ -68,7 +68,7 @@ export function EventArticle({
           <Image src={img.url} alt={img.alt ?? title} fill className="object-cover" />
         </div>
       )}
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="mx-auto max-w-5xl px-4 py-10">
         <Link href="/agenda" className="text-sm text-brand-mid hover:text-teal no-underline">
           ← Retour à l'agenda
         </Link>

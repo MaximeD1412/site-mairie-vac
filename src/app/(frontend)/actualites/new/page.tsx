@@ -11,7 +11,7 @@ export default async function NewsNewPage() {
   if (decoded?.role !== 'admin' && decoded?.role !== 'agent') redirect('/connexion')
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-12">
+    <main className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="mb-8 text-3xl font-bold">Nouvelle actualité</h1>
       <NewsForm action={createNews} />
     </main>

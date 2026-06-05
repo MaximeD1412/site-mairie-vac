@@ -20,7 +20,7 @@ export function RenderBlocks({ blocks }: { blocks?: any[] }) {
         switch (discriminator) {
           case 'richText':
             if ('html' in block)
-              return <HtmlContent key={index} html={block.html} className="my-8 text-text text-[15px]" />
+              return <HtmlContent key={index} html={block.html} className="rich-content my-8 text-text text-[15px]" />
             return <RichTextBlock key={index} content={block.content} />
           case 'image':
             if (typeof block.url === 'string')
