@@ -29,6 +29,7 @@ export function Hero({ settings }: HeroProps) {
           alt=""
           aria-hidden="true"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />

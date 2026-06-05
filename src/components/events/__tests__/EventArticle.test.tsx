@@ -4,8 +4,15 @@ import React from 'react'
 
 vi.mock('next/image', () => ({ default: (props: Record<string, unknown>) => <img {...props as any} /> }))
 vi.mock('next/link', () => ({ default: ({ href, children, ...rest }: any) => <a href={href} {...rest}>{children}</a> }))
-vi.mock('@/components/blocks/RichTextBlock', () => ({
-  RichTextBlock: ({ content }: any) => content ? <div data-testid="rich-text" /> : null,
+
+vi.mock('@/components/HtmlContent', () => ({
+  HtmlContent: ({ html }: any) =>
+    html ? <div data-testid="html-content" dangerouslySetInnerHTML={{ __html: html }} /> : null,
+}))
+
+vi.mock('@/components/Blocks', () => ({
+  RenderBlocks: ({ blocks }: { blocks?: any[] }) =>
+    blocks?.length ? <div data-testid="render-blocks" /> : null,
 }))
 
 import { EventArticle } from '../EventArticle'
@@ -107,13 +114,24 @@ describe('EventArticle', () => {
     expect(screen.queryByRole('img')).toBeNull()
   })
 
-  it('renders richtext content when description is provided', () => {
-    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" description={{ root: { children: [] } }} />)
-    expect(screen.getByTestId('rich-text')).toBeInTheDocument()
+  it('renders layout blocks via RenderBlocks when layout is provided', () => {
+    render(
+      <EventArticle
+        title="Titre"
+        startDate="2026-06-20T12:00:00.000Z"
+        layout={[{ type: 'richText', html: '<p>Description</p>' }]}
+      />,
+    )
+    expect(screen.getByTestId('render-blocks')).toBeInTheDocument()
   })
 
-  it('does not render richtext when description is absent', () => {
+  it('does not render RenderBlocks when layout is absent', () => {
     render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" />)
-    expect(screen.queryByTestId('rich-text')).toBeNull()
+    expect(screen.queryByTestId('render-blocks')).toBeNull()
+  })
+
+  it('does not render RenderBlocks when layout is an empty array', () => {
+    render(<EventArticle title="Titre" startDate="2026-06-20T12:00:00.000Z" layout={[]} />)
+    expect(screen.queryByTestId('render-blocks')).toBeNull()
   })
 })

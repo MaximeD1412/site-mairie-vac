@@ -1,0 +1,25 @@
+// Brand: La Ville-aux-Clercs — override Payload's success/primary color scale to the commune blue.
+// The --color-success-* variables control buttons, active nav items, focus rings, and badges.
+@layer payload-default {
+  :root {
+    --color-success-50:  rgb(238, 244, 253);
+    --color-success-100: rgb(220, 232, 250);
+    --color-success-150: rgb(194, 215, 246);
+    --color-success-200: rgb(167, 197, 243);
+    --color-success-250: rgb(147, 186, 242);
+    --color-success-300: rgb(115, 162, 231);
+    --color-success-350: rgb(82,  142, 222);
+    --color-success-400: rgb(55,  130, 214);
+    --color-success-450: rgb(42,  127, 212);
+    --color-success-500: rgb(26,  97,  171);
+    --color-success-550: rgb(22,  83,  147);
+    --color-success-600: rgb(18,  70,  126);
+    --color-success-650: rgb(15,  59,  106);
+    --color-success-700: rgb(13,  49,  88);
+    --color-success-750: rgb(11,  40,  72);
+    --color-success-800: rgb(9,   32,  58);
+    --color-success-850: rgb(7,   25,  45);
+    --color-success-900: rgb(5,   18,  34);
+    --color-success-950: rgb(4,   12,  24);
+  }
+}

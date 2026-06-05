@@ -1,26 +1,23 @@
-import type { ComponentProps } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { RichTextBlock } from '@/components/blocks/RichTextBlock'
+import { RenderBlocks } from '@/components/Blocks'
 
 interface NewsImage {
   url?: string | null
   alt?: string | null
 }
 
-type RichTextContent = ComponentProps<typeof RichTextBlock>['content']
-
 interface NewsArticleProps {
   title: string
   publishedAt?: string | null
   summary?: string | null
   image?: NewsImage | number | string | null
-  content?: RichTextContent | null
+  layout?: any[]
 }
 
-export function NewsArticle({ title, publishedAt, summary, image, content }: NewsArticleProps) {
-  const img = image && typeof image === 'object' ? image : null
-  const hasRichTextContent = Boolean(content?.root?.children?.length)
+export function NewsArticle({ title, publishedAt, summary, image, layout }: NewsArticleProps) {
+  const img = image && typeof image === 'object' ? image as NewsImage : null
+  const hasLayout = layout && layout.length > 0
 
   return (
     <article>
@@ -29,7 +26,7 @@ export function NewsArticle({ title, publishedAt, summary, image, content }: New
           <Image src={img.url} alt="" aria-hidden="true" fill className="object-cover" />
         </div>
       )}
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="mx-auto max-w-5xl px-4 py-10">
         <Link
           href="/actualites"
           className="text-sm text-brand-mid hover:text-teal no-underline"
@@ -52,10 +49,10 @@ export function NewsArticle({ title, publishedAt, summary, image, content }: New
         </div>
         <h1 className="mt-3 text-3xl font-extrabold text-text leading-tight">{title}</h1>
         {summary && <p className="mt-3 text-lg text-muted">{summary}</p>}
-        {hasRichTextContent && (
+        {hasLayout && (
           <>
             <hr className="my-6 border-border" />
-            <RichTextBlock content={content ?? undefined} />
+            <RenderBlocks blocks={layout} />
           </>
         )}
       </div>

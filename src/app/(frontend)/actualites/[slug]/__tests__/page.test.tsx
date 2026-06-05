@@ -16,15 +16,19 @@ vi.mock('next/navigation', () => ({
 }))
 
 vi.mock('@/components/news/NewsArticle', () => ({
-  NewsArticle: ({ title, publishedAt, summary, image, content }: any) => (
+  NewsArticle: ({ title, publishedAt, summary, image, layout }: any) => (
     <article data-testid="news-article">
       <h1>{title}</h1>
       <span>{publishedAt}</span>
       <p>{summary}</p>
       {image && <span data-testid="has-image" />}
-      {content && <span data-testid="has-content" />}
+      {layout?.length > 0 && <span data-testid="has-layout" />}
     </article>
   ),
+}))
+
+vi.mock('@/components/EditButton', () => ({
+  EditButton: () => null,
 }))
 
 const mockGetPayloadClient = vi.mocked(getPayloadClient)
@@ -58,7 +62,7 @@ describe('NewsDetailPage', () => {
       summary: 'Compte rendu du dernier conseil.',
       publishedAt: '2026-05-19T00:00:00.000Z',
       image: { url: '/image.jpg' },
-      content: { root: { children: [{ type: 'paragraph', children: [] }] } },
+      layout: [{ id: 'block-1', type: 'richText', html: '<p>Contenu</p>' }],
     }
     const find = mockPayloadFind([article])
 
@@ -78,7 +82,7 @@ describe('NewsDetailPage', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Conseil municipal')
     expect(screen.getByText('Compte rendu du dernier conseil.')).toBeInTheDocument()
     expect(screen.getByTestId('has-image')).toBeInTheDocument()
-    expect(screen.getByTestId('has-content')).toBeInTheDocument()
+    expect(screen.getByTestId('has-layout')).toBeInTheDocument()
   })
 
   it('calls notFound when no published article matches the slug', async () => {

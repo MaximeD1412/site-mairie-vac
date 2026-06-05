@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'development') {
 const payload = await getPayload({ config })
 
 try {
+  await seedUsers(payload)
   await seedAssociations(payload)
   await seedElectedOfficials(payload)
   await seedNews(payload)
@@ -57,6 +58,28 @@ function richText(text: string) {
       version: 1 as const,
     },
   }
+}
+
+async function seedUsers(payload: Awaited<ReturnType<typeof getPayload>>) {
+  const email = 'admin@test.fr'
+  const existing = await payload.find({
+    collection: 'users',
+    where: { email: { equals: email } },
+    overrideAccess: true,
+    limit: 1,
+  })
+
+  if (existing.totalDocs > 0) {
+    console.log('[seed] users: 0 inserted, 1 skipped')
+    return
+  }
+
+  await payload.create({
+    collection: 'users',
+    data: { email, password: 'admin', name: 'Administrateur', role: 'admin' },
+    overrideAccess: true,
+  })
+  console.log('[seed] users: 1 inserted, 0 skipped')
 }
 
 async function seedCollection<T extends Record<string, unknown>>(
@@ -132,7 +155,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: 'La commune inaugure sa nouvelle salle polyvalente ce samedi en présence des élus et des habitants.',
       publishedAt: '2026-04-15T10:00:00.000Z',
       featured: true,
-      content: richText("La nouvelle salle polyvalente de La Ville-aux-Clercs a été inaugurée samedi 15 avril en présence du conseil municipal et d'une centaine d'habitants. Cet équipement de 300 places permettra d'accueillir les événements associatifs, culturels et municipaux de la commune."),
+      content: "<p>La nouvelle salle polyvalente de La Ville-aux-Clercs a été inaugurée samedi 15 avril en présence du conseil municipal et d'une centaine d'habitants. Cet équipement de 300 places permettra d'accueillir les événements associatifs, culturels et municipaux de la commune.</p>",
       _status: 'published',
     },
     {
@@ -141,7 +164,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: 'Des travaux de voirie débutent sur la RD 10 du 1er au 20 juin. Circulation alternée mise en place.',
       publishedAt: '2026-05-10T08:00:00.000Z',
       featured: false,
-      content: richText("Le Département de Loir-et-Cher engage des travaux de réfection de la chaussée sur la RD 10 entre La-Ville-aux-Clercs et Mondoubleau. Ces travaux se dérouleront du 1er au 20 juin 2026. Une circulation alternée sera mise en place en semaine de 8h à 18h."),
+      content: "<p>Le Département de Loir-et-Cher engage des travaux de réfection de la chaussée sur la RD 10 entre La-Ville-aux-Clercs et Mondoubleau. Ces travaux se dérouleront du 1er au 20 juin 2026. Une circulation alternée sera mise en place en semaine de 8h à 18h.</p>",
       _status: 'published',
     },
     {
@@ -150,7 +173,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: 'Retrouvez le compte-rendu complet du conseil municipal du 18 mars 2026.',
       publishedAt: '2026-03-25T09:00:00.000Z',
       featured: false,
-      content: richText("Le conseil municipal s'est réuni le 18 mars 2026 sous la présidence de Jean-Pierre Faure, Maire. Étaient présents 11 conseillers sur 15. À l'ordre du jour : approbation du budget primitif 2026, délibération sur la réfection de la voirie communale, questions diverses."),
+      content: "<p>Le conseil municipal s'est réuni le 18 mars 2026 sous la présidence de Jean-Pierre Faure, Maire. Étaient présents 11 conseillers sur 15. À l'ordre du jour : approbation du budget primitif 2026, délibération sur la réfection de la voirie communale, questions diverses.</p>",
       _status: 'published',
     },
     {
@@ -159,7 +182,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: "La fête communale de La Ville-aux-Clercs aura lieu le 14 juillet avec bal, feu d'artifice et repas partagé.",
       publishedAt: '2026-05-01T10:00:00.000Z',
       featured: true,
-      content: richText("La fête du village est de retour le 14 juillet 2026 ! Au programme : apéritif offert par la municipalité dès 18h, repas partagé en plein air (inscription avant le 5 juillet), bal folk à partir de 21h et feu d'artifice à 22h30. Entrée libre."),
+      content: "<p>La fête du village est de retour le 14 juillet 2026 ! Au programme : apéritif offert par la municipalité dès 18h, repas partagé en plein air (inscription avant le 5 juillet), bal folk à partir de 21h et feu d'artifice à 22h30. Entrée libre.</p>",
       _status: 'published',
     },
     {
@@ -168,7 +191,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: "Depuis le 1er avril, la déchetterie intercommunale adopte de nouveaux horaires d'ouverture.",
       publishedAt: '2026-04-01T07:00:00.000Z',
       featured: false,
-      content: richText("Suite à la réorganisation du service intercommunal de collecte des déchets, la déchetterie intercommunale est désormais ouverte du lundi au samedi de 8h à 12h et de 14h à 18h. Elle est fermée le dimanche et les jours fériés."),
+      content: "<p>Suite à la réorganisation du service intercommunal de collecte des déchets, la déchetterie intercommunale est désormais ouverte du lundi au samedi de 8h à 12h et de 14h à 18h. Elle est fermée le dimanche et les jours fériés.</p>",
       _status: 'published',
     },
     {
@@ -177,7 +200,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: "Dans le cadre du plan de végétalisation, 30 arbres fruitiers et d'ombrage ont été plantés dans le parc.",
       publishedAt: '2026-02-20T10:00:00.000Z',
       featured: false,
-      content: richText("Dans le cadre du plan communal de végétalisation, 30 arbres ont été plantés en février dans le parc municipal. On y trouve des chênes, des frênes, des tilleuls et des pommiers, choisis pour leur résistance et leur valeur pour la biodiversité locale."),
+      content: "<p>Dans le cadre du plan communal de végétalisation, 30 arbres ont été plantés en février dans le parc municipal. On y trouve des chênes, des frênes, des tilleuls et des pommiers, choisis pour leur résistance et leur valeur pour la biodiversité locale.</p>",
       _status: 'published',
     },
     {
@@ -186,7 +209,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: 'Jean-Pierre Faure est réélu maire de La Ville-aux-Clercs avec 68 % des suffrages exprimés.',
       publishedAt: '2026-01-15T18:00:00.000Z',
       featured: false,
-      content: richText("Les élections municipales complémentaires du 13 janvier 2026 ont vu la réélection de Jean-Pierre Faure à la tête de la commune de La Ville-aux-Clercs avec 68 % des suffrages exprimés. Le nouveau conseil municipal se réunit pour la première fois le 28 janvier."),
+      content: "<p>Les élections municipales complémentaires du 13 janvier 2026 ont vu la réélection de Jean-Pierre Faure à la tête de la commune de La Ville-aux-Clercs avec 68 % des suffrages exprimés. Le nouveau conseil municipal se réunit pour la première fois le 28 janvier.</p>",
       _status: 'published',
     },
     {
@@ -195,7 +218,7 @@ async function seedNews(payload: Awaited<ReturnType<typeof getPayload>>) {
       summary: 'Le budget primitif 2026 a été voté en conseil municipal. Découvrez les grandes orientations financières.',
       publishedAt: '2026-03-28T09:00:00.000Z',
       featured: false,
-      content: richText("Le budget primitif 2026 de la commune de La Ville-aux-Clercs s'élève à 1 250 000 € en section de fonctionnement et 320 000 € en section d'investissement. Les principaux projets financés : réfection des trottoirs du centre bourg, rénovation énergétique de l'école primaire, et acquisition d'un nouveau véhicule de voirie."),
+      content: "<p>Le budget primitif 2026 de la commune de La Ville-aux-Clercs s'élève à 1 250 000 € en section de fonctionnement et 320 000 € en section d'investissement. Les principaux projets financés : réfection des trottoirs du centre bourg, rénovation énergétique de l'école primaire, et acquisition d'un nouveau véhicule de voirie.</p>",
       _status: 'published',
     },
   ]
@@ -321,7 +344,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       location: 'Salle polyvalente de La Ville-aux-Clercs',
       category: catBySlug['culture'] ?? undefined,
       organizer: assocByName['Amis du Patrimoine'] ?? undefined,
-      description: richText("Exposition retraçant l'histoire agricole et patrimoniale de la région, organisée par l'association Amis du Patrimoine. Entrée libre."),
+      description: "<p>Exposition retraçant l'histoire agricole et patrimoniale de la région, organisée par l'association Amis du Patrimoine. Entrée libre.</p>",
       _status: 'published',
     },
     // Deux événements le même jour (samedi 23 mai) — teste les points multiples (isMultiEvent) dans MiniCalendar
@@ -352,7 +375,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       endDate: '2026-05-27T21:00:00.000Z',
       location: 'Salle du conseil municipal — Mairie de La Ville-aux-Clercs',
       category: catBySlug['municipal'] ?? undefined,
-      description: richText("La mairie vous invite à une réunion publique de présentation du projet de révision du Plan Local d'Urbanisme. Venez poser vos questions et contribuer à l'avenir de notre commune."),
+      description: "<p>La mairie vous invite à une réunion publique de présentation du projet de révision du Plan Local d'Urbanisme. Venez poser vos questions et contribuer à l'avenir de notre commune.</p>",
       _status: 'published',
     },
     {
@@ -372,7 +395,7 @@ async function seedEvents(payload: Awaited<ReturnType<typeof getPayload>>) {
       location: 'Place de la Fontaine',
       category: catBySlug['association'] ?? undefined,
       organizer: assocByName['Entraide Locale'] ?? undefined,
-      description: richText("La Fête des voisins revient à La Ville-aux-Clercs ! Venez partager un moment convivial avec vos voisins autour d'un apéritif et d'un repas partagé. Chacun apporte un plat ou une boisson."),
+      description: "<p>La Fête des voisins revient à La Ville-aux-Clercs ! Venez partager un moment convivial avec vos voisins autour d'un apéritif et d'un repas partagé. Chacun apporte un plat ou une boisson.</p>",
       _status: 'published',
     },
   ]
@@ -515,7 +538,7 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
           blockType: 'accordion',
           items: [
             {
-              title: 'Demande d'acte de naissance, mariage ou décès',
+              title: "Demande d'acte de naissance, mariage ou décès",
               content: richText("Vous pouvez demander un acte d'état civil directement à la mairie ou en ligne sur service-public.fr. Munissez-vous de votre pièce d'identité et précisez la nature de l'acte et la date de l'événement."),
             },
             {
@@ -527,7 +550,7 @@ async function seedPages(payload: Awaited<ReturnType<typeof getPayload>>) {
               content: richText("Déposez votre dossier en mairie ou via le guichet numérique des autorisations d'urbanisme (GNAU). Le délai d'instruction est de 1 à 3 mois selon la nature des travaux."),
             },
             {
-              title: 'Certificat d'urbanisme',
+              title: "Certificat d'urbanisme",
               content: richText("Le certificat d'urbanisme informe sur les règles applicables à un terrain. Déposez votre demande en mairie avec le formulaire Cerfa n°13410. Le délai de réponse est d'un mois (informatif) ou deux mois (opérationnel)."),
             },
           ],

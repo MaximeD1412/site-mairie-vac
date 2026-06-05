@@ -1,6 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
+import { fr } from '@payloadcms/translations/languages/fr'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
@@ -24,11 +25,26 @@ const dirname = path.dirname(filename)
 const s3Enabled = process.env.S3_ENABLED === 'true'
 
 export default buildConfig({
+  i18n: {
+    supportedLanguages: { fr },
+    fallbackLanguage: 'fr',
+  },
   admin: {
     user: Users.slug,
     meta: {
-      titleSuffix: '- Site communal'
-    }
+      titleSuffix: '- La Ville-aux-Clercs'
+    },
+    components: {
+      graphics: {
+        Logo: '@/components/admin/Logo',
+        Icon: '@/components/admin/Icon',
+      },
+      views: {
+        dashboard: {
+          Component: '@/components/admin/Dashboard',
+        },
+      },
+    },
   },
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET!,

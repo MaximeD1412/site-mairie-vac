@@ -4,6 +4,7 @@ import type { Event } from '@/payload-types'
 import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payload'
 import { EventArticle } from '@/components/events/EventArticle'
+import { EditButton } from '@/components/EditButton'
 
 export const revalidate = 60
 
@@ -47,19 +48,22 @@ export default async function EventDetailPage(
   if (!event) notFound()
 
   return (
-    <EventArticle
-      title={event.title}
-      startDate={event.startDate}
-      endDate={event.endDate}
-      location={event.location}
-      category={
-        event.category && typeof event.category === 'object'
-          ? { name: event.category.name, color: event.category.color }
-          : null
-      }
-      organizer={event.organizer as { name?: string | null } | null | undefined}
-      image={event.image as { url?: string | null; alt?: string | null } | null | undefined}
-      description={event.description}
-    />
+    <>
+      <EventArticle
+        title={event.title}
+        startDate={event.startDate}
+        endDate={event.endDate}
+        location={event.location}
+        category={
+          event.category && typeof event.category === 'object'
+            ? { name: event.category.name, color: event.category.color }
+            : null
+        }
+        organizer={event.organizer as { name?: string | null } | null | undefined}
+        image={event.image as { url?: string | null; alt?: string | null } | null | undefined}
+        layout={Array.isArray(event.layout) ? event.layout : undefined}
+      />
+      <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" />
+    </>
   )
 }

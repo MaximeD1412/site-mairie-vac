@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { RichTextBlock } from '@/components/blocks/RichTextBlock'
+import { RenderBlocks } from '@/components/Blocks'
 
 interface EventImage {
   url?: string | null
@@ -24,7 +24,7 @@ interface EventArticleProps {
   category?: EventCategory | null
   organizer?: EventOrganizer | number | null
   image?: EventImage | string | null
-  description?: any
+  layout?: any[]
 }
 
 const DAY_FMT: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Europe/Paris' }
@@ -55,7 +55,7 @@ export function EventArticle({
   category,
   organizer,
   image,
-  description,
+  layout,
 }: EventArticleProps) {
   const img = image && typeof image === 'object' ? image as EventImage : null
   const org = organizer && typeof organizer === 'object' ? organizer as EventOrganizer : null
@@ -68,7 +68,7 @@ export function EventArticle({
           <Image src={img.url} alt={img.alt ?? title} fill className="object-cover" />
         </div>
       )}
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="mx-auto max-w-5xl px-4 py-10">
         <Link href="/agenda" className="text-sm text-brand-mid hover:text-teal no-underline">
           ← Retour à l'agenda
         </Link>
@@ -105,7 +105,7 @@ export function EventArticle({
           )}
         </div>
 
-        {description && <RichTextBlock content={description} />}
+        <RenderBlocks blocks={layout} />
       </div>
     </main>
   )

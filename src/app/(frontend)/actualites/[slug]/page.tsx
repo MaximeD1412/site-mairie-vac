@@ -4,6 +4,7 @@ import type { News } from '@/payload-types'
 import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payload'
 import { NewsArticle } from '@/components/news/NewsArticle'
+import { EditButton } from '@/components/EditButton'
 
 export const revalidate = 60
 
@@ -49,12 +50,15 @@ export default async function NewsDetailPage(
   if (!article) notFound()
 
   return (
-    <NewsArticle
-      title={article.title}
-      publishedAt={article.publishedAt}
-      summary={article.summary}
-      image={article.image}
-      content={article.content}
-    />
+    <>
+      <NewsArticle
+        title={article.title}
+        publishedAt={article.publishedAt}
+        summary={article.summary}
+        image={article.image}
+        layout={Array.isArray(article.layout) ? article.layout : undefined}
+      />
+      <EditButton href={`/actualites/${slug}/modifier`} label="Modifier" />
+    </>
   )
 }
