@@ -4,17 +4,7 @@ import { useActionState, useState } from 'react'
 import type { NewsFormState } from '@/actions/news'
 import type { News, Media } from '@/payload-types'
 import { RichEditor } from './RichEditor'
-
-function slugify(title: string): string {
-  return title
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-}
+import { slugify } from '@/lib/slugify'
 
 interface Props {
   action: (prevState: NewsFormState, formData: FormData) => Promise<NewsFormState>
