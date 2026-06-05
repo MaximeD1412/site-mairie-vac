@@ -16,12 +16,13 @@ vi.mock('next/navigation', () => ({
 }))
 
 vi.mock('@/components/news/NewsArticle', () => ({
-  NewsArticle: ({ title, publishedAt, summary, image }: any) => (
+  NewsArticle: ({ title, publishedAt, summary, image, layout }: any) => (
     <article data-testid="news-article">
       <h1>{title}</h1>
       <span>{publishedAt}</span>
       <p>{summary}</p>
       {image && <span data-testid="has-image" />}
+      {layout?.length > 0 && <span data-testid="has-layout" />}
     </article>
   ),
 }))
@@ -81,6 +82,7 @@ describe('NewsDetailPage', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Conseil municipal')
     expect(screen.getByText('Compte rendu du dernier conseil.')).toBeInTheDocument()
     expect(screen.getByTestId('has-image')).toBeInTheDocument()
+    expect(screen.getByTestId('has-layout')).toBeInTheDocument()
   })
 
   it('calls notFound when no published article matches the slug', async () => {

@@ -61,6 +61,7 @@ export default async function EventDetailPage(
         }
         organizer={event.organizer as { name?: string | null } | null | undefined}
         image={event.image as { url?: string | null; alt?: string | null } | null | undefined}
+        layout={Array.isArray(event.layout) ? event.layout : undefined}
       />
       <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" />
     </>

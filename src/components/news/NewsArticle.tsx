@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { HtmlContent } from '@/components/HtmlContent'
+import { RenderBlocks } from '@/components/Blocks'
 
 interface NewsImage {
   url?: string | null
@@ -12,11 +12,12 @@ interface NewsArticleProps {
   publishedAt?: string | null
   summary?: string | null
   image?: NewsImage | number | string | null
-  content?: string | null
+  layout?: any[]
 }
 
-export function NewsArticle({ title, publishedAt, summary, image, content }: NewsArticleProps) {
+export function NewsArticle({ title, publishedAt, summary, image, layout }: NewsArticleProps) {
   const img = image && typeof image === 'object' ? image as NewsImage : null
+  const hasLayout = layout && layout.length > 0
 
   return (
     <article>
@@ -48,10 +49,10 @@ export function NewsArticle({ title, publishedAt, summary, image, content }: New
         </div>
         <h1 className="mt-3 text-3xl font-extrabold text-text leading-tight">{title}</h1>
         {summary && <p className="mt-3 text-lg text-muted">{summary}</p>}
-        {content && (
+        {hasLayout && (
           <>
             <hr className="my-6 border-border" />
-            <HtmlContent html={content} className="my-8 text-text text-[15px]" />
+            <RenderBlocks blocks={layout} />
           </>
         )}
       </div>
