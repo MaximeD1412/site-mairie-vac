@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@source "../../**/*.{tsx,ts,jsx,js}";
+@import 'tailwindcss' source(none);
+@source "../../";
 
 @theme {
   --color-brand:        #1a61ab;
