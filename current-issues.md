@@ -2,7 +2,8 @@
 
 ## Disponibles (sans bloquant)
 
-- [#88 feat: RichEditor — tables, alignement, couleur de texte](https://github.com/MaximeD1412/site-mairie-vac/issues/88)
+_(aucune)_
+
 ## Bloquées
 
 - [#90 feat: BlockEditor — ColumnsBlock](https://github.com/MaximeD1412/site-mairie-vac/issues/90)
