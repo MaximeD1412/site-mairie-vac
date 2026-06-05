@@ -101,11 +101,11 @@ describe('BlockEditor — toolbar d\'ajout', () => {
     expect(screen.getByRole('button', { name: '+ Vidéo' })).toBeInTheDocument()
   })
 
-  it('le bouton + Colonnes est présent mais désactivé', () => {
+  it('le bouton + Colonnes est présent et activé', () => {
     render(<BlockEditor value={emptyBlocks} onChange={vi.fn()} />)
     const colBtn = screen.getByRole('button', { name: '+ Colonnes' })
     expect(colBtn).toBeInTheDocument()
-    expect(colBtn).toBeDisabled()
+    expect(colBtn).not.toBeDisabled()
   })
 })
 
