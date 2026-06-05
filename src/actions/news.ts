@@ -27,7 +27,7 @@ export async function createNews(
   const summary = (formData.get('summary') as string)?.trim()
   const publishedAt = formData.get('publishedAt') as string
   const featured = formData.get('featured') === 'on'
-  const content = (formData.get('content') as string) || ''
+  const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
 
   if (!title || !slug || !summary || !publishedAt) {
@@ -56,7 +56,7 @@ export async function createNews(
       summary,
       publishedAt,
       featured,
-      content: content || null,
+      layout: JSON.parse(layoutJson),
       _status: 'published',
       ...(imageId !== undefined && { image: imageId }),
     } as any,
@@ -79,7 +79,7 @@ export async function updateNews(
   const summary = (formData.get('summary') as string)?.trim()
   const publishedAt = formData.get('publishedAt') as string
   const featured = formData.get('featured') === 'on'
-  const content = (formData.get('content') as string) || ''
+  const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
 
   if (!title || !slug || !summary || !publishedAt) {
@@ -94,7 +94,7 @@ export async function updateNews(
     summary,
     publishedAt,
     featured,
-    content: content || null,
+    layout: JSON.parse(layoutJson),
   }
 
   if (imageFile && imageFile.size > 0) {
