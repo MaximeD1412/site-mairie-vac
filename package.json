@@ -49,6 +49,7 @@
     "react-leaflet": "^5.0.0",
     "resend": "^6.12.4",
     "sanitize-html": "^2.17.4",
+    "sass": "^1.100.0",
     "sharp": "latest",
     "sonner": "^2.0.7",
     "yet-another-react-lightbox": "^3.32.0"
