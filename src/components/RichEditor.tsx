@@ -1,12 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
+import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
+import { TextAlign } from '@tiptap/extension-text-align'
+import { Color } from '@tiptap/extension-color'
+import { TextStyle } from '@tiptap/extension-text-style'
 import sanitizeHtml from 'sanitize-html'
-import { Bold, Italic, Heading2, Heading3, List, ListOrdered, Link2, ImageIcon, FileText } from 'lucide-react'
+import {
+  Bold, Italic, Heading2, Heading3, List, ListOrdered, Link2, ImageIcon, FileText,
+  AlignLeft, AlignCenter, AlignRight, AlignJustify, Table2, Palette,
+} from 'lucide-react'
 import { MediaLibraryModal } from './MediaLibraryModal'
 import { DocumentLibraryModal, type DocumentInsertMode } from './DocumentLibraryModal'
 import { DocumentPdfViewer } from './tiptap-extensions/DocumentPdfViewer'
@@ -19,13 +26,29 @@ interface RichEditorProps {
 }
 
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
-  allowedTags: ['p', 'br', 'strong', 'em', 'h2', 'h3', 'ul', 'ol', 'li', 'a', 'img', 'iframe', 'video', 'source'],
+  allowedTags: [
+    'p', 'br', 'strong', 'em', 'h2', 'h3', 'ul', 'ol', 'li',
+    'a', 'img', 'iframe', 'video', 'source', 'span',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td',
+  ],
   allowedAttributes: {
     a: ['href', 'target', 'rel'],
     img: ['src', 'alt', 'width', 'height'],
     iframe: ['src', 'title', 'allowfullscreen', 'class', 'style'],
     video: ['controls', 'class', 'style'],
     source: ['src', 'type'],
+    p: ['style'],
+    h2: ['style'],
+    h3: ['style'],
+    span: ['style'],
+    td: ['colspan', 'rowspan', 'style'],
+    th: ['colspan', 'rowspan', 'style'],
+  },
+  allowedStyles: {
+    '*': {
+      'text-align': [/^left$/, /^center$/, /^right$/, /^justify$/],
+      'color': [/^#[0-9a-fA-F]{3,8}$/, /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/],
+    },
   },
   allowedSchemes: ['https', 'http', 'mailto'],
 }
@@ -33,6 +56,7 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
 export function RichEditor({ value, onChange, className }: RichEditorProps) {
   const [mediaOpen, setMediaOpen] = useState(false)
   const [docOpen, setDocOpen] = useState(false)
+  const colorInputRef = useRef<HTMLInputElement>(null)
 
   const editor = useEditor({
     extensions: [
@@ -41,6 +65,13 @@ export function RichEditor({ value, onChange, className }: RichEditorProps) {
       Image.configure({ inline: false }),
       DocumentPdfViewer,
       DocumentVideoPlayer,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableCell,
+      TableHeader,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      TextStyle,
+      Color,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -148,6 +179,87 @@ export function RichEditor({ value, onChange, className }: RichEditorProps) {
           aria-pressed={false}
         >
           <FileText size={15} />
+        </ToolbarButton>
+
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().setTextAlign('left').run()}
+          aria-label="Aligner à gauche"
+          aria-pressed={editor?.isActive({ textAlign: 'left' }) ?? false}
+        >
+          <AlignLeft size={15} />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().setTextAlign('center').run()}
+          aria-label="Centrer"
+          aria-pressed={editor?.isActive({ textAlign: 'center' }) ?? false}
+        >
+          <AlignCenter size={15} />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().setTextAlign('right').run()}
+          aria-label="Aligner à droite"
+          aria-pressed={editor?.isActive({ textAlign: 'right' }) ?? false}
+        >
+          <AlignRight size={15} />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().setTextAlign('justify').run()}
+          aria-label="Justifier"
+          aria-pressed={editor?.isActive({ textAlign: 'justify' }) ?? false}
+        >
+          <AlignJustify size={15} />
+        </ToolbarButton>
+
+        <ToolbarButton
+          onClick={() => colorInputRef.current?.click()}
+          aria-label="Couleur de texte"
+          aria-pressed={false}
+        >
+          <Palette size={15} />
+        </ToolbarButton>
+        <input
+          ref={colorInputRef}
+          type="color"
+          className="sr-only"
+          aria-hidden="true"
+          tabIndex={-1}
+          onChange={(e) => editor?.chain().focus().setColor(e.target.value).run()}
+        />
+
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+          aria-label="Insérer un tableau"
+          aria-pressed={false}
+        >
+          <Table2 size={15} />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().addRowAfter().run()}
+          aria-label="Ajouter une ligne"
+          aria-pressed={false}
+        >
+          <span className="text-[11px] font-mono leading-none">L+</span>
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().deleteRow().run()}
+          aria-label="Supprimer la ligne"
+          aria-pressed={false}
+        >
+          <span className="text-[11px] font-mono leading-none">L−</span>
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().addColumnAfter().run()}
+          aria-label="Ajouter une colonne"
+          aria-pressed={false}
+        >
+          <span className="text-[11px] font-mono leading-none">C+</span>
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor?.chain().focus().deleteColumn().run()}
+          aria-label="Supprimer la colonne"
+          aria-pressed={false}
+        >
+          <span className="text-[11px] font-mono leading-none">C−</span>
         </ToolbarButton>
       </div>
       <EditorContent

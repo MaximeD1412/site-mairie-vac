@@ -21,6 +21,13 @@ const mockEditor = vi.hoisted(() => ({
       unsetLink: () => ({ run: mockRun }),
       setImage: () => ({ run: mockRun }),
       insertContent: () => ({ run: mockRun }),
+      setTextAlign: () => ({ run: mockRun }),
+      setColor: () => ({ run: mockRun }),
+      insertTable: () => ({ run: mockRun }),
+      addRowAfter: () => ({ run: mockRun }),
+      deleteRow: () => ({ run: mockRun }),
+      addColumnAfter: () => ({ run: mockRun }),
+      deleteColumn: () => ({ run: mockRun }),
     }),
   }),
   isActive: mockIsActive,
@@ -38,6 +45,24 @@ vi.mock('@tiptap/react', () => ({
 vi.mock('@tiptap/starter-kit', () => ({ default: { configure: vi.fn(() => ({})) } }))
 vi.mock('@tiptap/extension-link', () => ({ default: { configure: vi.fn(() => ({})) } }))
 vi.mock('@tiptap/extension-image', () => ({ default: { configure: vi.fn(() => ({})) } }))
+vi.mock('@tiptap/extension-table', () => ({
+  Table: { configure: vi.fn(() => ({})), name: 'table' },
+  TableRow: { name: 'tableRow' },
+  TableCell: { name: 'tableCell' },
+  TableHeader: { name: 'tableHeader' },
+}))
+vi.mock('@tiptap/extension-text-align', () => ({
+  TextAlign: { configure: vi.fn(() => ({})) },
+  default: { configure: vi.fn(() => ({})) },
+}))
+vi.mock('@tiptap/extension-color', () => ({
+  Color: { name: 'color' },
+  default: { name: 'color' },
+}))
+vi.mock('@tiptap/extension-text-style', () => ({
+  TextStyle: { name: 'textStyle' },
+  default: { name: 'textStyle' },
+}))
 vi.mock('../MediaLibraryModal', () => ({
   MediaLibraryModal: ({ onSelect, onClose }: { onSelect: (url: string, alt: string) => void; onClose: () => void }) => (
     <div role="dialog" data-testid="media-library-modal">
@@ -79,7 +104,7 @@ beforeEach(() => {
 })
 
 describe('RichEditor', () => {
-  it('affiche les 9 boutons de la barre d\'outils avec aria-label', () => {
+  it('affiche les boutons de mise en forme de base avec aria-label', () => {
     render(<RichEditor value="" onChange={vi.fn()} />)
 
     expect(screen.getByRole('button', { name: 'Gras' })).toBeInTheDocument()
@@ -91,6 +116,30 @@ describe('RichEditor', () => {
     expect(screen.getByRole('button', { name: 'Lien' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Image' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Document' })).toBeInTheDocument()
+  })
+
+  it('affiche les boutons d\'alignement de texte', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+
+    expect(screen.getByRole('button', { name: 'Aligner à gauche' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Centrer' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Aligner à droite' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Justifier' })).toBeInTheDocument()
+  })
+
+  it('affiche le bouton couleur de texte', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    expect(screen.getByRole('button', { name: 'Couleur de texte' })).toBeInTheDocument()
+  })
+
+  it('affiche les boutons de gestion de tableau', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+
+    expect(screen.getByRole('button', { name: 'Insérer un tableau' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Ajouter une ligne' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Supprimer la ligne' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Ajouter une colonne' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Supprimer la colonne' })).toBeInTheDocument()
   })
 
   it('la barre d\'outils a le rôle toolbar', () => {
@@ -127,6 +176,68 @@ describe('RichEditor', () => {
   it('cliquer sur Gras appelle la commande toggleBold', () => {
     render(<RichEditor value="" onChange={vi.fn()} />)
     fireEvent.click(screen.getByRole('button', { name: 'Gras' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Aligner à gauche" appelle setTextAlign(left)', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Aligner à gauche' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Centrer" appelle setTextAlign(center)', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Centrer' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Aligner à droite" appelle setTextAlign(right)', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Aligner à droite' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Justifier" appelle setTextAlign(justify)', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Justifier' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('changer la couleur déclenche setColor', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    const colorInput = document.querySelector('input[type="color"]') as HTMLInputElement
+    expect(colorInput).not.toBeNull()
+    fireEvent.change(colorInput, { target: { value: '#ff0000' } })
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Insérer un tableau" appelle insertTable', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Insérer un tableau' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Ajouter une ligne" appelle addRowAfter', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Ajouter une ligne' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Supprimer la ligne" appelle deleteRow', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Supprimer la ligne' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Ajouter une colonne" appelle addColumnAfter', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Ajouter une colonne' }))
+    expect(mockRun).toHaveBeenCalledOnce()
+  })
+
+  it('cliquer sur "Supprimer la colonne" appelle deleteColumn', () => {
+    render(<RichEditor value="" onChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Supprimer la colonne' }))
     expect(mockRun).toHaveBeenCalledOnce()
   })
 
