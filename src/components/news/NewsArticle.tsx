@@ -26,7 +26,7 @@ export function NewsArticle({ title, publishedAt, summary, image, layout }: News
           <Image src={img.url} alt="" aria-hidden="true" fill className="object-cover" />
         </div>
       )}
-      <div className="mx-auto max-w-2xl px-4 py-10">
+      <div className="mx-auto max-w-5xl px-4 py-10">
         <Link
           href="/actualites"
           className="text-sm text-brand-mid hover:text-teal no-underline"
