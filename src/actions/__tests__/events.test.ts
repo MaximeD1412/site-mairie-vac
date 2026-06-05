@@ -21,7 +21,8 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { getPayloadClient } from '@/lib/payload'
 import { decodePayloadToken } from '@/lib/auth'
-import { createEvent, updateEvent, deleteEvent, slugify } from '../events'
+import { createEvent, updateEvent, deleteEvent } from '../events'
+import { slugify } from '@/lib/slugify'
 
 const mockCookies = vi.mocked(cookies)
 const mockRedirect = vi.mocked(redirect)
