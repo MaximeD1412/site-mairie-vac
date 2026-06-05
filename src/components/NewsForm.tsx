@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import type { NewsFormState } from '@/actions/news'
 import type { News, Media } from '@/payload-types'
-import { RichEditor } from './RichEditor'
+import { BlockEditor, type Block } from './BlockEditor'
 import { slugify } from '@/lib/slugify'
 
 interface Props {
@@ -12,11 +12,16 @@ interface Props {
   deleteAction?: (formData: FormData) => Promise<NewsFormState>
 }
 
+function parseLayout(raw: unknown): Block[] {
+  if (Array.isArray(raw)) return raw as Block[]
+  return []
+}
+
 export function NewsForm({ action, news, deleteAction }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
   const [slug, setSlug] = useState(news?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(!!news)
-  const [content, setContent] = useState(news?.content ?? '')
+  const [layout, setLayout] = useState<Block[]>(parseLayout(news?.layout))
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!slugTouched) setSlug(slugify(e.target.value))
@@ -134,11 +139,11 @@ export function NewsForm({ action, news, deleteAction }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700" htmlFor="content">
+          <label className="block text-sm font-medium text-slate-700">
             Contenu
           </label>
-          <input type="hidden" name="content" value={content} />
-          <RichEditor value={content} onChange={setContent} className="mt-1" />
+          <input type="hidden" name="layout" value={JSON.stringify(layout)} />
+          <BlockEditor value={layout} onChange={setLayout} />
         </div>
 
         <button

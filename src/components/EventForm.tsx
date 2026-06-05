@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import type { EventFormState } from '@/actions/events'
 import type { Event, EventCategory, Association, Media } from '@/payload-types'
-import { RichEditor } from './RichEditor'
+import { BlockEditor, type Block } from './BlockEditor'
 import { slugify } from '@/lib/slugify'
 
 interface Props {
@@ -14,11 +14,16 @@ interface Props {
   associations: Association[]
 }
 
+function parseLayout(raw: unknown): Block[] {
+  if (Array.isArray(raw)) return raw as Block[]
+  return []
+}
+
 export function EventForm({ action, event, deleteAction, categories, associations }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
   const [slug, setSlug] = useState(event?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(!!event)
-  const [description, setDescription] = useState(event?.description ?? '')
+  const [layout, setLayout] = useState<Block[]>(parseLayout(event?.layout))
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!slugTouched) setSlug(slugify(e.target.value))
@@ -187,11 +192,11 @@ export function EventForm({ action, event, deleteAction, categories, association
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700" htmlFor="description">
+          <label className="block text-sm font-medium text-slate-700">
             Description
           </label>
-          <input type="hidden" name="description" value={description} />
-          <RichEditor value={description} onChange={setDescription} className="mt-1" />
+          <input type="hidden" name="layout" value={JSON.stringify(layout)} />
+          <BlockEditor value={layout} onChange={setLayout} />
         </div>
 
         <button

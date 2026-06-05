@@ -7,14 +7,16 @@ vi.mock('react', async (importOriginal) => {
   return { ...actual, useActionState: vi.fn() }
 })
 
-vi.mock('@/components/RichEditor', () => ({
-  RichEditor: ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
-    <div data-testid="rich-editor">
-      <textarea
-        data-testid="rich-editor-textarea"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
+vi.mock('@/components/BlockEditor', () => ({
+  BlockEditor: ({ value, onChange }: { value: unknown[]; onChange: (v: unknown[]) => void }) => (
+    <div data-testid="block-editor">
+      <button
+        type="button"
+        data-testid="block-editor-add"
+        onClick={() => onChange([...value, { id: 'test-id', type: 'richText', html: '<p>Bloc test</p>' }])}
+      >
+        + Texte
+      </button>
     </div>
   ),
 }))
@@ -50,7 +52,7 @@ describe('EventForm', () => {
     expect(screen.getByLabelText(/lieu/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/catégorie/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/organisateur/i)).toBeInTheDocument()
-    expect(screen.getByTestId('rich-editor')).toBeInTheDocument()
+    expect(screen.getByTestId('block-editor')).toBeInTheDocument()
   })
 
   it('affiche les options de catégorie chargées', () => {
@@ -173,13 +175,34 @@ describe('EventForm', () => {
     expect(btn).toBeDisabled()
   })
 
-  it('la description RichEditor est synchronisée dans un champ caché', () => {
+  it('le layout BlockEditor est sérialisé en JSON dans un champ caché', () => {
     render(
       <EventForm action={vi.fn()} categories={mockCategories} associations={mockAssociations} />,
     )
-    const textarea = screen.getByTestId('rich-editor-textarea')
-    fireEvent.change(textarea, { target: { value: '<p>Description riche</p>' } })
-    const hiddenInput = document.querySelector('input[name="description"]') as HTMLInputElement
-    expect(hiddenInput?.value).toBe('<p>Description riche</p>')
+    const hiddenInput = document.querySelector('input[name="layout"]') as HTMLInputElement
+    expect(hiddenInput?.value).toBe('[]')
+
+    fireEvent.click(screen.getByTestId('block-editor-add'))
+    expect(JSON.parse(hiddenInput?.value ?? '[]')).toHaveLength(1)
+  })
+
+  it('le layout est pré-rempli depuis event.layout en mode édition', () => {
+    const existingLayout = [{ id: 'abc', type: 'richText', html: '<p>Description existante</p>' }]
+    const event = {
+      id: 1, title: 'Concert', slug: 'concert',
+      startDate: '2026-06-21T18:00:00.000Z',
+      layout: existingLayout,
+      updatedAt: '', createdAt: '',
+    }
+    render(
+      <EventForm
+        action={vi.fn()}
+        event={event as any}
+        categories={mockCategories}
+        associations={mockAssociations}
+      />,
+    )
+    const hiddenInput = document.querySelector('input[name="layout"]') as HTMLInputElement
+    expect(JSON.parse(hiddenInput?.value ?? '[]')).toEqual(existingLayout)
   })
 })

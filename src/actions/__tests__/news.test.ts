@@ -106,7 +106,7 @@ describe('createNews', () => {
       slug: 'mon-titre',
       summary: 'Résumé test',
       publishedAt: '2026-01-01',
-      content: '<p>Contenu</p>',
+      layout: '[]',
     })
 
     await expect(createNews(null, fd)).rejects.toThrow('REDIRECT:/actualites/mon-titre')
@@ -163,7 +163,7 @@ describe('updateNews', () => {
       slug: 'titre-modifie',
       summary: 'Nouveau résumé',
       publishedAt: '2026-02-01',
-      content: '',
+      layout: '[]',
     })
 
     await expect(updateNews(5, null, fd)).rejects.toThrow('REDIRECT:/actualites/titre-modifie')
