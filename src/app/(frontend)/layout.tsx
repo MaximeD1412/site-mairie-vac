@@ -17,16 +17,17 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const payload = await getPayloadClient()
 
-  const [mainNavResult, footerNavResult, mairieInfo] = await Promise.all([
+  const [mainNavResult, footerNavResult, mairieInfo, siteSettings] = await Promise.all([
     payload.find({ collection: 'navigation', where: { location: { equals: 'main' } }, depth: 2, limit: 1 }).catch(() => null),
     payload.find({ collection: 'navigation', where: { location: { equals: 'footer' } }, depth: 1, limit: 1 }).catch(() => null),
     payload.findGlobal({ slug: 'mairie-info' }).catch(() => null),
+    payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
   ])
 
   return (
     <html lang="fr">
       <body>
-        <Header navigation={mainNavResult?.docs?.[0] as any} />
+        <Header navigation={mainNavResult?.docs?.[0] as any} siteSettings={siteSettings as any} />
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>

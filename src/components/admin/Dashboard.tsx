@@ -8,6 +8,7 @@ const SHORTCUTS = [
   { label: 'Actualités', href: '/admin/collections/news', emoji: '📰' },
   { label: 'Agenda', href: '/admin/collections/events', emoji: '📅' },
   { label: 'Documents', href: '/admin/collections/documents', emoji: '📁' },
+  { label: 'Paramètres du site', href: '/admin/globals/site-settings', emoji: '⚙️' },
 ]
 
 export default async function AdminDashboard() {
