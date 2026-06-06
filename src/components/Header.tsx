@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { cookies } from 'next/headers'
 import { HeaderClient } from './HeaderClient'
 import { decodePayloadToken } from '@/lib/auth'
@@ -20,9 +21,10 @@ interface NavItem {
 
 interface HeaderProps {
   navigation?: { items?: NavItem[] }
+  siteSettings?: { logo?: { url?: string; alt?: string } | null } | null
 }
 
-export async function Header({ navigation }: HeaderProps) {
+export async function Header({ navigation, siteSettings }: HeaderProps) {
   const items = navigation?.items ?? []
   const cookieStore = await cookies()
   const token = cookieStore.get('payload-token')?.value
@@ -42,9 +44,19 @@ export async function Header({ navigation }: HeaderProps) {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 no-underline shrink-0">
-            <div className="w-10 h-10 rounded-lg bg-brand-light flex items-center justify-center text-brand font-bold text-lg">
-              M
-            </div>
+            {siteSettings?.logo?.url ? (
+              <Image
+                src={siteSettings.logo.url}
+                alt={siteSettings.logo.alt ?? 'Logo mairie'}
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-lg object-contain"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-lg bg-brand-light flex items-center justify-center text-brand font-bold text-lg">
+                M
+              </div>
+            )}
             <div className="text-white leading-tight">
               <strong className="block text-[15px] font-bold">La Ville-aux-Clercs</strong>
               <span className="text-[11px] text-white/85">Site officiel de la mairie</span>

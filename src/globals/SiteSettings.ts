@@ -8,6 +8,13 @@ export const SiteSettings: GlobalConfig = {
   access: { read: () => true, update: isAdmin },
   fields: [
     {
+      name: 'logo',
+      label: 'Logo (header)',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Affiché en haut à gauche sur toutes les pages. Format carré recommandé (ex : 80×80px).' },
+    },
+    {
       name: 'heroImage',
       label: "Photo hero (page d'accueil)",
       type: 'upload',
