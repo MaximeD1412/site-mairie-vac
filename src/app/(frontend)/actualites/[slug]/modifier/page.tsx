@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { cookies } from 'next/headers'
 import { redirect, notFound } from 'next/navigation'
 import { decodePayloadToken } from '@/lib/auth'
@@ -33,7 +35,7 @@ export default async function NewsModifierPage({
   const boundDelete = deleteNews.bind(null, article.id)
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-12">
+    <main className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="mb-8 text-3xl font-bold">Modifier l&apos;actualité</h1>
       <NewsForm action={boundUpdate} news={article} deleteAction={boundDelete} />
     </main>

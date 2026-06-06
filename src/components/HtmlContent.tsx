@@ -18,15 +18,24 @@ const ALLOWED_ATTRS: sanitizeHtml.IOptions['allowedAttributes'] = {
   source: ['src', 'type'],
   video: ['controls', 'class'],
   iframe: ['src', 'title', 'allow', 'allowfullscreen', 'class'],
-  div: ['class'],
+  div: ['class', 'style'],
   figure: ['class'],
-  '*': ['class'],
+  '*': ['class', 'style'],
+}
+
+const ALLOWED_STYLES: sanitizeHtml.IOptions['allowedStyles'] = {
+  '*': {
+    'color': [/^#[0-9a-fA-F]{3,6}$/, /^rgb\([\d ,]+\)$/, /^rgba\([\d ,/.]+\)$/],
+    'background-color': [/^#[0-9a-fA-F]{3,6}$/, /^rgb\([\d ,]+\)$/, /^rgba\([\d ,/.]+\)$/],
+    'text-align': [/^(left|center|right|justify)$/],
+  },
 }
 
 function sanitize(html: string): string {
   return sanitizeHtml(html, {
     allowedTags: ALLOWED_TAGS,
     allowedAttributes: ALLOWED_ATTRS,
+    allowedStyles: ALLOWED_STYLES,
     allowedSchemes: ['https', 'http', 'mailto', 'tel'],
   })
 }

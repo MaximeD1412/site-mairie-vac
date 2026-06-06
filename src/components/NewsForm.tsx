@@ -1,9 +1,10 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useRef, useState } from 'react'
 import type { NewsFormState } from '@/actions/news'
 import type { News, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
+import { PreviewModal, type PreviewData } from './PreviewModal'
 import { slugify } from '@/lib/slugify'
 
 interface Props {
@@ -22,6 +23,22 @@ export function NewsForm({ action, news, deleteAction }: Props) {
   const [slug, setSlug] = useState(news?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(!!news)
   const [layout, setLayout] = useState<Block[]>(parseLayout(news?.layout))
+  const [preview, setPreview] = useState<PreviewData | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+
+  const openPreview = () => {
+    const form = formRef.current
+    if (!form) return
+    const get = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? ''
+    setPreview({
+      type: 'news',
+      title: get('title'),
+      summary: get('summary') || undefined,
+      publishedAt: get('publishedAt') || undefined,
+      image: existingImage?.url ? { url: existingImage.url, alt: existingImage.alt || '' } : null,
+      layout,
+    })
+  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!slugTouched) setSlug(slugify(e.target.value))
@@ -37,7 +54,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
 
   return (
     <div className="space-y-8">
-      <form action={formAction} className="space-y-6">
+      {preview && <PreviewModal data={preview} onClose={() => setPreview(null)} />}
+      <form ref={formRef} action={formAction} className="space-y-6">
         {state?.error && (
           <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {state.error}
@@ -146,18 +164,27 @@ export function NewsForm({ action, news, deleteAction }: Props) {
           <BlockEditor value={layout} onChange={setLayout} />
         </div>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-mid disabled:opacity-50"
-        >
-          {isPending ? 'Enregistrement…' : news ? 'Modifier' : 'Créer'}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-mid disabled:opacity-50"
+          >
+            {isPending ? 'Enregistrement…' : news ? 'Modifier' : 'Créer'}
+          </button>
+          <button
+            type="button"
+            onClick={openPreview}
+            className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-muted hover:border-brand hover:text-brand"
+          >
+            Prévisualiser
+          </button>
+        </div>
       </form>
 
       {deleteAction && (
         <form
-          action={deleteAction}
+          action={async (formData) => { await deleteAction(formData) }}
           onSubmit={(e) => {
             if (!confirm('Supprimer cette actualité définitivement ?')) e.preventDefault()
           }}

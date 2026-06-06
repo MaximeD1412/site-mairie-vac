@@ -2,7 +2,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 
 const nextConfig = {
   experimental: {},
-  compress: true,
+  compress: false,
   poweredByHeader: false,
   images: {
     remotePatterns: [

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { decodePayloadToken } from '@/lib/auth'
@@ -19,7 +21,7 @@ export default async function EventNewPage() {
   ])
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-12">
+    <main className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="mb-8 text-3xl font-bold">Nouvel événement</h1>
       <EventForm
         action={createEvent}

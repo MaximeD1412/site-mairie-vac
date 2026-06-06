@@ -392,7 +392,15 @@ export interface News {
   image?: (number | null) | Media;
   publishedAt: string;
   featured?: boolean | null;
-  layout?: unknown | null;
+  layout?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -429,7 +437,15 @@ export interface Event {
    */
   organizer?: (number | null) | Association;
   image?: (number | null) | Media;
-  layout?: unknown | null;
+  layout?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -832,7 +848,7 @@ export interface NewsSelect<T extends boolean = true> {
   image?: T;
   publishedAt?: T;
   featured?: T;
-  content?: T;
+  layout?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -861,7 +877,7 @@ export interface EventsSelect<T extends boolean = true> {
   category?: T;
   organizer?: T;
   image?: T;
-  description?: T;
+  layout?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

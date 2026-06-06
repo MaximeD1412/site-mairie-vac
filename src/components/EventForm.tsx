@@ -1,9 +1,10 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useRef, useState } from 'react'
 import type { EventFormState } from '@/actions/events'
 import type { Event, EventCategory, Association, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
+import { PreviewModal, type PreviewData } from './PreviewModal'
 import { slugify } from '@/lib/slugify'
 
 interface Props {
@@ -24,6 +25,29 @@ export function EventForm({ action, event, deleteAction, categories, association
   const [slug, setSlug] = useState(event?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(!!event)
   const [layout, setLayout] = useState<Block[]>(parseLayout(event?.layout))
+  const [preview, setPreview] = useState<PreviewData | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+
+  const openPreview = () => {
+    const form = formRef.current
+    if (!form) return
+    const get = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? ''
+    const catId = get('category')
+    const orgId = get('organizer')
+    const cat = categories.find((c) => String(c.id) === catId)
+    const org = associations.find((a) => String(a.id) === orgId)
+    setPreview({
+      type: 'event',
+      title: get('title'),
+      startDate: get('startDate') || new Date().toISOString(),
+      endDate: get('endDate') || undefined,
+      location: get('location') || undefined,
+      category: cat ? { name: cat.name ?? '', color: cat.color ?? null } : null,
+      organizer: org ? { name: org.name ?? '' } : null,
+      image: existingImage?.url ? { url: existingImage.url, alt: existingImage.alt || '' } : null,
+      layout,
+    })
+  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!slugTouched) setSlug(slugify(e.target.value))
@@ -53,7 +77,8 @@ export function EventForm({ action, event, deleteAction, categories, association
 
   return (
     <div className="space-y-8">
-      <form action={formAction} className="space-y-6">
+      {preview && <PreviewModal data={preview} onClose={() => setPreview(null)} />}
+      <form ref={formRef} action={formAction} className="space-y-6">
         {state?.error && (
           <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {state.error}
@@ -199,18 +224,27 @@ export function EventForm({ action, event, deleteAction, categories, association
           <BlockEditor value={layout} onChange={setLayout} />
         </div>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-mid disabled:opacity-50"
-        >
-          {isPending ? 'Enregistrement…' : event ? 'Modifier' : 'Créer'}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-mid disabled:opacity-50"
+          >
+            {isPending ? 'Enregistrement…' : event ? 'Modifier' : 'Créer'}
+          </button>
+          <button
+            type="button"
+            onClick={openPreview}
+            className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-muted hover:border-brand hover:text-brand"
+          >
+            Prévisualiser
+          </button>
+        </div>
       </form>
 
       {deleteAction && (
         <form
-          action={deleteAction}
+          action={async (formData) => { await deleteAction(formData) }}
           onSubmit={(e) => {
             if (!confirm('Supprimer cet événement définitivement ?')) e.preventDefault()
           }}

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { cookies } from 'next/headers'
 import { redirect, notFound } from 'next/navigation'
 import { decodePayloadToken } from '@/lib/auth'
@@ -32,7 +34,7 @@ export default async function EventModifierPage({
   const boundDelete = deleteEvent.bind(null, event.id)
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-12">
+    <main className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="mb-8 text-3xl font-bold">Modifier l&apos;événement</h1>
       <EventForm
         action={boundUpdate}
