@@ -184,7 +184,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
 
       {deleteAction && (
         <form
-          action={deleteAction}
+          action={async (formData) => { await deleteAction(formData) }}
           onSubmit={(e) => {
             if (!confirm('Supprimer cette actualité définitivement ?')) e.preventDefault()
           }}

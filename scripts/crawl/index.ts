@@ -1,7 +1,7 @@
 import { createWriteStream, existsSync, mkdirSync } from 'node:fs'
 import { writeFile, appendFile } from 'node:fs/promises'
 import path from 'node:path'
-import { extractLinks, extractFiles, extractTitle, classifyPage, shouldSkip, toCsvLine } from './crawler.ts'
+import { extractLinks, extractFiles, extractTitle, classifyPage, shouldSkip, toCsvLine } from './crawler'
 
 const SUBDIRS = { pdf: 'pdf', image: 'images', doc: 'docs' } as const
 
