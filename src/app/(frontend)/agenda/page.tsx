@@ -3,32 +3,52 @@ import { EditButton } from '@/components/EditButton'
 import { EventCard } from '@/components/events/EventCard'
 import { MiniCalendar } from '@/components/home/MiniCalendar'
 import type { Event, EventCategory, Media } from '@/payload-types'
+import type { Where } from 'payload'
 import type { CalendarEventInput } from '@/lib/calendar'
 import Link from 'next/link'
 
 const PAGE_SIZE = 12
 
-function buildUrl(page: number, past: boolean): string {
+function buildUrl(page: number, past: boolean, category?: string | null): string {
   const params = new URLSearchParams()
   if (past) params.set('past', '1')
+  if (category) params.set('category', category)
   params.set('page', String(page))
+  return `/agenda?${params.toString()}`
+}
+
+function buildCategoryUrl(slug: string | null, past: boolean): string {
+  const params = new URLSearchParams()
+  if (past) params.set('past', '1')
+  if (slug) params.set('category', slug)
   return `/agenda?${params.toString()}`
 }
 
 export default async function EventsArchive({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; past?: string }>
+  searchParams: Promise<{ page?: string; past?: string; category?: string }>
 }) {
-  const { page: pageParam, past: pastParam } = await searchParams
+  const { page: pageParam, past: pastParam, category: categoryParam } = await searchParams
   const page = Math.max(1, parseInt(pageParam ?? '1', 10) || 1)
   const showPast = pastParam === '1'
+  const activeCategory = categoryParam || null
 
   const payload = await getPayloadClient()
 
-  const where: Record<string, unknown> = { _status: { equals: 'published' } }
+  const categoriesResult = await payload.find({
+    collection: 'event-categories',
+    limit: 100,
+    sort: 'name',
+  })
+  const categories = categoriesResult.docs as EventCategory[]
+
+  const where: Where = { _status: { equals: 'published' } }
   if (!showPast) {
     where.startDate = { greater_than_equal: new Date().toISOString() }
+  }
+  if (activeCategory) {
+    where['category.slug'] = { equals: activeCategory }
   }
 
   const [result, calendarResult] = await Promise.all([
@@ -57,7 +77,7 @@ export default async function EventsArchive({
       ? item.category as EventCategory
       : null
     return {
-      id: item.id,
+      id: String(item.id),
       slug: item.slug,
       title: item.title,
       startDate: item.startDate,
@@ -73,8 +93,30 @@ export default async function EventsArchive({
         <EditButton href="/agenda/new" label="Nouvel événement" />
       </div>
 
+      {categories.length > 0 && (
+        <nav className="mt-6 flex flex-wrap gap-2" aria-label="Filtres par catégorie">
+          <Link
+            href={buildCategoryUrl(null, showPast)}
+            aria-current={!activeCategory ? 'page' : undefined}
+            className="px-3 py-1 rounded-full text-sm font-medium border transition-colors no-underline"
+          >
+            Tous
+          </Link>
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={buildCategoryUrl(cat.slug, showPast)}
+              aria-current={activeCategory === cat.slug ? 'page' : undefined}
+              className="px-3 py-1 rounded-full text-sm font-medium border transition-colors no-underline"
+              style={{ backgroundColor: `${cat.color}22`, color: cat.color, borderColor: `${cat.color}66` }}
+            >
+              {cat.name}
+            </Link>
+          ))}
+        </nav>
+      )}
+
       <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start">
-        {/* Event list — 65% */}
         <div className="w-full lg:w-[65%]">
           <div className="grid gap-4">
             {result.docs.map((item: Event) => {
@@ -102,12 +144,12 @@ export default async function EventsArchive({
           {(hasPrev || hasNext) && (
             <div className="mt-10 flex justify-between">
               {hasPrev ? (
-                <Link href={buildUrl(page - 1, showPast)} className="text-sm text-brand-mid hover:text-teal no-underline">
+                <Link href={buildUrl(page - 1, showPast, activeCategory)} className="text-sm text-brand-mid hover:text-teal no-underline">
                   ← Précédent
                 </Link>
               ) : <span />}
               {hasNext && (
-                <Link href={buildUrl(page + 1, showPast)} className="text-sm text-brand-mid hover:text-teal no-underline">
+                <Link href={buildUrl(page + 1, showPast, activeCategory)} className="text-sm text-brand-mid hover:text-teal no-underline">
                   Suivant →
                 </Link>
               )}
@@ -115,7 +157,6 @@ export default async function EventsArchive({
           )}
         </div>
 
-        {/* MiniCalendar sidebar — 35% */}
         <div className="w-full lg:w-[35%]">
           <MiniCalendar events={calendarEvents} />
         </div>
