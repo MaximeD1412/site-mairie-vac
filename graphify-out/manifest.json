@@ -1,0 +1,1077 @@
+{
+  "/home/maximedupre/projects/site-mairie-vac/docker/backup/backup.sh": {
+    "mtime": 1779457094.1652944,
+    "ast_hash": "4fba4d0c2ea0f625a28ac64292597657",
+    "semantic_hash": "4fba4d0c2ea0f625a28ac64292597657"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/next-env.d.ts": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "90426577ad8f38459f3e566411c85589",
+    "semantic_hash": "90426577ad8f38459f3e566411c85589"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/next.config.mjs": {
+    "mtime": 1780747685.654368,
+    "ast_hash": "53babc0b1869c15daa9e470dfd064230",
+    "semantic_hash": "53babc0b1869c15daa9e470dfd064230"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/package.json": {
+    "mtime": 1780747685.654368,
+    "ast_hash": "048becc4d7782beba41919b08ab0d3fa",
+    "semantic_hash": "048becc4d7782beba41919b08ab0d3fa"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/postcss.config.mjs": {
+    "mtime": 1779457104.406634,
+    "ast_hash": "ee58a68dc3308c729e9a66e03a2cafad",
+    "semantic_hash": "ee58a68dc3308c729e9a66e03a2cafad"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/prod.sh": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "d9e3a8991b21ed30155bbff7e96f894e",
+    "semantic_hash": "d9e3a8991b21ed30155bbff7e96f894e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/scripts/crawl/crawler.test.ts": {
+    "mtime": 1780494809.8440986,
+    "ast_hash": "2102ad6eb84ff047fae5e648ca4269bd",
+    "semantic_hash": "2102ad6eb84ff047fae5e648ca4269bd"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/scripts/crawl/crawler.ts": {
+    "mtime": 1780494809.8440986,
+    "ast_hash": "5ec6d45051394a39725e02cf9bc25a7b",
+    "semantic_hash": "5ec6d45051394a39725e02cf9bc25a7b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/scripts/crawl/index.ts": {
+    "mtime": 1780747685.654368,
+    "ast_hash": "5655041cb507901335eb3df5411cad17",
+    "semantic_hash": "5655041cb507901335eb3df5411cad17"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/access.ts": {
+    "mtime": 1779457104.4226363,
+    "ast_hash": "4b117b2671f6892dae8e9c8f92550161",
+    "semantic_hash": "4b117b2671f6892dae8e9c8f92550161"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/actions/__tests__/events.test.ts": {
+    "mtime": 1780650592.9443972,
+    "ast_hash": "fd1fa91fcb53fd764d3e2c1859be09c3",
+    "semantic_hash": "fd1fa91fcb53fd764d3e2c1859be09c3"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/actions/__tests__/news.test.ts": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "abbf7721694c6fad507d3c0196a0a285",
+    "semantic_hash": "abbf7721694c6fad507d3c0196a0a285"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/actions/documents.ts": {
+    "mtime": 1780604276.5582116,
+    "ast_hash": "55af2f198fa48280582951b194a44079",
+    "semantic_hash": "55af2f198fa48280582951b194a44079"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/actions/events.ts": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "291ae26d198937c4a6a2a449637e0703",
+    "semantic_hash": "291ae26d198937c4a6a2a449637e0703"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/actions/news.ts": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "584b5029b802517787c6d220a2f57dbc",
+    "semantic_hash": "584b5029b802517787c6d220a2f57dbc"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/actions/sendContact.ts": {
+    "mtime": 1780492633.5456445,
+    "ast_hash": "eca6e7ee9ec16c5845ddec69594f8f3a",
+    "semantic_hash": "eca6e7ee9ec16c5845ddec69594f8f3a"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/[...slug]/page.tsx": {
+    "mtime": 1780564149.712645,
+    "ast_hash": "ac4ee0c5d3f3e20d370bf3a05fc8f98b",
+    "semantic_hash": "ac4ee0c5d3f3e20d370bf3a05fc8f98b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/[slug]/__tests__/page.test.tsx": {
+    "mtime": 1780747685.654368,
+    "ast_hash": "c727b054b7131281af5da2b098e7fd21",
+    "semantic_hash": "c727b054b7131281af5da2b098e7fd21"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/[slug]/modifier/__tests__/page.test.tsx": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "5e85dc1fbf72ec9da9d4869c26494424",
+    "semantic_hash": "5e85dc1fbf72ec9da9d4869c26494424"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/[slug]/modifier/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "73ed6c5c571c119cd6620d53bb527529",
+    "semantic_hash": "73ed6c5c571c119cd6620d53bb527529"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/[slug]/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "bf68ddde9f29bef2532d5347f918935d",
+    "semantic_hash": "bf68ddde9f29bef2532d5347f918935d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/__tests__/page.test.tsx": {
+    "mtime": 1780754122.2736044,
+    "ast_hash": "3cf0d924c6f723791ad9f1fc494ad9e3",
+    "semantic_hash": "3cf0d924c6f723791ad9f1fc494ad9e3"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/new/__tests__/page.test.tsx": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "0c7be29e99cb7d54220721dcf469ce7a",
+    "semantic_hash": "0c7be29e99cb7d54220721dcf469ce7a"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/new/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "032ac1805535ca4f2392da1ef2e4e2fc",
+    "semantic_hash": "032ac1805535ca4f2392da1ef2e4e2fc"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/actualites/page.tsx": {
+    "mtime": 1780754122.2736044,
+    "ast_hash": "8181068ceb0baa58943d81fdefa86ce7",
+    "semantic_hash": "8181068ceb0baa58943d81fdefa86ce7"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/[slug]/__tests__/page.test.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "6cb5b867740853ea4ea1ea3d291e693e",
+    "semantic_hash": "6cb5b867740853ea4ea1ea3d291e693e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/[slug]/modifier/__tests__/page.test.tsx": {
+    "mtime": 1780605803.6087003,
+    "ast_hash": "3943ebc023dc75f7a71b8ac5a8551586",
+    "semantic_hash": "3943ebc023dc75f7a71b8ac5a8551586"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/[slug]/modifier/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "b037f8de357d135960488d8f655a942c",
+    "semantic_hash": "b037f8de357d135960488d8f655a942c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/[slug]/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "82bb8bd0bdc027278810cd3fe0df97f9",
+    "semantic_hash": "82bb8bd0bdc027278810cd3fe0df97f9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/__tests__/page.test.tsx": {
+    "mtime": 1780756303.132607,
+    "ast_hash": "b57ccbf6045e8b82333a6debc8da1442",
+    "semantic_hash": "b57ccbf6045e8b82333a6debc8da1442"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/new/__tests__/page.test.tsx": {
+    "mtime": 1780605803.6087003,
+    "ast_hash": "0c36eae0df564d3fcb76b36460d834b0",
+    "semantic_hash": "0c36eae0df564d3fcb76b36460d834b0"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/new/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "d4a8a1ee78b8402e94f5a157a2710aa9",
+    "semantic_hash": "d4a8a1ee78b8402e94f5a157a2710aa9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/agenda/page.tsx": {
+    "mtime": 1780756881.6309457,
+    "ast_hash": "4425fdaf596730379b52fc20aec427fc",
+    "semantic_hash": "4425fdaf596730379b52fc20aec427fc"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/associations/page.tsx": {
+    "mtime": 1779457104.4746432,
+    "ast_hash": "4b86e0b67f3a757bdb7193f8142428b1",
+    "semantic_hash": "4b86e0b67f3a757bdb7193f8142428b1"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/documents/[id]/modifier/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "71c93fd9157ce25312e4d32c0663b1f4",
+    "semantic_hash": "71c93fd9157ce25312e4d32c0663b1f4"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/documents/new/page.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "d142f3284e7473de907ec94bb829654d",
+    "semantic_hash": "d142f3284e7473de907ec94bb829654d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/documents/page.tsx": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "fdf75581869f9a04e3b89ccaffe0a441",
+    "semantic_hash": "fdf75581869f9a04e3b89ccaffe0a441"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/layout.tsx": {
+    "mtime": 1780757216.2511406,
+    "ast_hash": "d5e7eafb2c8c1dc4e560a56102d08e84",
+    "semantic_hash": "d5e7eafb2c8c1dc4e560a56102d08e84"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(frontend)/page.tsx": {
+    "mtime": 1780049074.0145805,
+    "ast_hash": "a402baa0b8cceade1b05b26ed1c1fde6",
+    "semantic_hash": "a402baa0b8cceade1b05b26ed1c1fde6"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(payload)/admin/[[...segments]]/page.tsx": {
+    "mtime": 1779457104.5026472,
+    "ast_hash": "1109a54c6f29387db7efc69774ceb3c2",
+    "semantic_hash": "1109a54c6f29387db7efc69774ceb3c2"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(payload)/admin/importMap.d.ts": {
+    "mtime": 1779457104.494646,
+    "ast_hash": "0ca54c58fdc69082ed74de41a4d9ccf6",
+    "semantic_hash": "0ca54c58fdc69082ed74de41a4d9ccf6"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(payload)/admin/importMap.js": {
+    "mtime": 1780752064.0376656,
+    "ast_hash": "d441bb80165cfa8c698a35f83c1c9a0c",
+    "semantic_hash": "d441bb80165cfa8c698a35f83c1c9a0c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(payload)/api/[[...slug]]/route.ts": {
+    "mtime": 1779457104.5146487,
+    "ast_hash": "bdad8c73bb46e3b0fad9606094f87fee",
+    "semantic_hash": "bdad8c73bb46e3b0fad9606094f87fee"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(payload)/api/graphql-playground/route.ts": {
+    "mtime": 1779457104.5226498,
+    "ast_hash": "0de287f621c1ccfda4ce4f62c9e32ed4",
+    "semantic_hash": "0de287f621c1ccfda4ce4f62c9e32ed4"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(payload)/api/graphql/route.ts": {
+    "mtime": 1779457104.5346513,
+    "ast_hash": "a0ba7fb7b24a90bdff2ffb27100759cc",
+    "semantic_hash": "a0ba7fb7b24a90bdff2ffb27100759cc"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/app/(payload)/layout.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "57a4b35c3ede9742b16f98da7bee4c0c",
+    "semantic_hash": "57a4b35c3ede9742b16f98da7bee4c0c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/AccordionBlock.ts": {
+    "mtime": 1780492633.5456445,
+    "ast_hash": "96fff5d62e953b15372a76726ae0a122",
+    "semantic_hash": "96fff5d62e953b15372a76726ae0a122"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/ButtonBlock.ts": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "9d9b3e235ddd240610883311f0ad6d3c",
+    "semantic_hash": "9d9b3e235ddd240610883311f0ad6d3c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/CollectionListBlock.ts": {
+    "mtime": 1779457104.538652,
+    "ast_hash": "26e705bf9b5f80a0426524aca824d16b",
+    "semantic_hash": "26e705bf9b5f80a0426524aca824d16b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/ContactBlock.ts": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "8942a85a57e8a61e050d3f58de1a6f0c",
+    "semantic_hash": "8942a85a57e8a61e050d3f58de1a6f0c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/GalleryBlock.ts": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "20d45feb54942794fb81ae1bd5d38cce",
+    "semantic_hash": "20d45feb54942794fb81ae1bd5d38cce"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/ImageBlock.ts": {
+    "mtime": 1779457104.5426524,
+    "ast_hash": "e964ad52f502984c7655583b142bda69",
+    "semantic_hash": "e964ad52f502984c7655583b142bda69"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/MapBlock.ts": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "38672c6abf8f3e2b07da8b0b81f96296",
+    "semantic_hash": "38672c6abf8f3e2b07da8b0b81f96296"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/PanneauPocketBlock.ts": {
+    "mtime": 1779457104.5426524,
+    "ast_hash": "ece07fc00a9281104652453efef40035",
+    "semantic_hash": "ece07fc00a9281104652453efef40035"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/QuickLinksBlock.ts": {
+    "mtime": 1779457104.546653,
+    "ast_hash": "96fa1a0fab0b807ead4786ef2dd7f318",
+    "semantic_hash": "96fa1a0fab0b807ead4786ef2dd7f318"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/blocks/RichTextBlock.ts": {
+    "mtime": 1780564149.7166452,
+    "ast_hash": "15e016796f57a865dec4cc6a6509c431",
+    "semantic_hash": "15e016796f57a865dec4cc6a6509c431"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/Associations.ts": {
+    "mtime": 1779457104.5506535,
+    "ast_hash": "43ffae9d3f322c3d49d7702cc336bc04",
+    "semantic_hash": "43ffae9d3f322c3d49d7702cc336bc04"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/Documents.ts": {
+    "mtime": 1779457104.5666556,
+    "ast_hash": "c5c37a4a4e24b0da45834e9c8d13abcf",
+    "semantic_hash": "c5c37a4a4e24b0da45834e9c8d13abcf"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/ElectedOfficials.ts": {
+    "mtime": 1779457104.5546541,
+    "ast_hash": "b30e1562ac036573c7741a75882c1b22",
+    "semantic_hash": "b30e1562ac036573c7741a75882c1b22"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/EventCategories.ts": {
+    "mtime": 1780049074.0145805,
+    "ast_hash": "c963f19c8dfe27d0600abcb6ee3ca390",
+    "semantic_hash": "c963f19c8dfe27d0600abcb6ee3ca390"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/Events.ts": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "743a3983a247067c7d2b5cf76c62ba60",
+    "semantic_hash": "743a3983a247067c7d2b5cf76c62ba60"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/Media.ts": {
+    "mtime": 1779457104.5546541,
+    "ast_hash": "a2a82c8869bccf1286f3c0457fb9127b",
+    "semantic_hash": "a2a82c8869bccf1286f3c0457fb9127b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/Navigation.ts": {
+    "mtime": 1780494809.8440986,
+    "ast_hash": "2acc340ed18f547f1ed6d51cb1e97ac8",
+    "semantic_hash": "2acc340ed18f547f1ed6d51cb1e97ac8"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/News.ts": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "28551c16a31789a0b4888a63df61d8f8",
+    "semantic_hash": "28551c16a31789a0b4888a63df61d8f8"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/Pages.ts": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "f01af454973167c08089ed874c179d57",
+    "semantic_hash": "f01af454973167c08089ed874c179d57"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/collections/Users.ts": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "d92dbf64c25d68f7cb0fb08ba7f90536",
+    "semantic_hash": "d92dbf64c25d68f7cb0fb08ba7f90536"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/AuthToast.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "2557b775e0818636118459508384e5cf",
+    "semantic_hash": "2557b775e0818636118459508384e5cf"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/BlockEditor.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "b96a6d415e06ca0d30d302b3a071b099",
+    "semantic_hash": "b96a6d415e06ca0d30d302b3a071b099"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/Blocks.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "1c407f6c8069779ed58daa22897ac460",
+    "semantic_hash": "1c407f6c8069779ed58daa22897ac460"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/DocumentForm.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "99fd7c7a0e14af554e7a088fbc7f1119",
+    "semantic_hash": "99fd7c7a0e14af554e7a088fbc7f1119"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/DocumentLibraryModal.tsx": {
+    "mtime": 1780604276.566212,
+    "ast_hash": "6c821cffcec65740319f333f0a0805eb",
+    "semantic_hash": "6c821cffcec65740319f333f0a0805eb"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/EditButton.tsx": {
+    "mtime": 1780583170.414524,
+    "ast_hash": "34cb0eb5127fe2c222a53dfb2a664bd8",
+    "semantic_hash": "34cb0eb5127fe2c222a53dfb2a664bd8"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/EventForm.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "2202e61cc1fd1674aa5279aebef44a83",
+    "semantic_hash": "2202e61cc1fd1674aa5279aebef44a83"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/Footer.tsx": {
+    "mtime": 1780498488.5179868,
+    "ast_hash": "6e6583210319b6717a146949fec7ae3e",
+    "semantic_hash": "6e6583210319b6717a146949fec7ae3e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/Header.tsx": {
+    "mtime": 1780757235.8899925,
+    "ast_hash": "f2a41568ca7d4b594c04c1ccd190830a",
+    "semantic_hash": "f2a41568ca7d4b594c04c1ccd190830a"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/HeaderClient.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "05e5b180a322e3b80d7ad7007b8b27ad",
+    "semantic_hash": "05e5b180a322e3b80d7ad7007b8b27ad"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/HtmlContent.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "b330da5de918d61a73990e5b9b06f3c7",
+    "semantic_hash": "b330da5de918d61a73990e5b9b06f3c7"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/LoginForm.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "0bfe97af83607b35a873dc4a01b6ae30",
+    "semantic_hash": "0bfe97af83607b35a873dc4a01b6ae30"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/LoginPopover.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "45ba0af9b325d698ce375a7de4079ed7",
+    "semantic_hash": "45ba0af9b325d698ce375a7de4079ed7"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/MediaLibraryModal.tsx": {
+    "mtime": 1780583170.414524,
+    "ast_hash": "ccdb608ee860d33b16323ce77ee7c454",
+    "semantic_hash": "ccdb608ee860d33b16323ce77ee7c454"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/MobileMenu.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "552be4cf1edbb5680002aeb575ce1bdd",
+    "semantic_hash": "552be4cf1edbb5680002aeb575ce1bdd"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/NewsForm.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "2b9bbf8f3bc75b37bbc35ef4e708b901",
+    "semantic_hash": "2b9bbf8f3bc75b37bbc35ef4e708b901"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/PreviewBlocks.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "eed7b7af243a8d2b8bf7fb97861c44b9",
+    "semantic_hash": "eed7b7af243a8d2b8bf7fb97861c44b9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/PreviewModal.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "70f18241350d04e890ae5d9d269dead9",
+    "semantic_hash": "70f18241350d04e890ae5d9d269dead9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/RichEditor.tsx": {
+    "mtime": 1780651293.1374474,
+    "ast_hash": "a773c5f5769ae737adac7ff72621e554",
+    "semantic_hash": "a773c5f5769ae737adac7ff72621e554"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/AuthToast.test.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "4609c4758d95dcc2602e46f2cf92f12e",
+    "semantic_hash": "4609c4758d95dcc2602e46f2cf92f12e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/BlockEditor.test.tsx": {
+    "mtime": 1780652195.2204807,
+    "ast_hash": "44ff46f99a45fa86067c644e41605113",
+    "semantic_hash": "44ff46f99a45fa86067c644e41605113"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/Blocks.test.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "54b811184923d927cb790e1248065aa5",
+    "semantic_hash": "54b811184923d927cb790e1248065aa5"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/ColumnsBlock.test.tsx": {
+    "mtime": 1780652195.2204807,
+    "ast_hash": "24c746ea95fe27b4c6e175d8257c7f3b",
+    "semantic_hash": "24c746ea95fe27b4c6e175d8257c7f3b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/DocumentForm.test.tsx": {
+    "mtime": 1780605803.6087003,
+    "ast_hash": "45ee7d001d17fef01f637c6112fc713f",
+    "semantic_hash": "45ee7d001d17fef01f637c6112fc713f"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/DocumentLibraryModal.test.tsx": {
+    "mtime": 1780604276.566212,
+    "ast_hash": "5d0a517fa0129c3216e22d601925e6bc",
+    "semantic_hash": "5d0a517fa0129c3216e22d601925e6bc"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/EditButton.test.tsx": {
+    "mtime": 1780583170.414524,
+    "ast_hash": "cf145c06579c27da4651e2cd5aba549a",
+    "semantic_hash": "cf145c06579c27da4651e2cd5aba549a"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/EventForm.test.tsx": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "7219d27832441ae05b2cf92f9811b9c9",
+    "semantic_hash": "7219d27832441ae05b2cf92f9811b9c9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/Footer.test.tsx": {
+    "mtime": 1780499512.5226135,
+    "ast_hash": "c3eeaa456947b216bf9f8b8a6d005462",
+    "semantic_hash": "c3eeaa456947b216bf9f8b8a6d005462"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/HtmlContent.test.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "85c1a1a729c72dff73c165e23f078e64",
+    "semantic_hash": "85c1a1a729c72dff73c165e23f078e64"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/LoginPopover.test.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "ac8a3c64dbacdec3f4ae11f67da27e4f",
+    "semantic_hash": "ac8a3c64dbacdec3f4ae11f67da27e4f"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/MediaLibraryModal.test.tsx": {
+    "mtime": 1780583170.414524,
+    "ast_hash": "ebc1091500cc635342671372a5a85f00",
+    "semantic_hash": "ebc1091500cc635342671372a5a85f00"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/MobileMenu.test.tsx": {
+    "mtime": 1780579875.8449645,
+    "ast_hash": "7f54aae797d8ccc0a8204980928a9040",
+    "semantic_hash": "7f54aae797d8ccc0a8204980928a9040"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/NewsForm.test.tsx": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "4e7274e08363dbef6c8064fb1f752071",
+    "semantic_hash": "4e7274e08363dbef6c8064fb1f752071"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/__tests__/RichEditor.test.tsx": {
+    "mtime": 1780651293.1374474,
+    "ast_hash": "0270ba07f6605dbe2142d30a22916faf",
+    "semantic_hash": "0270ba07f6605dbe2142d30a22916faf"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/admin/Dashboard.tsx": {
+    "mtime": 1780757459.2178316,
+    "ast_hash": "baaeaa917d90c5ad8cc01fd592d4baac",
+    "semantic_hash": "baaeaa917d90c5ad8cc01fd592d4baac"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/admin/Icon.tsx": {
+    "mtime": 1780579875.8489652,
+    "ast_hash": "0d60aeb4a4df2cd90fc87a683fa7f894",
+    "semantic_hash": "0d60aeb4a4df2cd90fc87a683fa7f894"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/admin/Logo.tsx": {
+    "mtime": 1780579875.8489652,
+    "ast_hash": "30283a5799e0ba3ae19305495ed9dd92",
+    "semantic_hash": "30283a5799e0ba3ae19305495ed9dd92"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/AccordionBlock.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "b870c9e2e3cc801976ca1f22f8167e97",
+    "semantic_hash": "b870c9e2e3cc801976ca1f22f8167e97"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/ButtonBlock.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "12c08a6342a12aa0af2b273bc427ad5f",
+    "semantic_hash": "12c08a6342a12aa0af2b273bc427ad5f"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/CollectionListBlock.tsx": {
+    "mtime": 1779977755.0053036,
+    "ast_hash": "db1c58c3455b214852d0100a2853581d",
+    "semantic_hash": "db1c58c3455b214852d0100a2853581d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/ColumnsBlock.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "c01a89485a0ce7a5376cbd1f599d31c9",
+    "semantic_hash": "c01a89485a0ce7a5376cbd1f599d31c9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/ContactBlock.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "748be39ca29803c811a879fe9594e0f6",
+    "semantic_hash": "748be39ca29803c811a879fe9594e0f6"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/GalleryBlock.tsx": {
+    "mtime": 1780564149.7166452,
+    "ast_hash": "92fad197aa36f01267b86436aae2056e",
+    "semantic_hash": "92fad197aa36f01267b86436aae2056e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/ImageBlock.tsx": {
+    "mtime": 1779977755.0053036,
+    "ast_hash": "0449a09d018abb6bdc3e4d6fdf9599fb",
+    "semantic_hash": "0449a09d018abb6bdc3e4d6fdf9599fb"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/LeafletMap.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "0f6ea0f55c6496f4e104922c09b5838d",
+    "semantic_hash": "0f6ea0f55c6496f4e104922c09b5838d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/MapBlock.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "f0ffbbcb7893457d6ca6d548dfcecdf8",
+    "semantic_hash": "f0ffbbcb7893457d6ca6d548dfcecdf8"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/PanneauPocketBlock.tsx": {
+    "mtime": 1779977755.0053036,
+    "ast_hash": "be2446ab38ce543369e842fdb21f2e81",
+    "semantic_hash": "be2446ab38ce543369e842fdb21f2e81"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/QuickLinksBlock.tsx": {
+    "mtime": 1779977755.0053036,
+    "ast_hash": "018dc9ae0145d1c185addc6b16da4872",
+    "semantic_hash": "018dc9ae0145d1c185addc6b16da4872"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/RichTextBlock.tsx": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "ba3bc62f626f19f19ae417039c53742a",
+    "semantic_hash": "ba3bc62f626f19f19ae417039c53742a"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/AccordionBlock.test.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "c52ce4e125850c544a6f965cc39860b0",
+    "semantic_hash": "c52ce4e125850c544a6f965cc39860b0"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/ButtonBlock.test.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "2fd599b2e650b8aa2b89dddf41ff7136",
+    "semantic_hash": "2fd599b2e650b8aa2b89dddf41ff7136"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/CollectionListBlock.test.tsx": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "419985bc81f6751e1ad54e39601dc313",
+    "semantic_hash": "419985bc81f6751e1ad54e39601dc313"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/ColumnsBlock.test.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "68a7da57ea34baddf6ce892474596727",
+    "semantic_hash": "68a7da57ea34baddf6ce892474596727"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/ContactBlock.test.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "5e4b6d678f2b6af067d393791f403445",
+    "semantic_hash": "5e4b6d678f2b6af067d393791f403445"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/GalleryBlock.test.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "1612843bc7f370730955c86a6907b8f0",
+    "semantic_hash": "1612843bc7f370730955c86a6907b8f0"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/ImageBlock.test.tsx": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "358818976f47a2ad848aba0a0967aad8",
+    "semantic_hash": "358818976f47a2ad848aba0a0967aad8"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/MapBlock.test.tsx": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "ec21b1876dfcf1f4499b2f0bee6ef8a9",
+    "semantic_hash": "ec21b1876dfcf1f4499b2f0bee6ef8a9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/PanneauPocketBlock.test.tsx": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "745e48565f68bc3160647fdc123819cb",
+    "semantic_hash": "745e48565f68bc3160647fdc123819cb"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/QuickLinksBlock.test.tsx": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "a85a01b29a946ba1319c11f939ce0454",
+    "semantic_hash": "a85a01b29a946ba1319c11f939ce0454"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/blocks/__tests__/RichTextBlock.test.tsx": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "6f83c63e4d6a3d88332ad57fca2182a3",
+    "semantic_hash": "6f83c63e4d6a3d88332ad57fca2182a3"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/events/EventArticle.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "408142db38deaed8667fb037fa6bc53b",
+    "semantic_hash": "408142db38deaed8667fb037fa6bc53b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/events/EventCard.tsx": {
+    "mtime": 1780754122.2776048,
+    "ast_hash": "b44bd2295f6cf443d46b488bb84287a9",
+    "semantic_hash": "b44bd2295f6cf443d46b488bb84287a9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/events/__tests__/EventArticle.test.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "45e00bf300b7600b9cbacd99d127b842",
+    "semantic_hash": "45e00bf300b7600b9cbacd99d127b842"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/events/__tests__/EventCard.test.tsx": {
+    "mtime": 1780754122.2776048,
+    "ast_hash": "ce12ec2c3bcd282d8f0d13b8f9ac906d",
+    "semantic_hash": "ce12ec2c3bcd282d8f0d13b8f9ac906d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/ActuPanneauSection.tsx": {
+    "mtime": 1780754122.2776048,
+    "ast_hash": "175bd72feda0944c5cf05bd2c915cb50",
+    "semantic_hash": "175bd72feda0944c5cf05bd2c915cb50"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/AgendaCarousel.tsx": {
+    "mtime": 1780564149.7166452,
+    "ast_hash": "c69c9ddbe7eabcb6a145be7fe514800e",
+    "semantic_hash": "c69c9ddbe7eabcb6a145be7fe514800e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/AgendaSection.tsx": {
+    "mtime": 1780049074.0145805,
+    "ast_hash": "7d5207243700daaf0f781d69403b3378",
+    "semantic_hash": "7d5207243700daaf0f781d69403b3378"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/Hero.tsx": {
+    "mtime": 1780564149.7166452,
+    "ast_hash": "3acbbc231b19fc4622ac81da10d5b391",
+    "semantic_hash": "3acbbc231b19fc4622ac81da10d5b391"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/MiniCalendar.tsx": {
+    "mtime": 1780498488.5179868,
+    "ast_hash": "28b1c6cd97bdbc48191366007ed3abc4",
+    "semantic_hash": "28b1c6cd97bdbc48191366007ed3abc4"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/PublicationsSection.tsx": {
+    "mtime": 1780498488.5179868,
+    "ast_hash": "3e0179dc4c2d68699683e72c57c619af",
+    "semantic_hash": "3e0179dc4c2d68699683e72c57c619af"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/QuickLinksBar.tsx": {
+    "mtime": 1779457104.6186628,
+    "ast_hash": "edda6b59e3bfd712d6c79614d61fba11",
+    "semantic_hash": "edda6b59e3bfd712d6c79614d61fba11"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/__tests__/AgendaCarousel.test.tsx": {
+    "mtime": 1780049074.018581,
+    "ast_hash": "815b9651d3d6da7b0baa3cd161de60e6",
+    "semantic_hash": "815b9651d3d6da7b0baa3cd161de60e6"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/home/__tests__/MiniCalendar.test.tsx": {
+    "mtime": 1780498488.5179868,
+    "ast_hash": "9909be0da48e350aa73c3bad14b42d4c",
+    "semantic_hash": "9909be0da48e350aa73c3bad14b42d4c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/news/NewsArticle.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "c4530dcfc716a9ba7169824446b0e18f",
+    "semantic_hash": "c4530dcfc716a9ba7169824446b0e18f"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/news/NewsCard.tsx": {
+    "mtime": 1780754122.2776048,
+    "ast_hash": "732a64824ac0984e3e0f19be0e53f6a6",
+    "semantic_hash": "732a64824ac0984e3e0f19be0e53f6a6"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/news/__tests__/NewsArticle.test.tsx": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "3d7b69517922eca846821f878f375658",
+    "semantic_hash": "3d7b69517922eca846821f878f375658"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/news/__tests__/NewsCard.test.tsx": {
+    "mtime": 1780754122.2776048,
+    "ast_hash": "6d83f81a1eeb0da6f2c1c48b9fefbc72",
+    "semantic_hash": "6d83f81a1eeb0da6f2c1c48b9fefbc72"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/tiptap-extensions/DocumentPdfViewer.ts": {
+    "mtime": 1780604276.566212,
+    "ast_hash": "91067762789d1f0ef0998be47a9e4f40",
+    "semantic_hash": "91067762789d1f0ef0998be47a9e4f40"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/components/tiptap-extensions/DocumentVideoPlayer.ts": {
+    "mtime": 1780604276.566212,
+    "ast_hash": "f621454ff4c2d2d9da7a3234bb2c9e8e",
+    "semantic_hash": "f621454ff4c2d2d9da7a3234bb2c9e8e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/features/youtube/YoutubeNode.ts": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "c09cb9a8e77daf9cc4ddb8623973418d",
+    "semantic_hash": "c09cb9a8e77daf9cc4ddb8623973418d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/features/youtube/feature.client.tsx": {
+    "mtime": 1780564149.7166452,
+    "ast_hash": "f996311b2539d086e79e7a2c1ae58447",
+    "semantic_hash": "f996311b2539d086e79e7a2c1ae58447"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/features/youtube/feature.server.ts": {
+    "mtime": 1780564149.7166452,
+    "ast_hash": "c9bc8fd57ce0db18621550e61fca4e15",
+    "semantic_hash": "c9bc8fd57ce0db18621550e61fca4e15"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/globals/HomepageSettings.ts": {
+    "mtime": 1780494809.8440986,
+    "ast_hash": "e3b6bbbba8def4192a58f8f39d377aab",
+    "semantic_hash": "e3b6bbbba8def4192a58f8f39d377aab"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/globals/MairieInfo.ts": {
+    "mtime": 1780494809.8440986,
+    "ast_hash": "b2b10ef8224da2a001199976dd3f04ae",
+    "semantic_hash": "b2b10ef8224da2a001199976dd3f04ae"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/globals/SiteSettings.ts": {
+    "mtime": 1780757205.5997057,
+    "ast_hash": "b7818bc45984e66922ab62f6a6b14b84",
+    "semantic_hash": "b7818bc45984e66922ab62f6a6b14b84"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/__tests__/auth.test.ts": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "37b2c057bcca00593e4462559b1f361c",
+    "semantic_hash": "37b2c057bcca00593e4462559b1f361c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/__tests__/calendar.test.ts": {
+    "mtime": 1780049074.018581,
+    "ast_hash": "2ec35291a6205ff85ace92346d00f63e",
+    "semantic_hash": "2ec35291a6205ff85ace92346d00f63e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/__tests__/documents.test.ts": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "04a79f2649c671d2874d983ac98d6fd2",
+    "semantic_hash": "04a79f2649c671d2874d983ac98d6fd2"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/auth.ts": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "e5452daaa8b3cc66bfbe05d530d997ed",
+    "semantic_hash": "e5452daaa8b3cc66bfbe05d530d997ed"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/calendar.ts": {
+    "mtime": 1780049074.018581,
+    "ast_hash": "acbf0cdb680a7a2728631fe2d484e57b",
+    "semantic_hash": "acbf0cdb680a7a2728631fe2d484e57b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/documents.ts": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "73fe8791821a3671e61e2ecd077f2259",
+    "semantic_hash": "73fe8791821a3671e61e2ecd077f2259"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/links.ts": {
+    "mtime": 1779457104.6586683,
+    "ast_hash": "cc85901a7a357ba691103bc5c4ee7fa1",
+    "semantic_hash": "cc85901a7a357ba691103bc5c4ee7fa1"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/payload.ts": {
+    "mtime": 1779457104.6586683,
+    "ast_hash": "84871fc655b726357c2afb1da32795d7",
+    "semantic_hash": "84871fc655b726357c2afb1da32795d7"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/lib/slugify.ts": {
+    "mtime": 1780650592.948398,
+    "ast_hash": "f0cbde1a4282e2410e16d35772c55c7f",
+    "semantic_hash": "f0cbde1a4282e2410e16d35772c55c7f"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/middleware.ts": {
+    "mtime": 1780605102.3692203,
+    "ast_hash": "3e4f88139dd14e191b897ddcd7b4aae1",
+    "semantic_hash": "3e4f88139dd14e191b897ddcd7b4aae1"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260519_075452.json": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "5930a70fd676c02e768ab9f8b139ab79",
+    "semantic_hash": "5930a70fd676c02e768ab9f8b139ab79"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260519_075452.ts": {
+    "mtime": 1779977755.0093048,
+    "ast_hash": "5ad40bd3c752a24760edce6e93525bde",
+    "semantic_hash": "5ad40bd3c752a24760edce6e93525bde"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260521_091237_event-categories.ts": {
+    "mtime": 1780049074.018581,
+    "ast_hash": "1016eb1e621a510b0517ae86828ef000",
+    "semantic_hash": "1016eb1e621a510b0517ae86828ef000"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260602_151020.json": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "db3d2feb48ca88c8a4ace1937c61a7a2",
+    "semantic_hash": "db3d2feb48ca88c8a4ace1937c61a7a2"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260602_151020.ts": {
+    "mtime": 1780492633.549645,
+    "ast_hash": "cfb6d91fb3e576f2f98c65f1cfbf5735",
+    "semantic_hash": "cfb6d91fb3e576f2f98c65f1cfbf5735"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260604_000000_news-events-html.ts": {
+    "mtime": 1780579875.8489652,
+    "ast_hash": "fdf2d69575775f01016b1201e37a0e86",
+    "semantic_hash": "fdf2d69575775f01016b1201e37a0e86"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260605_000000_layout-json.ts": {
+    "mtime": 1780653419.092295,
+    "ast_hash": "480db187b345cd05f9c61f8abc9f9f96",
+    "semantic_hash": "480db187b345cd05f9c61f8abc9f9f96"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/20260606_000000_site-settings-logo.ts": {
+    "mtime": 1780757582.4301183,
+    "ast_hash": "3c8459636766a6266ec088281118e0aa",
+    "semantic_hash": "3c8459636766a6266ec088281118e0aa"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/migrations/index.ts": {
+    "mtime": 1780757594.7315552,
+    "ast_hash": "2b03e8619248e3d3fd1f9b496f34b3a2",
+    "semantic_hash": "2b03e8619248e3d3fd1f9b496f34b3a2"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/payload-types.ts": {
+    "mtime": 1780757228.2011027,
+    "ast_hash": "a21b1cf85c34c4f40fc1e54ac3fd3d22",
+    "semantic_hash": "a21b1cf85c34c4f40fc1e54ac3fd3d22"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/payload.config.ts": {
+    "mtime": 1780752064.0376656,
+    "ast_hash": "0aeccf341eb572d480175a4ad6ec3e74",
+    "semantic_hash": "0aeccf341eb572d480175a4ad6ec3e74"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/seed.init.lib.ts": {
+    "mtime": 1780499512.5226135,
+    "ast_hash": "46adacb8b08f3a76af9f6df5b659b06c",
+    "semantic_hash": "46adacb8b08f3a76af9f6df5b659b06c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/seed.init.ts": {
+    "mtime": 1780498488.5179868,
+    "ast_hash": "ba8d93fd4aacadb8b9b647c6bec53ff6",
+    "semantic_hash": "ba8d93fd4aacadb8b9b647c6bec53ff6"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/seed.ts": {
+    "mtime": 1780580825.568699,
+    "ast_hash": "06af4de64a381e97228a727e5a451d03",
+    "semantic_hash": "06af4de64a381e97228a727e5a451d03"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/test/seed.init.test.ts": {
+    "mtime": 1780499512.5226135,
+    "ast_hash": "71cf285c990b6e83943d735474350e33",
+    "semantic_hash": "71cf285c990b6e83943d735474350e33"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/test/setup.ts": {
+    "mtime": 1779977755.0133057,
+    "ast_hash": "994c5bf3f0f8742b450d0ab09b0d6bb9",
+    "semantic_hash": "994c5bf3f0f8742b450d0ab09b0d6bb9"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/test/smoke.test.ts": {
+    "mtime": 1779977755.0133057,
+    "ast_hash": "44ee75c910b378f253914fdd78681695",
+    "semantic_hash": "44ee75c910b378f253914fdd78681695"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/src/types/css.d.ts": {
+    "mtime": 1780747685.6583683,
+    "ast_hash": "71b4eae4ce8953cbc212cd1b08aeaa5c",
+    "semantic_hash": "71b4eae4ce8953cbc212cd1b08aeaa5c"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/tsconfig.json": {
+    "mtime": 1780049074.018581,
+    "ast_hash": "8a8655e6c00f579b1303caa5e5fc1685",
+    "semantic_hash": "8a8655e6c00f579b1303caa5e5fc1685"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/vitest.config.ts": {
+    "mtime": 1780049074.0265818,
+    "ast_hash": "defb688a6c85012fe2a25679609db717",
+    "semantic_hash": "defb688a6c85012fe2a25679609db717"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/.github/workflows/ci.yml": {
+    "mtime": 1779977755.0013027,
+    "ast_hash": "f11084a98f27038c61a9ba5b4d190e42",
+    "semantic_hash": "f11084a98f27038c61a9ba5b4d190e42"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/.github/workflows/deploy.yml": {
+    "mtime": 1779977755.0013027,
+    "ast_hash": "885bcdc9ba76c13163320997142cda64",
+    "semantic_hash": "885bcdc9ba76c13163320997142cda64"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/CONTEXT.md": {
+    "mtime": 1780650592.9403963,
+    "ast_hash": "3edcf95726d92c23819cd7d2895e101d",
+    "semantic_hash": "3edcf95726d92c23819cd7d2895e101d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/PROJECT.md": {
+    "mtime": 1780499500.9934566,
+    "ast_hash": "94ae9c3e532741bfc9ed01da4d9e1612",
+    "semantic_hash": "94ae9c3e532741bfc9ed01da4d9e1612"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/README.md": {
+    "mtime": 1780499500.9934566,
+    "ast_hash": "44b73e3eb1b5127cfdeb48b8d8833a86",
+    "semantic_hash": "44b73e3eb1b5127cfdeb48b8d8833a86"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/cadrage-agent-ia-edition-mairie-payload.md": {
+    "mtime": 1780650592.9403963,
+    "ast_hash": "ee200bf65c15fbb4b8dff09dc9ac6ce2",
+    "semantic_hash": "ee200bf65c15fbb4b8dff09dc9ac6ce2"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/current-issues.md": {
+    "mtime": 1780754767.514925,
+    "ast_hash": "0b99351926bbe9fe3f43d1d8ffb23c7e",
+    "semantic_hash": "0b99351926bbe9fe3f43d1d8ffb23c7e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docker-compose.dev.yml": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "89086d530d68f5ce85eb77771fe51027",
+    "semantic_hash": "89086d530d68f5ce85eb77771fe51027"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docker-compose.yml": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "42575e07807adff10a461ca962f34a28",
+    "semantic_hash": "42575e07807adff10a461ca962f34a28"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/adr/0001-espace-agents-custom-vs-payload-admin.md": {
+    "mtime": 1780564149.7086449,
+    "ast_hash": "4565a0c10da016623e511e1c2132d657",
+    "semantic_hash": "4565a0c10da016623e511e1c2132d657"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/adr/0002-connexion-popover-vs-page.md": {
+    "mtime": 1780579875.840964,
+    "ast_hash": "5aad666cd8f8b862cd8b3b62105364b3",
+    "semantic_hash": "5aad666cd8f8b862cd8b3b62105364b3"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/adr/0003-block-editor-news-events.md": {
+    "mtime": 1780650592.9443972,
+    "ast_hash": "48f504c1ae85d522f10443eac5fe9723",
+    "semantic_hash": "48f504c1ae85d522f10443eac5fe9723"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/audit-accessibilite.md": {
+    "mtime": 1780498488.5139866,
+    "ast_hash": "e2660772871eeeddab7dedbeebc06e37",
+    "semantic_hash": "e2660772871eeeddab7dedbeebc06e37"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/clever-cloud.md": {
+    "mtime": 1779457104.3346243,
+    "ast_hash": "336628052bc2d1f44ea444f8e78ae12e",
+    "semantic_hash": "336628052bc2d1f44ea444f8e78ae12e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/current-issues.md": {
+    "mtime": 1780650559.7413974,
+    "ast_hash": "58d0184059201dfefc7317331b3c1cd1",
+    "semantic_hash": "58d0184059201dfefc7317331b3c1cd1"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/sqlite-backup-cellar.md": {
+    "mtime": 1779457104.338625,
+    "ast_hash": "3e1f8769784494fa19c0ca37352d664b",
+    "semantic_hash": "3e1f8769784494fa19c0ca37352d664b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/notes/2026-05-07-session-ui-implementation.md": {
+    "mtime": 1779457104.3746297,
+    "ast_hash": "4e9a42c5d268723f466e7a657bf0cfc7",
+    "semantic_hash": "4e9a42c5d268723f466e7a657bf0cfc7"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-07-infrastructure-ovh-docker.md": {
+    "mtime": 1779457104.390632,
+    "ast_hash": "df4fb5ede08789a44ec68c4ece26aebe",
+    "semantic_hash": "df4fb5ede08789a44ec68c4ece26aebe"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-07-ui-design-system.md": {
+    "mtime": 1779457104.3866313,
+    "ast_hash": "feb855e751adbcc1b053e3ce1fdc4f8e",
+    "semantic_hash": "feb855e751adbcc1b053e3ce1fdc4f8e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-19-agenda-detail-page.md": {
+    "mtime": 1780048353.6487648,
+    "ast_hash": "31db8b1efa53bc28836b6256ff890725",
+    "semantic_hash": "31db8b1efa53bc28836b6256ff890725"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-19-agenda-homepage-redesign.md": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "7f5c5939defc28af7c43fc935ff7205b",
+    "semantic_hash": "7f5c5939defc28af7c43fc935ff7205b"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-19-block-renderer.md": {
+    "mtime": 1779977755.0013027,
+    "ast_hash": "ac889a3563bd16eb120ec2035e3b6252",
+    "semantic_hash": "ac889a3563bd16eb120ec2035e3b6252"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-19-news-detail-page.md": {
+    "mtime": 1780048353.6487648,
+    "ast_hash": "c15a35c65a51918d62b0eeb5644925b4",
+    "semantic_hash": "c15a35c65a51918d62b0eeb5644925b4"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-19-seed-script.md": {
+    "mtime": 1780048353.6487648,
+    "ast_hash": "8f1b1d980916f6e0d49082caab516a95",
+    "semantic_hash": "8f1b1d980916f6e0d49082caab516a95"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/plans/2026-05-22-docker-clean-env.md": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "2889193bff728c03ec09009ab64737d2",
+    "semantic_hash": "2889193bff728c03ec09009ab64737d2"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-07-infrastructure-ovh-docker-design.md": {
+    "mtime": 1779457104.3506265,
+    "ast_hash": "013aec1b50f68f2f9f64047160ae1b64",
+    "semantic_hash": "013aec1b50f68f2f9f64047160ae1b64"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-07-ui-design-system.md": {
+    "mtime": 1779457104.346626,
+    "ast_hash": "dbf5282b9a8dbe7d894b52961c09f595",
+    "semantic_hash": "dbf5282b9a8dbe7d894b52961c09f595"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-19-agenda-detail-page-design.md": {
+    "mtime": 1780048353.6487648,
+    "ast_hash": "ae3c80ada06a9152d3d716cf2d6da8ec",
+    "semantic_hash": "ae3c80ada06a9152d3d716cf2d6da8ec"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-19-agenda-homepage-redesign.md": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "291fc406a10bd760845d4660c182245e",
+    "semantic_hash": "291fc406a10bd760845d4660c182245e"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-19-block-renderer-design.md": {
+    "mtime": 1779977755.0013027,
+    "ast_hash": "f5cffc5a8211352343b3314228e94a49",
+    "semantic_hash": "f5cffc5a8211352343b3314228e94a49"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-19-docker-dev-setup-design.md": {
+    "mtime": 1780049074.01058,
+    "ast_hash": "9546f04981d7e9e3a304e40c75c52836",
+    "semantic_hash": "9546f04981d7e9e3a304e40c75c52836"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-19-news-detail-page-design.md": {
+    "mtime": 1780048353.6487648,
+    "ast_hash": "647a128a408de044565a7f5d350dc82d",
+    "semantic_hash": "647a128a408de044565a7f5d350dc82d"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/docs/superpowers/specs/2026-05-19-seed-script-design.md": {
+    "mtime": 1780048353.6487648,
+    "ast_hash": "cd8a5ba83aff32e95dff76a38a1dcd1f",
+    "semantic_hash": "cd8a5ba83aff32e95dff76a38a1dcd1f"
+  },
+  "/home/maximedupre/projects/site-mairie-vac/scripts/crawl/README.md": {
+    "mtime": 1780494809.8440986,
+    "ast_hash": "a232a3478c572197378293c1bcdd97af",
+    "semantic_hash": "a232a3478c572197378293c1bcdd97af"
+  }
+}
