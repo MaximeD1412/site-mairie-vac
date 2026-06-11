@@ -969,6 +969,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface SiteSetting {
   id: number;
+  /**
+   * Affiché en haut à gauche sur toutes les pages. Format carré recommandé (ex : 80×80px).
+   */
+  logo?: (number | null) | Media;
   heroImage?: (number | null) | Media;
   heroTitle?: string | null;
   heroSubtitle?: string | null;
@@ -1034,6 +1038,7 @@ export interface HomepageSetting {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  logo?: T;
   heroImage?: T;
   heroTitle?: T;
   heroSubtitle?: T;
