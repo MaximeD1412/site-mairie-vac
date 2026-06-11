@@ -1,5 +1,6 @@
 import { getPayloadClient } from '@/lib/payload'
 import { EditButton } from '@/components/EditButton'
+import { Plus } from 'lucide-react'
 import { NewsCard } from '@/components/news/NewsCard'
 import Link from 'next/link'
 
@@ -27,7 +28,7 @@ export default async function NewsArchive({
     <div className="mx-auto max-w-5xl px-4 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold">Actualités</h1>
-        <EditButton href="/actualites/new" label="+ Nouvelle actualité" />
+        <EditButton href="/actualites/new" label="Nouvelle actualité" icon={<Plus size={14} />} />
       </div>
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {docs.map((item: any) => (

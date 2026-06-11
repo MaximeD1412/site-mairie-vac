@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { Plus } from 'lucide-react'
 import { NewsCard } from '@/components/news/NewsCard'
 import type { NewsItem } from '@/components/news/NewsCard'
+import { EditButton } from '@/components/EditButton'
 
 interface SiteSettingsData {
   panneauPocketUrl?: string | null
@@ -9,10 +11,9 @@ interface SiteSettingsData {
 interface ActuPanneauSectionProps {
   news: NewsItem[]
   settings?: SiteSettingsData | null
-  role?: string
 }
 
-export function ActuPanneauSection({ news, settings, role }: ActuPanneauSectionProps) {
+export function ActuPanneauSection({ news, settings }: ActuPanneauSectionProps) {
   const [featured, ...allRest] = news
   const rest = allRest.slice(0, 2)
   const panneauUrl = settings?.panneauPocketUrl
@@ -29,11 +30,7 @@ export function ActuPanneauSection({ news, settings, role }: ActuPanneauSectionP
               <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
             </h2>
             <div className="flex items-center gap-3">
-              {(role === 'agent' || role === 'admin') && (
-                <Link href="/actualites/new" className="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors no-underline bg-brand text-white hover:bg-brand-mid">
-                  + Nouvelle actualité
-                </Link>
-              )}
+              <EditButton href="/actualites/new" label="Nouvelle actualité" icon={<Plus size={14} />} />
               <Link href="/actualites" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
                 Toutes les actualités →
               </Link>
