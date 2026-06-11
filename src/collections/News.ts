@@ -5,7 +5,18 @@ export const News: CollectionConfig = {
   slug: 'news',
   labels: { singular: 'Actualité', plural: 'Actualités' },
   versions: { drafts: true },
-  admin: { useAsTitle: 'title', group: 'Contenus' },
+  admin: {
+    useAsTitle: 'title',
+    group: 'Contenus',
+    components: {
+      beforeFields: [
+        {
+          path: '@/components/admin/AgentsBanner',
+          clientProps: { newPath: '/actualites/new', editBasePath: '/actualites' },
+        },
+      ],
+    },
+  },
   access: { read: publishedOrLoggedIn, create: isAgentOrAdmin, update: isAgentOrAdmin, delete: isAgentOrAdmin },
   fields: [
     { name: 'title', label: 'Titre', type: 'text', required: true },
