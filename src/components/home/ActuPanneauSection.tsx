@@ -9,9 +9,10 @@ interface SiteSettingsData {
 interface ActuPanneauSectionProps {
   news: NewsItem[]
   settings?: SiteSettingsData | null
+  role?: string
 }
 
-export function ActuPanneauSection({ news, settings }: ActuPanneauSectionProps) {
+export function ActuPanneauSection({ news, settings, role }: ActuPanneauSectionProps) {
   const [featured, ...allRest] = news
   const rest = allRest.slice(0, 2)
   const panneauUrl = settings?.panneauPocketUrl
@@ -27,9 +28,16 @@ export function ActuPanneauSection({ news, settings }: ActuPanneauSectionProps) 
               Actualités
               <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
             </h2>
-            <Link href="/actualites" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
-              Toutes les actualités →
-            </Link>
+            <div className="flex items-center gap-3">
+              {(role === 'agent' || role === 'admin') && (
+                <Link href="/actualites/new" className="inline-flex items-center gap-1 text-[12px] font-semibold text-teal border border-teal rounded px-2 py-1 hover:bg-teal hover:text-white transition-colors no-underline">
+                  + Nouvelle actualité
+                </Link>
+              )}
+              <Link href="/actualites" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
+                Toutes les actualités →
+              </Link>
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             {featured && <NewsCard item={featured} featured />}
