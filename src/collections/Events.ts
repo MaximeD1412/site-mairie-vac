@@ -9,12 +9,7 @@ export const Events: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Contenus',
     components: {
-      beforeFields: [
-        {
-          path: '@/components/admin/AgentsBanner',
-          clientProps: { newPath: '/agenda/new', editBasePath: '/agenda' },
-        },
-      ],
+      beforeFields: ['@/components/admin/AgentsBannerEvents'],
     },
   },
   access: { read: publishedOrLoggedIn, create: isAgentOrAdmin, update: isAgentOrAdmin, delete: isAgentOrAdmin },

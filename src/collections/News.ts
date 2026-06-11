@@ -9,12 +9,7 @@ export const News: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Contenus',
     components: {
-      beforeFields: [
-        {
-          path: '@/components/admin/AgentsBanner',
-          clientProps: { newPath: '/actualites/new', editBasePath: '/actualites' },
-        },
-      ],
+      beforeFields: ['@/components/admin/AgentsBannerNews'],
     },
   },
   access: { read: publishedOrLoggedIn, create: isAgentOrAdmin, update: isAgentOrAdmin, delete: isAgentOrAdmin },

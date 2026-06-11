@@ -2,15 +2,9 @@
 import React from 'react'
 import { useFormFields } from '@payloadcms/ui'
 
-type Props = {
-  newPath: string
-  editBasePath: string
-}
-
-export default function AgentsBanner({ newPath, editBasePath }: Props) {
+export default function AgentsBannerEvents() {
   const slug = useFormFields(([fields]) => fields['slug']?.value as string | undefined)
-
-  const href = slug ? `${editBasePath}/${slug}/modifier` : newPath
+  const href = slug ? `/agenda/${slug}/modifier` : '/agenda/new'
 
   return (
     <div
