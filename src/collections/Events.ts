@@ -5,13 +5,7 @@ export const Events: CollectionConfig = {
   slug: 'events',
   labels: { singular: 'Événement', plural: 'Agenda' },
   versions: { drafts: true },
-  admin: {
-    useAsTitle: 'title',
-    group: 'Contenus',
-    components: {
-      beforeFields: ['@/components/admin/AgentsBannerEvents'],
-    },
-  },
+  admin: { useAsTitle: 'title', group: 'Contenus' },
   access: { read: publishedOrLoggedIn, create: isAgentOrAdmin, update: isAgentOrAdmin, delete: isAgentOrAdmin },
   fields: [
     { name: 'title', label: 'Titre', type: 'text', required: true },
