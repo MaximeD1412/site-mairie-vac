@@ -1,5 +1,6 @@
 import { getPayloadClient } from '@/lib/payload'
 import { EditButton } from '@/components/EditButton'
+import { Plus } from 'lucide-react'
 import { EventCard } from '@/components/events/EventCard'
 import { MiniCalendar } from '@/components/home/MiniCalendar'
 import type { Event, EventCategory, Media } from '@/payload-types'
@@ -90,7 +91,7 @@ export default async function EventsArchive({
     <main className="mx-auto max-w-6xl px-4 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold">Agenda</h1>
-        <EditButton href="/agenda/new" label="Nouvel événement" />
+        <EditButton href="/agenda/new" label="Nouvel événement" icon={<Plus size={14} />} />
       </div>
 
       {categories.length > 0 && (

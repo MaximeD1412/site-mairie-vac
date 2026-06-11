@@ -1,6 +1,4 @@
-import { cookies } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
-import { decodePayloadToken } from '@/lib/auth'
 import { Hero } from '@/components/home/Hero'
 import { QuickLinksBar } from '@/components/home/QuickLinksBar'
 import { ActuPanneauSection } from '@/components/home/ActuPanneauSection'
@@ -10,10 +8,6 @@ import { PublicationsSection } from '@/components/home/PublicationsSection'
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const cookieStore = await cookies()
-  const token = cookieStore.get('payload-token')?.value
-  const decoded = token ? decodePayloadToken(token) : null
-  const role = decoded?.role
   const payload = await getPayloadClient()
 
   const nowISO = new Date().toISOString()
@@ -72,13 +66,12 @@ export default async function HomePage() {
     <>
       <Hero settings={siteSettings as any} />
       <QuickLinksBar settings={homepageSettings as any} />
-      <ActuPanneauSection news={newsResult.docs as any} settings={siteSettings as any} role={role} />
+      <ActuPanneauSection news={newsResult.docs as any} settings={siteSettings as any} />
       <AgendaSection
           carouselEvents={carouselEventsResult.docs as any}
           calendarEvents={calendarEventsResult.docs as any}
-          role={role}
         />
-      <PublicationsSection documents={docsResult.docs as any} role={role} />
+      <PublicationsSection documents={docsResult.docs as any} />
     </>
   )
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
+import type { ReactNode } from 'react'
 import { decodePayloadToken } from '@/lib/auth'
 
 type Variant = 'primary' | 'secondary'
@@ -13,9 +14,10 @@ interface EditButtonProps {
   href: string
   label: string
   variant?: Variant
+  icon?: ReactNode
 }
 
-export async function EditButton({ href, label, variant = 'primary' }: EditButtonProps) {
+export async function EditButton({ href, label, variant = 'primary', icon }: EditButtonProps) {
   const cookieStore = await cookies()
   const token = cookieStore.get('payload-token')?.value
   const decoded = token ? decodePayloadToken(token) : null
@@ -26,8 +28,9 @@ export async function EditButton({ href, label, variant = 'primary' }: EditButto
   return (
     <Link
       href={href}
-      className={`inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors no-underline ${variantClass[variant]}`}
+      className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-colors no-underline ${variantClass[variant]}`}
     >
+      {icon}
       {label}
     </Link>
   )

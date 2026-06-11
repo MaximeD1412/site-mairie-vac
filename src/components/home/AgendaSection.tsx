@@ -1,15 +1,16 @@
 import Link from 'next/link'
+import { Plus } from 'lucide-react'
 import { AgendaCarousel, type CarouselEvent } from './AgendaCarousel'
 import { MiniCalendar } from './MiniCalendar'
 import type { CalendarEventInput } from '@/lib/calendar'
+import { EditButton } from '@/components/EditButton'
 
 interface AgendaSectionProps {
   carouselEvents: CarouselEvent[]
   calendarEvents: CalendarEventInput[]
-  role?: string
 }
 
-export function AgendaSection({ carouselEvents, calendarEvents, role }: AgendaSectionProps) {
+export function AgendaSection({ carouselEvents, calendarEvents }: AgendaSectionProps) {
   return (
     <section className="bg-brand-pale py-14 px-6">
       <div className="mx-auto max-w-7xl">
@@ -19,11 +20,7 @@ export function AgendaSection({ carouselEvents, calendarEvents, role }: AgendaSe
             <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
           </h2>
           <div className="flex items-center gap-3">
-            {(role === 'agent' || role === 'admin') && (
-              <Link href="/agenda/new" className="inline-flex items-center gap-1 text-[12px] font-semibold text-teal border border-teal rounded px-2 py-1 hover:bg-teal hover:text-white transition-colors no-underline">
-                + Nouvel événement
-              </Link>
-            )}
+            <EditButton href="/agenda/new" label="Nouvel événement" icon={<Plus size={14} />} />
             <Link
               href="/agenda"
               className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal"

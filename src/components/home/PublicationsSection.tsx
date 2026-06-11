@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { FileText } from 'lucide-react'
+import { FileText, Plus } from 'lucide-react'
+import { EditButton } from '@/components/EditButton'
 
 interface DocumentFile {
   url?: string | null
@@ -15,7 +16,6 @@ interface DocumentItem {
 
 interface PublicationsSectionProps {
   documents: DocumentItem[]
-  role?: string
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -30,7 +30,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   'autre': 'Autre',
 }
 
-export function PublicationsSection({ documents, role }: PublicationsSectionProps) {
+export function PublicationsSection({ documents }: PublicationsSectionProps) {
   return (
     <section className="py-14 px-6">
       <div className="mx-auto max-w-7xl">
@@ -40,11 +40,7 @@ export function PublicationsSection({ documents, role }: PublicationsSectionProp
             <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
           </h2>
           <div className="flex items-center gap-3">
-            {(role === 'agent' || role === 'admin') && (
-              <Link href="/documents/new" className="inline-flex items-center gap-1 text-[12px] font-semibold text-teal border border-teal rounded px-2 py-1 hover:bg-teal hover:text-white transition-colors no-underline">
-                + Nouvelle publication
-              </Link>
-            )}
+            <EditButton href="/documents/new" label="Nouvelle publication" icon={<Plus size={14} />} />
             <Link href="/documents" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
               Toutes les publications →
             </Link>
