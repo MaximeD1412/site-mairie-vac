@@ -20,7 +20,7 @@ export default async function DocumentsArchive({
     <main className="mx-auto max-w-5xl px-4 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold">Documents</h1>
-        <EditButton href="/documents/new" label="Nouveau document" />
+        <EditButton href="/documents/new" label="+ Nouveau document" />
       </div>
 
       <nav className="mt-8 flex flex-wrap gap-2" aria-label="Filtrer par catégorie">

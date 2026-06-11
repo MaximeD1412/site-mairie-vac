@@ -41,7 +41,7 @@ export function PublicationsSection({ documents, role }: PublicationsSectionProp
           </h2>
           <div className="flex items-center gap-3">
             {(role === 'agent' || role === 'admin') && (
-              <Link href="/documents/new" className="inline-flex items-center gap-1 text-[12px] font-semibold text-teal border border-teal rounded px-2 py-1 hover:bg-teal hover:text-white transition-colors no-underline">
+              <Link href="/documents/new" className="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors no-underline bg-brand text-white hover:bg-brand-mid">
                 + Nouvelle publication
               </Link>
             )}

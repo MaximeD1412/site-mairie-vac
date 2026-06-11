@@ -90,7 +90,7 @@ export default async function EventsArchive({
     <main className="mx-auto max-w-6xl px-4 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold">Agenda</h1>
-        <EditButton href="/agenda/new" label="Nouvel événement" />
+        <EditButton href="/agenda/new" label="+ Nouvel événement" />
       </div>
 
       {categories.length > 0 && (
