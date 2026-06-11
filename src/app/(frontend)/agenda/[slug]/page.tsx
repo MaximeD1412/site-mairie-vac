@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payload'
 import { EventArticle } from '@/components/events/EventArticle'
 import { EditButton } from '@/components/EditButton'
+import { Pencil } from 'lucide-react'
 
 export const revalidate = 60
 
@@ -63,7 +64,7 @@ export default async function EventDetailPage(
         image={event.image as { url?: string | null; alt?: string | null } | null | undefined}
         layout={Array.isArray(event.layout) ? event.layout : undefined}
       />
-      <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" />
+      <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" icon={<Pencil size={14} />} />
     </>
   )
 }

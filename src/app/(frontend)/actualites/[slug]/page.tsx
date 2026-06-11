@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { getPayloadClient } from '@/lib/payload'
 import { NewsArticle } from '@/components/news/NewsArticle'
 import { EditButton } from '@/components/EditButton'
+import { Pencil } from 'lucide-react'
 
 export const revalidate = 60
 
@@ -58,7 +59,7 @@ export default async function NewsDetailPage(
         image={article.image}
         layout={Array.isArray(article.layout) ? article.layout : undefined}
       />
-      <EditButton href={`/actualites/${slug}/modifier`} label="Modifier" />
+      <EditButton href={`/actualites/${slug}/modifier`} label="Modifier" icon={<Pencil size={14} />} />
     </>
   )
 }
