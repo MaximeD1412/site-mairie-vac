@@ -6,9 +6,10 @@ import type { CalendarEventInput } from '@/lib/calendar'
 interface AgendaSectionProps {
   carouselEvents: CarouselEvent[]
   calendarEvents: CalendarEventInput[]
+  role?: string
 }
 
-export function AgendaSection({ carouselEvents, calendarEvents }: AgendaSectionProps) {
+export function AgendaSection({ carouselEvents, calendarEvents, role }: AgendaSectionProps) {
   return (
     <section className="bg-brand-pale py-14 px-6">
       <div className="mx-auto max-w-7xl">
@@ -17,12 +18,19 @@ export function AgendaSection({ carouselEvents, calendarEvents }: AgendaSectionP
             Agenda
             <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
           </h2>
-          <Link
-            href="/agenda"
-            className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal"
-          >
-            Tous les événements →
-          </Link>
+          <div className="flex items-center gap-3">
+            {(role === 'agent' || role === 'admin') && (
+              <Link href="/agenda/new" className="inline-flex items-center gap-1 text-[12px] font-semibold text-teal border border-teal rounded px-2 py-1 hover:bg-teal hover:text-white transition-colors no-underline">
+                + Nouvel événement
+              </Link>
+            )}
+            <Link
+              href="/agenda"
+              className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal"
+            >
+              Tous les événements →
+            </Link>
+          </div>
         </div>
 
         <div className="flex flex-col gap-6 md:flex-row md:gap-8">
