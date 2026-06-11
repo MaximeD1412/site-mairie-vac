@@ -11,11 +11,11 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathname === '/admin/collections/news/create') {
-    return NextResponse.redirect(new URL('/actualites/new', request.url))
+    return NextResponse.redirect(new URL('/admin-relay?to=/actualites/new&back=/admin/collections/news', request.url))
   }
 
   if (pathname === '/admin/collections/events/create') {
-    return NextResponse.redirect(new URL('/agenda/new', request.url))
+    return NextResponse.redirect(new URL('/admin-relay?to=/agenda/new&back=/admin/collections/events', request.url))
   }
 
   const newsEdit = pathname.match(/^\/admin\/collections\/news\/([^/]+)$/)
@@ -25,7 +25,10 @@ export async function middleware(request: NextRequest) {
         headers: { cookie: request.headers.get('cookie') ?? '' },
       })
       const doc = await res.json()
-      if (doc?.slug) return NextResponse.redirect(new URL(`/actualites/${doc.slug}/modifier`, request.url))
+      if (doc?.slug) {
+        const relayUrl = `/admin-relay?to=${encodeURIComponent(`/actualites/${doc.slug}/modifier`)}&back=/admin/collections/news`
+        return NextResponse.redirect(new URL(relayUrl, request.url))
+      }
     } catch {}
   }
 
@@ -36,7 +39,10 @@ export async function middleware(request: NextRequest) {
         headers: { cookie: request.headers.get('cookie') ?? '' },
       })
       const doc = await res.json()
-      if (doc?.slug) return NextResponse.redirect(new URL(`/agenda/${doc.slug}/modifier`, request.url))
+      if (doc?.slug) {
+        const relayUrl = `/admin-relay?to=${encodeURIComponent(`/agenda/${doc.slug}/modifier`)}&back=/admin/collections/events`
+        return NextResponse.redirect(new URL(relayUrl, request.url))
+      }
     } catch {}
   }
 
