@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useRef, useState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import type { EventFormState } from '@/actions/events'
 import type { Event, EventCategory, Association, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
@@ -22,18 +22,45 @@ function parseLayout(raw: unknown): Block[] {
 
 export function EventForm({ action, event, deleteAction, categories, associations }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
+  const [title, setTitle] = useState(event?.title ?? '')
   const [slug, setSlug] = useState(event?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(!!event)
   const [layout, setLayout] = useState<Block[]>(parseLayout(event?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
   const [startDate, setStartDate] = useState(event?.startDate ? event.startDate.slice(0, 16) : '')
   const [endDate, setEndDate] = useState(event?.endDate ? event.endDate.slice(0, 16) : '')
+  const [location, setLocation] = useState(event?.location ?? '')
+  const [category, setCategory] = useState(
+    event?.category && typeof event.category === 'object'
+      ? String((event.category as EventCategory).id)
+      : event?.category ? String(event.category) : ''
+  )
+  const [organizer, setOrganizer] = useState(
+    event?.organizer && typeof event.organizer === 'object'
+      ? String((event.organizer as Association).id)
+      : event?.organizer ? String(event.organizer) : ''
+  )
+
   const formRef = useRef<HTMLFormElement>(null)
+  const errorRef = useRef<HTMLParagraphElement>(null)
+  const endDateRef = useRef<HTMLInputElement>(null)
 
   const endDateError =
     endDate && startDate && new Date(endDate) <= new Date(startDate)
       ? 'La date de fin doit être postérieure à la date de début.'
       : null
+
+  useEffect(() => {
+    if (state?.error) {
+      errorRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' })
+    }
+  }, [state])
+
+  useEffect(() => {
+    if (endDateError) {
+      endDateRef.current?.focus()
+    }
+  }, [endDateError])
 
   const openPreview = () => {
     const form = formRef.current
@@ -57,6 +84,7 @@ export function EventForm({ action, event, deleteAction, categories, association
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value)
     if (!slugTouched) setSlug(slugify(e.target.value))
   }
 
@@ -68,26 +96,12 @@ export function EventForm({ action, event, deleteAction, categories, association
   const existingImage =
     event?.image && typeof event.image !== 'number' ? (event.image as Media) : null
 
-  const categoryId =
-    event?.category && typeof event.category === 'object'
-      ? String((event.category as EventCategory).id)
-      : event?.category
-        ? String(event.category)
-        : ''
-
-  const organizerId =
-    event?.organizer && typeof event.organizer === 'object'
-      ? String((event.organizer as Association).id)
-      : event?.organizer
-        ? String(event.organizer)
-        : ''
-
   return (
     <div className="space-y-8">
       {preview && <PreviewModal data={preview} onClose={() => setPreview(null)} />}
       <form ref={formRef} action={formAction} className="space-y-6">
         {state?.error && (
-          <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p ref={errorRef} role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {state.error}
           </p>
         )}
@@ -101,7 +115,7 @@ export function EventForm({ action, event, deleteAction, categories, association
             name="title"
             type="text"
             required
-            defaultValue={event?.title}
+            value={title}
             onChange={handleTitleChange}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
@@ -142,6 +156,7 @@ export function EventForm({ action, event, deleteAction, categories, association
             Date et heure de fin
           </label>
           <input
+            ref={endDateRef}
             id="endDate"
             name="endDate"
             type="datetime-local"
@@ -164,7 +179,8 @@ export function EventForm({ action, event, deleteAction, categories, association
             id="location"
             name="location"
             type="text"
-            defaultValue={event?.location ?? undefined}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
@@ -176,7 +192,8 @@ export function EventForm({ action, event, deleteAction, categories, association
           <select
             id="category"
             name="category"
-            defaultValue={categoryId}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           >
             <option value="">— Aucune catégorie —</option>
@@ -195,7 +212,8 @@ export function EventForm({ action, event, deleteAction, categories, association
           <select
             id="organizer"
             name="organizer"
-            defaultValue={organizerId}
+            value={organizer}
+            onChange={(e) => setOrganizer(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           >
             <option value="">— Événement municipal —</option>

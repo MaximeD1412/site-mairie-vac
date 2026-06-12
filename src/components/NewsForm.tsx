@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useRef, useState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import type { NewsFormState } from '@/actions/news'
 import type { News, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
@@ -20,11 +20,22 @@ function parseLayout(raw: unknown): Block[] {
 
 export function NewsForm({ action, news, deleteAction }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
+  const [title, setTitle] = useState(news?.title ?? '')
   const [slug, setSlug] = useState(news?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(!!news)
+  const [summary, setSummary] = useState(news?.summary ?? '')
+  const [publishedAt, setPublishedAt] = useState(news?.publishedAt ? news.publishedAt.slice(0, 10) : '')
+  const [featured, setFeatured] = useState(news?.featured ?? false)
   const [layout, setLayout] = useState<Block[]>(parseLayout(news?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const errorRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    if (state?.error) {
+      errorRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' })
+    }
+  }, [state])
 
   const openPreview = () => {
     const form = formRef.current
@@ -41,6 +52,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value)
     if (!slugTouched) setSlug(slugify(e.target.value))
   }
 
@@ -57,7 +69,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
       {preview && <PreviewModal data={preview} onClose={() => setPreview(null)} />}
       <form ref={formRef} action={formAction} className="space-y-6">
         {state?.error && (
-          <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p ref={errorRef} role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {state.error}
           </p>
         )}
@@ -71,7 +83,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             name="title"
             type="text"
             required
-            defaultValue={news?.title}
+            value={title}
             onChange={handleTitleChange}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
@@ -101,7 +113,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             name="summary"
             rows={3}
             required
-            defaultValue={news?.summary}
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
@@ -138,7 +151,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             name="publishedAt"
             type="date"
             required
-            defaultValue={news?.publishedAt ? news.publishedAt.slice(0, 10) : undefined}
+            value={publishedAt}
+            onChange={(e) => setPublishedAt(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
@@ -148,7 +162,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             id="featured"
             name="featured"
             type="checkbox"
-            defaultChecked={news?.featured ?? false}
+            checked={featured}
+            onChange={(e) => setFeatured(e.target.checked)}
             className="rounded border-slate-300"
           />
           <label className="text-sm font-medium text-slate-700" htmlFor="featured">
