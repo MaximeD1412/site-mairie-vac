@@ -35,7 +35,6 @@ describe('NewsForm', () => {
     render(<NewsForm action={vi.fn()} />)
 
     expect(screen.getByLabelText(/titre/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/slug/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/résumé/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/image de couverture/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/date de publication/i)).toBeInTheDocument()
@@ -77,7 +76,7 @@ describe('NewsForm', () => {
     render(<NewsForm action={vi.fn()} />)
     const titleInput = screen.getByLabelText(/titre/i)
     fireEvent.change(titleInput, { target: { value: 'Conseil Municipal 2026' } })
-    const slugInput = screen.getByLabelText(/slug/i) as HTMLInputElement
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
     expect(slugInput.value).toBe('conseil-municipal-2026')
   })
 
@@ -88,17 +87,21 @@ describe('NewsForm', () => {
       updatedAt: '', createdAt: '',
     }
     render(<NewsForm action={vi.fn()} news={news as any} />)
-    const slugInput = screen.getByLabelText(/slug/i) as HTMLInputElement
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
     expect(slugInput.value).toBe('titre-existant')
   })
 
-  it('le slug ne change plus quand il a été modifié manuellement', () => {
-    render(<NewsForm action={vi.fn()} />)
-    const slugInput = screen.getByLabelText(/slug/i)
-    fireEvent.change(slugInput, { target: { value: 'mon-slug-perso' } })
+  it('en mode édition, modifier le titre ne modifie pas le slug', () => {
+    const news = {
+      id: 1, title: 'Titre existant', slug: 'titre-existant', summary: 'Résumé',
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: null,
+      updatedAt: '', createdAt: '',
+    }
+    render(<NewsForm action={vi.fn()} news={news as any} />)
     const titleInput = screen.getByLabelText(/titre/i)
     fireEvent.change(titleInput, { target: { value: 'Nouveau titre quelconque' } })
-    expect((screen.getByLabelText(/slug/i) as HTMLInputElement).value).toBe('mon-slug-perso')
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
+    expect(slugInput.value).toBe('titre-existant')
   })
 
   it('affiche le message d\'erreur du serveur', () => {
