@@ -42,7 +42,7 @@ export function AgendaSection({ carouselEvents, calendarEvents }: AgendaSectionP
 
           {/* Mini-calendrier — 40% */}
           <div className="w-full md:w-[40%]">
-            <MiniCalendar events={calendarEvents} />
+            <MiniCalendar events={calendarEvents} showLegend />
           </div>
         </div>
       </div>
