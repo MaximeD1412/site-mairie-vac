@@ -2,7 +2,6 @@
 
 | # | Title | URL | Blocked by |
 |---|---|---|---|
-| 143 | feat: palette de couleurs + slug auto-généré pour EventCategories | https://github.com/MaximeD1412/site-mairie-vac/issues/143 | — |
 | 144 | feat: légende des catégories sous le MiniCalendar | https://github.com/MaximeD1412/site-mairie-vac/issues/144 | — |
 | 145 | feat: schéma brouillon — collection working-copies + versions drafts | https://github.com/MaximeD1412/site-mairie-vac/issues/145 | — |
 | 146 | feat: autosave "En rédaction" + boutons éditoriaux dans EventForm et NewsForm | https://github.com/MaximeD1412/site-mairie-vac/issues/146 | #145 |
