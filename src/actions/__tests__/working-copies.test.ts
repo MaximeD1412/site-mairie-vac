@@ -13,7 +13,7 @@ vi.mock('@/lib/auth', () => ({
 import { cookies } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
 import { decodePayloadToken } from '@/lib/auth'
-import { saveWorkingCopy, deleteWorkingCopy } from '../working-copies'
+import { saveWorkingCopy, deleteWorkingCopy, getWorkingCopy } from '../working-copies'
 
 const mockCookies = vi.mocked(cookies)
 const mockGetPayloadClient = vi.mocked(getPayloadClient)
@@ -114,6 +114,54 @@ describe('saveWorkingCopy', () => {
       expect.objectContaining({
         where: expect.objectContaining({
           and: expect.arrayContaining([{ relatedId: { exists: false } }]),
+        }),
+      }),
+    )
+  })
+})
+
+describe('getWorkingCopy', () => {
+  it('retourne null si non authentifié', async () => {
+    setupAuth(null)
+    setupPayload()
+    const result = await getWorkingCopy('news', '99')
+    expect(result).toBeNull()
+  })
+
+  it('retourne null si aucune working-copy trouvée', async () => {
+    setupAuth(42)
+    const { find } = setupPayload()
+    find.mockResolvedValue({ docs: [] })
+    const result = await getWorkingCopy('events', '5')
+    expect(result).toBeNull()
+  })
+
+  it('retourne id, data et updatedAt si une working-copy existe', async () => {
+    setupAuth(42)
+    const { find } = setupPayload()
+    find.mockResolvedValue({
+      docs: [{ id: 7, data: { title: 'Brouillon' }, updatedAt: '2026-06-10T10:00:00.000Z' }],
+    })
+    const result = await getWorkingCopy('news', '99')
+    expect(result).toEqual({ id: '7', data: { title: 'Brouillon' }, updatedAt: '2026-06-10T10:00:00.000Z' })
+  })
+
+  it('filtre par auteur, collection et relatedId', async () => {
+    setupAuth(42)
+    const { find } = setupPayload()
+    find.mockResolvedValue({ docs: [{ id: 1, data: {}, updatedAt: '' }] })
+
+    await getWorkingCopy('events', '55')
+
+    expect(find).toHaveBeenCalledWith(
+      expect.objectContaining({
+        collection: 'working-copies',
+        where: expect.objectContaining({
+          and: expect.arrayContaining([
+            { author: { equals: 42 } },
+            { collection: { equals: 'events' } },
+            { relatedId: { equals: '55' } },
+          ]),
         }),
       }),
     )

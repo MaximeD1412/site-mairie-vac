@@ -6,7 +6,18 @@ import type { Event, EventCategory, Association, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
 import { PreviewModal, type PreviewData } from './PreviewModal'
 import { slugify } from '@/lib/slugify'
-import { saveWorkingCopy } from '@/actions/working-copies'
+import { saveWorkingCopy, deleteWorkingCopy } from '@/actions/working-copies'
+
+interface WorkingCopyData {
+  title?: string
+  slug?: string
+  layout?: Block[]
+  startDate?: string
+  endDate?: string
+  location?: string
+  category?: string
+  organizer?: string
+}
 
 interface Props {
   action: (prevState: EventFormState, formData: FormData) => Promise<EventFormState>
@@ -14,6 +25,7 @@ interface Props {
   deleteAction?: (formData: FormData) => Promise<EventFormState>
   categories: EventCategory[]
   associations: Association[]
+  workingCopy?: { id: string; data: WorkingCopyData; updatedAt: string }
 }
 
 function parseLayout(raw: unknown): Block[] {
@@ -21,26 +33,34 @@ function parseLayout(raw: unknown): Block[] {
   return []
 }
 
-export function EventForm({ action, event, deleteAction, categories, associations }: Props) {
+export function EventForm({ action, event, deleteAction, categories, associations, workingCopy }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
-  const [title, setTitle] = useState(event?.title ?? '')
-  const [slug, setSlug] = useState(event?.slug ?? '')
-  const [layout, setLayout] = useState<Block[]>(parseLayout(event?.layout))
+  const wc = workingCopy?.data
+  const [title, setTitle] = useState(wc?.title ?? event?.title ?? '')
+  const [slug, setSlug] = useState(wc?.slug ?? event?.slug ?? '')
+  const [layout, setLayout] = useState<Block[]>(parseLayout(wc?.layout ?? event?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
-  const [startDate, setStartDate] = useState(event?.startDate ? event.startDate.slice(0, 16) : '')
-  const [endDate, setEndDate] = useState(event?.endDate ? event.endDate.slice(0, 16) : '')
-  const [location, setLocation] = useState(event?.location ?? '')
+  const [startDate, setStartDate] = useState(
+    wc?.startDate?.slice(0, 16) ?? (event?.startDate ? event.startDate.slice(0, 16) : '')
+  )
+  const [endDate, setEndDate] = useState(
+    wc?.endDate?.slice(0, 16) ?? (event?.endDate ? event.endDate.slice(0, 16) : '')
+  )
+  const [location, setLocation] = useState(wc?.location ?? event?.location ?? '')
   const [category, setCategory] = useState(
-    event?.category && typeof event.category === 'object'
+    wc?.category ??
+    (event?.category && typeof event.category === 'object'
       ? String((event.category as EventCategory).id)
-      : event?.category ? String(event.category) : ''
+      : event?.category ? String(event.category) : '')
   )
   const [organizer, setOrganizer] = useState(
-    event?.organizer && typeof event.organizer === 'object'
+    wc?.organizer ??
+    (event?.organizer && typeof event.organizer === 'object'
       ? String((event.organizer as Association).id)
-      : event?.organizer ? String(event.organizer) : ''
+      : event?.organizer ? String(event.organizer) : '')
   )
   const [savedAt, setSavedAt] = useState<Date | null>(null)
+  const [showBanner, setShowBanner] = useState(!!workingCopy)
 
   const formRef = useRef<HTMLFormElement>(null)
   const errorRef = useRef<HTMLParagraphElement>(null)
@@ -88,6 +108,28 @@ export function EventForm({ action, event, deleteAction, categories, association
     }
   }, [])
 
+  const handleDiscardWorkingCopy = async () => {
+    if (!confirm('Ignorer vos modifications non publiées et repartir de la version enregistrée ?')) return
+    await deleteWorkingCopy('events', event ? String(event.id) : undefined)
+    setTitle(event?.title ?? '')
+    setSlug(event?.slug ?? '')
+    setLayout(parseLayout(event?.layout))
+    setStartDate(event?.startDate ? event.startDate.slice(0, 16) : '')
+    setEndDate(event?.endDate ? event.endDate.slice(0, 16) : '')
+    setLocation(event?.location ?? '')
+    setCategory(
+      event?.category && typeof event.category === 'object'
+        ? String((event.category as EventCategory).id)
+        : event?.category ? String(event.category) : ''
+    )
+    setOrganizer(
+      event?.organizer && typeof event.organizer === 'object'
+        ? String((event.organizer as Association).id)
+        : event?.organizer ? String(event.organizer) : ''
+    )
+    setShowBanner(false)
+  }
+
   const openPreview = () => {
     const form = formRef.current
     if (!form) return
@@ -120,6 +162,34 @@ export function EventForm({ action, event, deleteAction, categories, association
   return (
     <div className="space-y-8">
       {preview && <PreviewModal data={preview} onClose={() => setPreview(null)} />}
+      {showBanner && workingCopy && (
+        <div role="status" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <p>
+            Vous avez des modifications non publiées depuis{' '}
+            {new Date(workingCopy.updatedAt).toLocaleString('fr-FR', {
+              day: '2-digit', month: '2-digit', year: 'numeric',
+              hour: '2-digit', minute: '2-digit',
+            })}
+            . Ces modifications ne sont visibles que par vous.
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => setShowBanner(false)}
+              className="rounded border border-amber-400 bg-amber-100 px-3 py-1 text-xs font-semibold hover:bg-amber-200"
+            >
+              Continuer
+            </button>
+            <button
+              type="button"
+              onClick={handleDiscardWorkingCopy}
+              className="rounded border border-amber-400 px-3 py-1 text-xs font-semibold hover:bg-amber-100"
+            >
+              Ignorer et repartir de la version publiée
+            </button>
+          </div>
+        </div>
+      )}
       <form ref={formRef} action={formAction} className="space-y-6">
         {state?.error && (
           <p ref={errorRef} role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">

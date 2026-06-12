@@ -5,6 +5,7 @@ import { redirect, notFound } from 'next/navigation'
 import { decodePayloadToken } from '@/lib/auth'
 import { getPayloadClient } from '@/lib/payload'
 import { updateEvent, deleteEvent } from '@/actions/events'
+import { getWorkingCopy } from '@/actions/working-copies'
 import { EventForm } from '@/components/EventForm'
 import type { Event, EventCategory, Association } from '@/payload-types'
 
@@ -30,6 +31,8 @@ export default async function EventModifierPage({
   const event = eventResult.docs[0] as Event | undefined
   if (!event) notFound()
 
+  const workingCopy = await getWorkingCopy('events', String(event.id))
+
   const boundUpdate = updateEvent.bind(null, event.id)
   const boundDelete = deleteEvent.bind(null, event.id)
 
@@ -42,6 +45,7 @@ export default async function EventModifierPage({
         deleteAction={boundDelete}
         categories={categoriesResult.docs as EventCategory[]}
         associations={associationsResult.docs as Association[]}
+        workingCopy={workingCopy ?? undefined}
       />
     </main>
   )
