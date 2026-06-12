@@ -2,8 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import React from 'react'
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ refresh: vi.fn() }),
+const mockNavigate = vi.fn()
+
+vi.mock('../NavigationContext', () => ({
+  useNavigate: () => mockNavigate,
 }))
 
 vi.mock('next/link', () => ({
@@ -200,5 +202,15 @@ describe('HeaderClient', () => {
     expect(screen.getByTestId('search-modal')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /fermer la recherche/i }))
     expect(screen.queryByTestId('search-modal')).toBeNull()
+  })
+
+  it('cliquer Déconnexion appelle navigate(\'/\')', async () => {
+    global.fetch = vi.fn().mockResolvedValueOnce({} as Response)
+    render(<HeaderClient items={[]} role="admin" userName="Alice" />)
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /se déconnecter/i }))
+    })
+    expect(global.fetch).toHaveBeenCalledWith('/api/users/logout', { method: 'POST' })
+    expect(mockNavigate).toHaveBeenCalledWith('/')
   })
 })
