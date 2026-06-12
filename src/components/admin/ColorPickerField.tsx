@@ -1,20 +1,26 @@
 'use client'
 
+import { useRef } from 'react'
 import { useField, FieldLabel } from '@payloadcms/ui'
 
 const COLORS = [
-  { label: 'Bleu', hex: '#1D4ED8' },
-  { label: 'Ciel', hex: '#0369A1' },
-  { label: 'Cyan', hex: '#0E7490' },
+  { label: 'Rouge', hex: '#B91C1C' },
+  { label: 'Rose vif', hex: '#E11D48' },
+  { label: 'Rose', hex: '#BE185D' },
+  { label: 'Fuchsia', hex: '#A21CAF' },
+  { label: 'Orange', hex: '#C2410C' },
+  { label: 'Marron', hex: '#92400E' },
+  { label: 'Jaune', hex: '#A16207' },
+  { label: 'Citron', hex: '#65A30D' },
   { label: 'Vert', hex: '#15803D' },
   { label: 'Émeraude', hex: '#047857' },
   { label: 'Menthe', hex: '#0F766E' },
+  { label: 'Cyan', hex: '#0E7490' },
+  { label: 'Ciel', hex: '#0369A1' },
+  { label: 'Bleu', hex: '#1D4ED8' },
+  { label: 'Indigo', hex: '#4338CA' },
   { label: 'Violet', hex: '#6D28D9' },
   { label: 'Pourpre', hex: '#7E22CE' },
-  { label: 'Rose', hex: '#BE185D' },
-  { label: 'Rouge', hex: '#B91C1C' },
-  { label: 'Orange', hex: '#C2410C' },
-  { label: 'Marron', hex: '#92400E' },
   { label: 'Ardoise', hex: '#334155' },
   { label: 'Gris', hex: '#374151' },
 ]
@@ -27,6 +33,9 @@ type Props = {
 
 export function ColorPickerField({ path, field, required }: Props) {
   const { value, setValue, showError } = useField<string>({ path })
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const isCustom = !!value && !COLORS.some(c => c.hex.toLowerCase() === value.toLowerCase())
 
   return (
     <div style={{ marginBottom: '24px' }}>
@@ -62,7 +71,46 @@ export function ColorPickerField({ path, field, required }: Props) {
             }}
           />
         ))}
+
+        <button
+          type="button"
+          title={isCustom ? `Couleur personnalisée : ${value}` : 'Choisir une couleur personnalisée'}
+          aria-label={isCustom ? `Couleur personnalisée ${value}` : 'Choisir une couleur personnalisée'}
+          aria-pressed={isCustom}
+          onClick={() => inputRef.current?.click()}
+          style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: isCustom ? value! : 'transparent',
+            border: isCustom ? '3px solid #000' : '2px dashed var(--theme-elevation-300)',
+            outline: isCustom ? '2px solid #fff' : 'none',
+            outlineOffset: isCustom ? '-5px' : undefined,
+            cursor: 'pointer',
+            padding: 0,
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--theme-elevation-400)',
+            fontSize: '18px',
+            lineHeight: 1,
+          }}
+        >
+          {!isCustom && '+'}
+        </button>
+
+        <input
+          ref={inputRef}
+          type="color"
+          value={value ?? '#000000'}
+          onChange={e => setValue(e.target.value)}
+          style={{ position: 'absolute', opacity: 0, width: 0, height: 0, pointerEvents: 'none' }}
+          tabIndex={-1}
+          aria-hidden="true"
+        />
       </div>
+
       {value && (
         <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span
@@ -79,6 +127,7 @@ export function ColorPickerField({ path, field, required }: Props) {
           <code style={{ fontSize: '12px', color: 'var(--theme-elevation-500)' }}>{value}</code>
         </div>
       )}
+
       {showError && (
         <p style={{ color: 'var(--theme-error-500)', fontSize: '12px', marginTop: '4px', margin: '4px 0 0' }}>
           Veuillez sélectionner une couleur.

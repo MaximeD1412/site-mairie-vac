@@ -415,9 +415,6 @@ export interface EventCategory {
   id: number;
   name: string;
   slug: string;
-  /**
-   * Couleur hexadécimale (ex: #3B82F6)
-   */
   color: string;
   updatedAt: string;
   createdAt: string;
