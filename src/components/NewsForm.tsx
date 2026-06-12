@@ -22,7 +22,6 @@ export function NewsForm({ action, news, deleteAction }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
   const [title, setTitle] = useState(news?.title ?? '')
   const [slug, setSlug] = useState(news?.slug ?? '')
-  const [slugTouched, setSlugTouched] = useState(!!news)
   const [summary, setSummary] = useState(news?.summary ?? '')
   const [publishedAt, setPublishedAt] = useState(news?.publishedAt ? news.publishedAt.slice(0, 10) : '')
   const [featured, setFeatured] = useState(news?.featured ?? false)
@@ -53,12 +52,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
-    if (!slugTouched) setSlug(slugify(e.target.value))
-  }
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlug(e.target.value)
-    setSlugTouched(true)
+    if (!news) setSlug(slugify(e.target.value))
   }
 
   const existingImage =
@@ -89,20 +83,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700" htmlFor="slug">
-            Slug <span aria-hidden>*</span>
-          </label>
-          <input
-            id="slug"
-            name="slug"
-            type="text"
-            required
-            value={slug}
-            onChange={handleSlugChange}
-            className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
-          />
-        </div>
+        <input type="hidden" name="slug" value={slug} />
 
         <div>
           <label className="block text-sm font-medium text-slate-700" htmlFor="summary">

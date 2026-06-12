@@ -24,7 +24,6 @@ export function EventForm({ action, event, deleteAction, categories, association
   const [state, formAction, isPending] = useActionState(action, null)
   const [title, setTitle] = useState(event?.title ?? '')
   const [slug, setSlug] = useState(event?.slug ?? '')
-  const [slugTouched, setSlugTouched] = useState(!!event)
   const [layout, setLayout] = useState<Block[]>(parseLayout(event?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
   const [startDate, setStartDate] = useState(event?.startDate ? event.startDate.slice(0, 16) : '')
@@ -85,12 +84,7 @@ export function EventForm({ action, event, deleteAction, categories, association
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
-    if (!slugTouched) setSlug(slugify(e.target.value))
-  }
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlug(e.target.value)
-    setSlugTouched(true)
+    if (!event) setSlug(slugify(e.target.value))
   }
 
   const existingImage =
@@ -121,20 +115,7 @@ export function EventForm({ action, event, deleteAction, categories, association
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700" htmlFor="slug">
-            Slug <span aria-hidden>*</span>
-          </label>
-          <input
-            id="slug"
-            name="slug"
-            type="text"
-            required
-            value={slug}
-            onChange={handleSlugChange}
-            className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
-          />
-        </div>
+        <input type="hidden" name="slug" value={slug} />
 
         <div>
           <label className="block text-sm font-medium text-slate-700" htmlFor="startDate">
