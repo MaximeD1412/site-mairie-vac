@@ -7,6 +7,7 @@ import { Search, ChevronDown, LogOut, NotebookPen } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
 import { MobileMenu } from './MobileMenu'
 import { LoginPopover } from './LoginPopover'
+import { SearchModal } from './SearchModal'
 
 interface NavChild {
   label: string
@@ -40,6 +41,7 @@ const roleLabel: Record<string, string> = {
 export function HeaderClient({ items, role, userName }: HeaderClientProps) {
   const router = useRouter()
   const [openItem, setOpenItem] = useState<number | null>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   function cancelClose() {
@@ -170,10 +172,12 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
 
         <button
           aria-label="Rechercher sur le site"
+          onClick={() => setSearchOpen(true)}
           className="w-9 h-9 rounded-full bg-white/12 text-white flex items-center justify-center hover:bg-white/22 transition-colors"
         >
           <Search size={16} aria-hidden="true" />
         </button>
+        {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
         <MobileMenu items={items} role={role} onLogout={handleLogout} />
       </div>
 
