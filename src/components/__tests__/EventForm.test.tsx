@@ -46,7 +46,6 @@ describe('EventForm', () => {
     )
 
     expect(screen.getByLabelText(/titre/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/slug/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/date et heure de début/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/date et heure de fin/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/lieu/i)).toBeInTheDocument()
@@ -125,7 +124,7 @@ describe('EventForm', () => {
     )
     const titleInput = screen.getByLabelText(/titre/i)
     fireEvent.change(titleInput, { target: { value: 'Fête de la Musique 2026' } })
-    const slugInput = screen.getByLabelText(/slug/i) as HTMLInputElement
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
     expect(slugInput.value).toBe('fete-de-la-musique-2026')
   })
 
@@ -143,19 +142,28 @@ describe('EventForm', () => {
         associations={mockAssociations}
       />,
     )
-    const slugInput = screen.getByLabelText(/slug/i) as HTMLInputElement
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
     expect(slugInput.value).toBe('concert')
   })
 
-  it('le slug ne change plus quand il a été modifié manuellement', () => {
+  it('en mode édition, modifier le titre ne modifie pas le slug', () => {
+    const event = {
+      id: 1, title: 'Concert', slug: 'concert',
+      startDate: '2026-06-21T18:00:00.000Z',
+      updatedAt: '', createdAt: '',
+    }
     render(
-      <EventForm action={vi.fn()} categories={mockCategories} associations={mockAssociations} />,
+      <EventForm
+        action={vi.fn()}
+        event={event as any}
+        categories={mockCategories}
+        associations={mockAssociations}
+      />,
     )
-    const slugInput = screen.getByLabelText(/slug/i)
-    fireEvent.change(slugInput, { target: { value: 'mon-slug-perso' } })
     const titleInput = screen.getByLabelText(/titre/i)
     fireEvent.change(titleInput, { target: { value: 'Nouveau titre' } })
-    expect((screen.getByLabelText(/slug/i) as HTMLInputElement).value).toBe('mon-slug-perso')
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
+    expect(slugInput.value).toBe('concert')
   })
 
   it('affiche le message d\'erreur du serveur', () => {
