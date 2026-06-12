@@ -21,7 +21,6 @@ function parseLayout(raw: unknown): Block[] {
 export function NewsForm({ action, news, deleteAction }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
   const [slug, setSlug] = useState(news?.slug ?? '')
-  const [slugTouched, setSlugTouched] = useState(!!news)
   const [layout, setLayout] = useState<Block[]>(parseLayout(news?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -41,12 +40,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!slugTouched) setSlug(slugify(e.target.value))
-  }
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlug(e.target.value)
-    setSlugTouched(true)
+    if (!news) setSlug(slugify(e.target.value))
   }
 
   const existingImage =
@@ -77,20 +71,7 @@ export function NewsForm({ action, news, deleteAction }: Props) {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700" htmlFor="slug">
-            Slug <span aria-hidden>*</span>
-          </label>
-          <input
-            id="slug"
-            name="slug"
-            type="text"
-            required
-            value={slug}
-            onChange={handleSlugChange}
-            className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
-          />
-        </div>
+        <input type="hidden" name="slug" value={slug} />
 
         <div>
           <label className="block text-sm font-medium text-slate-700" htmlFor="summary">
