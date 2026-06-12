@@ -21,11 +21,18 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ON "working_copies" USING btree ("updated_at");
     CREATE INDEX "working_copies_created_at_idx"
       ON "working_copies" USING btree ("created_at");
+
+    ALTER TABLE "payload_locked_documents_rels"
+      ADD COLUMN "working_copies_id" integer
+        REFERENCES "working_copies"("id") ON DELETE CASCADE;
+    CREATE INDEX "payload_locked_documents_rels_working_copies_id_idx"
+      ON "payload_locked_documents_rels" USING btree ("working_copies_id");
   `)
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
+    ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "working_copies_id";
     DROP TABLE IF EXISTS "working_copies";
     DROP TYPE IF EXISTS "public"."enum_working_copies_collection";
   `)
