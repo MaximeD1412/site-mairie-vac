@@ -1,7 +1,9 @@
 import Link from 'next/link'
+import { Plus } from 'lucide-react'
 import { AgendaCarousel, type CarouselEvent } from './AgendaCarousel'
 import { MiniCalendar } from './MiniCalendar'
 import type { CalendarEventInput } from '@/lib/calendar'
+import { EditButton } from '@/components/EditButton'
 
 interface AgendaSectionProps {
   carouselEvents: CarouselEvent[]
@@ -17,12 +19,15 @@ export function AgendaSection({ carouselEvents, calendarEvents }: AgendaSectionP
             Agenda
             <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
           </h2>
-          <Link
-            href="/agenda"
-            className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal"
-          >
-            Tous les événements →
-          </Link>
+          <div className="flex items-center gap-3">
+            <EditButton href="/agenda/new" label="Nouvel événement" icon={<Plus size={14} />} />
+            <Link
+              href="/agenda"
+              className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal"
+            >
+              Tous les événements →
+            </Link>
+          </div>
         </div>
 
         <div className="flex flex-col gap-6 md:flex-row md:gap-8">

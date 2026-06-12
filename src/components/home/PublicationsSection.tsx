@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { FileText } from 'lucide-react'
+import { FileText, Plus } from 'lucide-react'
+import { EditButton } from '@/components/EditButton'
 
 interface DocumentFile {
   url?: string | null
@@ -38,9 +39,12 @@ export function PublicationsSection({ documents }: PublicationsSectionProps) {
             Publications
             <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
           </h2>
-          <Link href="/documents" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
-            Toutes les publications →
-          </Link>
+          <div className="flex items-center gap-3">
+            <EditButton href="/documents/new" label="Nouvelle publication" icon={<Plus size={14} />} />
+            <Link href="/documents" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
+              Toutes les publications →
+            </Link>
+          </div>
         </div>
 
         {documents.length === 0 ? (

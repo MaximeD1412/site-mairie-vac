@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { Plus } from 'lucide-react'
 import { NewsCard } from '@/components/news/NewsCard'
 import type { NewsItem } from '@/components/news/NewsCard'
+import { EditButton } from '@/components/EditButton'
 
 interface SiteSettingsData {
   panneauPocketUrl?: string | null
@@ -27,9 +29,12 @@ export function ActuPanneauSection({ news, settings }: ActuPanneauSectionProps) 
               Actualités
               <span className="block w-10 h-1 bg-teal rounded mt-2" aria-hidden="true" />
             </h2>
-            <Link href="/actualites" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
-              Toutes les actualités →
-            </Link>
+            <div className="flex items-center gap-3">
+              <EditButton href="/actualites/new" label="Nouvelle actualité" icon={<Plus size={14} />} />
+              <Link href="/actualites" className="text-brand-mid text-[13px] font-semibold no-underline hover:text-teal">
+                Toutes les actualités →
+              </Link>
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             {featured && <NewsCard item={featured} featured />}
