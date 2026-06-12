@@ -43,20 +43,22 @@ beforeEach(() => {
 })
 
 describe('EventNewPage', () => {
+  const noSearchParams = { searchParams: Promise.resolve({}) }
+
   it('redirige vers /connexion si non authentifié', async () => {
     setupAuth(null)
-    await expect(EventNewPage()).rejects.toThrow('REDIRECT:/connexion')
+    await expect(EventNewPage(noSearchParams)).rejects.toThrow('REDIRECT:/connexion')
   })
 
   it('redirige vers /connexion si rôle insuffisant', async () => {
     setupAuth('visitor')
-    await expect(EventNewPage()).rejects.toThrow('REDIRECT:/connexion')
+    await expect(EventNewPage(noSearchParams)).rejects.toThrow('REDIRECT:/connexion')
   })
 
   it('affiche le formulaire pour un agent connecté', async () => {
     setupAuth('agent')
     setupPayload()
-    const element = await EventNewPage()
+    const element = await EventNewPage(noSearchParams)
     render(element as React.ReactElement)
     expect(screen.getByTestId('event-form')).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/nouvel événement/i)
@@ -65,7 +67,7 @@ describe('EventNewPage', () => {
   it('affiche le formulaire pour un admin connecté', async () => {
     setupAuth('admin')
     setupPayload()
-    const element = await EventNewPage()
+    const element = await EventNewPage(noSearchParams)
     render(element as React.ReactElement)
     expect(screen.getByTestId('event-form')).toBeInTheDocument()
   })

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, ChevronDown, LogOut } from 'lucide-react'
+import { Search, ChevronDown, LogOut, NotebookPen } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
 import { MobileMenu } from './MobileMenu'
 import { LoginPopover } from './LoginPopover'
@@ -130,6 +130,16 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
             <strong className="text-white text-[13px] font-bold">{userName}</strong>
             <span className="text-white/70 text-[11px]">{roleLabel[role] ?? role}</span>
           </div>
+        )}
+
+        {role != null && (
+          <Link
+            href="/brouillons"
+            aria-label="Mes brouillons"
+            className="hidden md:flex items-center justify-center w-9 h-9 rounded bg-white/15 text-white hover:bg-white/25 transition-colors"
+          >
+            <NotebookPen size={15} aria-hidden="true" />
+          </Link>
         )}
 
         {role === 'admin' && (
