@@ -5,6 +5,7 @@ import { redirect, notFound } from 'next/navigation'
 import { decodePayloadToken } from '@/lib/auth'
 import { getPayloadClient } from '@/lib/payload'
 import { updateNews, deleteNews } from '@/actions/news'
+import { getWorkingCopy } from '@/actions/working-copies'
 import { NewsForm } from '@/components/NewsForm'
 import type { News } from '@/payload-types'
 
@@ -31,13 +32,15 @@ export default async function NewsModifierPage({
   const article = result.docs[0] as News | undefined
   if (!article) notFound()
 
+  const workingCopy = await getWorkingCopy('news', String(article.id))
+
   const boundUpdate = updateNews.bind(null, article.id)
   const boundDelete = deleteNews.bind(null, article.id)
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-12">
       <h1 className="mb-8 text-3xl font-bold">Modifier l&apos;actualité</h1>
-      <NewsForm action={boundUpdate} news={article} deleteAction={boundDelete} />
+      <NewsForm action={boundUpdate} news={article} deleteAction={boundDelete} workingCopy={workingCopy ?? undefined} />
     </main>
   )
 }

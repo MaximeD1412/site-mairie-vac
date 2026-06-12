@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import React from 'react'
 
 vi.mock('react', async (importOriginal) => {
@@ -27,11 +27,14 @@ vi.mock('@/components/BlockEditor', () => ({
 }))
 
 import { useActionState } from 'react'
+import { deleteWorkingCopy } from '@/actions/working-copies'
 import { NewsForm } from '../NewsForm'
 
 const mockUseActionState = vi.mocked(useActionState)
+const mockDeleteWorkingCopy = vi.mocked(deleteWorkingCopy)
 
 beforeEach(() => {
+  vi.clearAllMocks()
   mockUseActionState.mockReturnValue([null, vi.fn(), false] as any)
 })
 
@@ -121,6 +124,71 @@ describe('NewsForm', () => {
 
     fireEvent.click(screen.getByTestId('block-editor-add'))
     expect(JSON.parse(hiddenInput?.value ?? '[]')).toHaveLength(1)
+  })
+
+  describe('working copy banner', () => {
+    const news = {
+      id: 1, title: 'Titre original', slug: 'titre-original', summary: 'Résumé original',
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: [],
+      updatedAt: '', createdAt: '',
+    }
+    const workingCopy = {
+      id: 'wc1',
+      data: { title: 'Titre modifié', slug: 'titre-modifie', summary: 'Résumé modifié',
+        publishedAt: '2026-02-01', featured: true, layout: [] },
+      updatedAt: '2026-06-10T10:00:00.000Z',
+    }
+
+    it('le bandeau est absent sans prop workingCopy', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} />)
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    })
+
+    it('le bandeau est visible quand workingCopy est fourni', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      expect(screen.getByRole('status')).toBeInTheDocument()
+      expect(screen.getByText(/modifications non publiées/i)).toBeInTheDocument()
+    })
+
+    it('les champs sont pré-remplis depuis la working copy', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      expect(screen.getByLabelText(/titre/i)).toHaveValue('Titre modifié')
+      expect(screen.getByLabelText(/résumé/i)).toHaveValue('Résumé modifié')
+    })
+
+    it('le bouton Continuer ferme le bandeau', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      fireEvent.click(screen.getByRole('button', { name: 'Continuer' }))
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    })
+
+    it('le bouton Ignorer appelle deleteWorkingCopy et recharge les données originales', async () => {
+      mockDeleteWorkingCopy.mockResolvedValue(undefined)
+      vi.spyOn(window, 'confirm').mockReturnValue(true)
+
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      expect(screen.getByLabelText(/titre/i)).toHaveValue('Titre modifié')
+
+      fireEvent.click(screen.getByRole('button', { name: /ignorer/i }))
+
+      await waitFor(() => {
+        expect(mockDeleteWorkingCopy).toHaveBeenCalledWith('news', '1')
+        expect(screen.getByLabelText(/titre/i)).toHaveValue('Titre original')
+        expect(screen.queryByRole('status')).not.toBeInTheDocument()
+      })
+    })
+
+    it('le bouton Ignorer ne fait rien si l\'utilisateur annule la confirmation', async () => {
+      vi.spyOn(window, 'confirm').mockReturnValue(false)
+
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      fireEvent.click(screen.getByRole('button', { name: /ignorer/i }))
+
+      await waitFor(() => {
+        expect(mockDeleteWorkingCopy).not.toHaveBeenCalled()
+        expect(screen.getByRole('status')).toBeInTheDocument()
+      })
+    })
   })
 
   it('le layout est pré-rempli depuis news.layout en mode édition', () => {

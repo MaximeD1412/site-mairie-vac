@@ -180,7 +180,7 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
       {/* Mega menu panel — full viewport width, below header bar */}
       {openItem !== null && (items[openItem]?.children?.length ?? 0) > 0 && (
         <div
-          className="hidden md:block absolute left-1/2 -translate-x-1/2 w-screen top-full bg-white border-t-2 border-brand-light shadow-xl z-110"
+          className="hidden md:block absolute left-0 w-full top-full bg-white border-t-2 border-brand-light shadow-xl z-110"
           role="region"
           aria-label={`Sous-menu ${items[openItem]!.label}`}
           onMouseEnter={cancelClose}

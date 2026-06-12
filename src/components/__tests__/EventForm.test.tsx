@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import React from 'react'
 
 vi.mock('react', async (importOriginal) => {
@@ -27,7 +27,10 @@ vi.mock('@/components/BlockEditor', () => ({
 }))
 
 import { useActionState } from 'react'
+import { deleteWorkingCopy } from '@/actions/working-copies'
 import { EventForm } from '../EventForm'
+
+const mockDeleteWorkingCopy = vi.mocked(deleteWorkingCopy)
 
 const mockUseActionState = vi.mocked(useActionState)
 
@@ -41,6 +44,7 @@ const mockAssociations = [
 ]
 
 beforeEach(() => {
+  vi.clearAllMocks()
   mockUseActionState.mockReturnValue([null, vi.fn(), false] as any)
 })
 
@@ -182,6 +186,87 @@ describe('EventForm', () => {
 
     fireEvent.click(screen.getByTestId('block-editor-add'))
     expect(JSON.parse(hiddenInput?.value ?? '[]')).toHaveLength(1)
+  })
+
+  describe('working copy banner', () => {
+    const event = {
+      id: 1, title: 'Concert original', slug: 'concert-original',
+      startDate: '2026-06-21T18:00:00.000Z',
+      updatedAt: '', createdAt: '',
+    }
+    const workingCopy = {
+      id: 'wc1',
+      data: { title: 'Concert modifié', slug: 'concert-modifie',
+        startDate: '2026-07-01T20:00', layout: [] },
+      updatedAt: '2026-06-10T10:00:00.000Z',
+    }
+
+    it('le bandeau est absent sans prop workingCopy', () => {
+      render(
+        <EventForm action={vi.fn()} event={event as any} categories={mockCategories} associations={mockAssociations} />,
+      )
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    })
+
+    it('le bandeau est visible quand workingCopy est fourni', () => {
+      render(
+        <EventForm action={vi.fn()} event={event as any} workingCopy={workingCopy}
+          categories={mockCategories} associations={mockAssociations} />,
+      )
+      expect(screen.getByRole('status')).toBeInTheDocument()
+      expect(screen.getByText(/modifications non publiées/i)).toBeInTheDocument()
+    })
+
+    it('les champs sont pré-remplis depuis la working copy', () => {
+      render(
+        <EventForm action={vi.fn()} event={event as any} workingCopy={workingCopy}
+          categories={mockCategories} associations={mockAssociations} />,
+      )
+      expect(screen.getByLabelText(/titre/i)).toHaveValue('Concert modifié')
+    })
+
+    it('le bouton Continuer ferme le bandeau', () => {
+      render(
+        <EventForm action={vi.fn()} event={event as any} workingCopy={workingCopy}
+          categories={mockCategories} associations={mockAssociations} />,
+      )
+      fireEvent.click(screen.getByRole('button', { name: 'Continuer' }))
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    })
+
+    it('le bouton Ignorer appelle deleteWorkingCopy et recharge les données originales', async () => {
+      mockDeleteWorkingCopy.mockResolvedValue(undefined)
+      vi.spyOn(window, 'confirm').mockReturnValue(true)
+
+      render(
+        <EventForm action={vi.fn()} event={event as any} workingCopy={workingCopy}
+          categories={mockCategories} associations={mockAssociations} />,
+      )
+      expect(screen.getByLabelText(/titre/i)).toHaveValue('Concert modifié')
+
+      fireEvent.click(screen.getByRole('button', { name: /ignorer/i }))
+
+      await waitFor(() => {
+        expect(mockDeleteWorkingCopy).toHaveBeenCalledWith('events', '1')
+        expect(screen.getByLabelText(/titre/i)).toHaveValue('Concert original')
+        expect(screen.queryByRole('status')).not.toBeInTheDocument()
+      })
+    })
+
+    it('le bouton Ignorer ne fait rien si l\'utilisateur annule la confirmation', async () => {
+      vi.spyOn(window, 'confirm').mockReturnValue(false)
+
+      render(
+        <EventForm action={vi.fn()} event={event as any} workingCopy={workingCopy}
+          categories={mockCategories} associations={mockAssociations} />,
+      )
+      fireEvent.click(screen.getByRole('button', { name: /ignorer/i }))
+
+      await waitFor(() => {
+        expect(mockDeleteWorkingCopy).not.toHaveBeenCalled()
+        expect(screen.getByRole('status')).toBeInTheDocument()
+      })
+    })
   })
 
   it('le layout est pré-rempli depuis event.layout en mode édition', () => {
