@@ -7,6 +7,7 @@ vi.mock('next/navigation', () => ({
   redirect: vi.fn((url: string) => { throw new Error(`REDIRECT:${url}`) }),
 }))
 vi.mock('@/lib/auth', () => ({ decodePayloadToken: vi.fn() }))
+vi.mock('@/lib/payload', () => ({ getPayloadClient: vi.fn() }))
 vi.mock('@/actions/news', () => ({ createNews: vi.fn() }))
 vi.mock('@/components/NewsForm', () => ({
   NewsForm: ({ action }: { action: unknown }) => (
@@ -34,19 +35,21 @@ beforeEach(() => {
 })
 
 describe('NewsNewPage', () => {
+  const noSearchParams = { searchParams: Promise.resolve({}) }
+
   it('redirige vers /connexion si non authentifié', async () => {
     setupAuth(null)
-    await expect(NewsNewPage()).rejects.toThrow('REDIRECT:/connexion')
+    await expect(NewsNewPage(noSearchParams)).rejects.toThrow('REDIRECT:/connexion')
   })
 
   it('redirige vers /connexion si rôle insuffisant', async () => {
     setupAuth('visitor')
-    await expect(NewsNewPage()).rejects.toThrow('REDIRECT:/connexion')
+    await expect(NewsNewPage(noSearchParams)).rejects.toThrow('REDIRECT:/connexion')
   })
 
   it('affiche le formulaire pour un agent connecté', async () => {
     setupAuth('agent')
-    const element = await NewsNewPage()
+    const element = await NewsNewPage(noSearchParams)
     render(element as React.ReactElement)
     expect(screen.getByTestId('news-form')).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/nouvelle actualité/i)
@@ -54,7 +57,7 @@ describe('NewsNewPage', () => {
 
   it('affiche le formulaire pour un admin connecté', async () => {
     setupAuth('admin')
-    const element = await NewsNewPage()
+    const element = await NewsNewPage(noSearchParams)
     render(element as React.ReactElement)
     expect(screen.getByTestId('news-form')).toBeInTheDocument()
   })
