@@ -4,6 +4,7 @@ import * as migration_20260602_151020 from './20260602_151020';
 import * as migration_20260604_000000_news_events_html from './20260604_000000_news-events-html';
 import * as migration_20260605_000000_layout_json from './20260605_000000_layout-json';
 import * as migration_20260606_000000_site_settings_logo from './20260606_000000_site-settings-logo';
+import * as migration_20260612_000000_working_copies from './20260612_000000_working-copies';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260606_000000_site_settings_logo.up,
     down: migration_20260606_000000_site_settings_logo.down,
     name: '20260606_000000_site-settings-logo',
+  },
+  {
+    up: migration_20260612_000000_working_copies.up,
+    down: migration_20260612_000000_working_copies.down,
+    name: '20260612_000000_working-copies',
   },
 ];
