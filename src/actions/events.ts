@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { getPayloadClient } from '@/lib/payload'
 import { decodePayloadToken } from '@/lib/auth'
+import { deleteWorkingCopy } from './working-copies'
 
 export type EventFormState = { error: string } | null
 
@@ -31,6 +32,7 @@ export async function createEvent(
   const organizerRaw = formData.get('organizer') as string
   const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
+  const intentStatus = (formData.get('_intentStatus') as string) === 'draft' ? 'draft' : 'published'
 
   if (!title || !slug || !startDate) {
     return { error: 'Le titre, le slug et la date de début sont obligatoires.' }
@@ -65,12 +67,13 @@ export async function createEvent(
       ...(categoryRaw && { category: Number(categoryRaw) }),
       ...(organizerRaw && { organizer: Number(organizerRaw) }),
       layout: JSON.parse(layoutJson),
-      _status: 'published',
+      _status: intentStatus,
       ...(imageId !== undefined && { image: imageId }),
     } as any,
     overrideAccess: true,
   })
 
+  await deleteWorkingCopy('events')
   revalidatePath('/agenda')
   redirect(`/agenda/${slug}`)
 }
@@ -91,6 +94,7 @@ export async function updateEvent(
   const organizerRaw = formData.get('organizer') as string
   const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
+  const intentStatus = (formData.get('_intentStatus') as string) === 'draft' ? 'draft' : 'published'
 
   if (!title || !slug || !startDate) {
     return { error: 'Le titre, le slug et la date de début sont obligatoires.' }
@@ -111,6 +115,7 @@ export async function updateEvent(
     category: categoryRaw ? Number(categoryRaw) : null,
     organizer: organizerRaw ? Number(organizerRaw) : null,
     layout: JSON.parse(layoutJson),
+    _status: intentStatus,
   }
 
   if (imageFile && imageFile.size > 0) {
@@ -131,6 +136,7 @@ export async function updateEvent(
     overrideAccess: true,
   })
 
+  await deleteWorkingCopy('events', String(id))
   revalidatePath('/agenda')
   revalidatePath(`/agenda/${slug}`)
   redirect(`/agenda/${slug}`)

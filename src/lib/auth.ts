@@ -1,4 +1,4 @@
-export function decodePayloadToken(token: string): { role?: string; name?: string; email?: string } | null {
+export function decodePayloadToken(token: string): { id?: number | string; role?: string; name?: string; email?: string } | null {
   try {
     const parts = token.split('.')
     if (parts.length !== 3) return null

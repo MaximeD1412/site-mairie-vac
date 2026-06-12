@@ -7,6 +7,11 @@ vi.mock('react', async (importOriginal) => {
   return { ...actual, useActionState: vi.fn() }
 })
 
+vi.mock('@/actions/working-copies', () => ({
+  saveWorkingCopy: vi.fn(),
+  deleteWorkingCopy: vi.fn(),
+}))
+
 vi.mock('@/components/BlockEditor', () => ({
   BlockEditor: ({ value, onChange }: { value: unknown[]; onChange: (v: unknown[]) => void }) => (
     <div data-testid="block-editor">
@@ -69,28 +74,12 @@ describe('EventForm', () => {
     expect(screen.getByRole('option', { name: 'Amicale des pêcheurs' })).toBeInTheDocument()
   })
 
-  it('affiche le bouton "Créer" en mode création', () => {
+  it('affiche les boutons "Soumettre en brouillon" et "Publier"', () => {
     render(
       <EventForm action={vi.fn()} categories={mockCategories} associations={mockAssociations} />,
     )
-    expect(screen.getByRole('button', { name: 'Créer' })).toBeInTheDocument()
-  })
-
-  it('affiche le bouton "Modifier" en mode édition', () => {
-    const event = {
-      id: 1, title: 'Concert', slug: 'concert',
-      startDate: '2026-06-21T18:00:00.000Z',
-      updatedAt: '', createdAt: '',
-    }
-    render(
-      <EventForm
-        action={vi.fn()}
-        event={event as any}
-        categories={mockCategories}
-        associations={mockAssociations}
-      />,
-    )
-    expect(screen.getByRole('button', { name: 'Modifier' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Soumettre en brouillon' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Publier' })).toBeInTheDocument()
   })
 
   it('le bouton Supprimer est absent en mode création', () => {
@@ -174,13 +163,14 @@ describe('EventForm', () => {
     expect(screen.getByText('Erreur de sauvegarde')).toBeInTheDocument()
   })
 
-  it('désactive le bouton soumettre pendant l\'envoi', () => {
+  it('désactive les boutons soumettre pendant l\'envoi', () => {
     mockUseActionState.mockReturnValue([null, vi.fn(), true] as any)
     render(
       <EventForm action={vi.fn()} categories={mockCategories} associations={mockAssociations} />,
     )
-    const btn = screen.getByRole('button', { name: /enregistrement/i })
-    expect(btn).toBeDisabled()
+    const btns = screen.getAllByRole('button', { name: /enregistrement/i })
+    expect(btns).toHaveLength(2)
+    btns.forEach((btn) => expect(btn).toBeDisabled())
   })
 
   it('le layout BlockEditor est sérialisé en JSON dans un champ caché', () => {

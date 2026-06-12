@@ -6,6 +6,7 @@ import type { Event, EventCategory, Association, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
 import { PreviewModal, type PreviewData } from './PreviewModal'
 import { slugify } from '@/lib/slugify'
+import { saveWorkingCopy } from '@/actions/working-copies'
 
 interface Props {
   action: (prevState: EventFormState, formData: FormData) => Promise<EventFormState>
@@ -39,10 +40,14 @@ export function EventForm({ action, event, deleteAction, categories, association
       ? String((event.organizer as Association).id)
       : event?.organizer ? String(event.organizer) : ''
   )
+  const [savedAt, setSavedAt] = useState<Date | null>(null)
 
   const formRef = useRef<HTMLFormElement>(null)
   const errorRef = useRef<HTMLParagraphElement>(null)
   const endDateRef = useRef<HTMLInputElement>(null)
+  const intentStatusRef = useRef<HTMLInputElement>(null)
+  const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isFirstRender = useRef(true)
 
   const endDateError =
     endDate && startDate && new Date(endDate) <= new Date(startDate)
@@ -60,6 +65,28 @@ export function EventForm({ action, event, deleteAction, categories, association
       endDateRef.current?.focus()
     }
   }, [endDateError])
+
+  const formSnapshot = JSON.stringify({ title, slug, layout, startDate, endDate, location, category, organizer })
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    if (autosaveTimer.current) clearTimeout(autosaveTimer.current)
+    autosaveTimer.current = setTimeout(async () => {
+      const relatedId = event ? String(event.id) : undefined
+      await saveWorkingCopy('events', { title, slug, layout, startDate, endDate, location, category, organizer }, relatedId)
+      setSavedAt(new Date())
+    }, 5000)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formSnapshot])
+
+  useEffect(() => {
+    return () => {
+      if (autosaveTimer.current) clearTimeout(autosaveTimer.current)
+    }
+  }, [])
 
   const openPreview = () => {
     const form = formRef.current
@@ -99,6 +126,8 @@ export function EventForm({ action, event, deleteAction, categories, association
             {state.error}
           </p>
         )}
+
+        <input ref={intentStatusRef} type="hidden" name="_intentStatus" defaultValue="published" />
 
         <div>
           <label className="block text-sm font-medium text-slate-700" htmlFor="title">
@@ -237,13 +266,29 @@ export function EventForm({ action, event, deleteAction, categories, association
           <BlockEditor value={layout} onChange={setLayout} />
         </div>
 
+        {savedAt && (
+          <p className="text-xs text-slate-500">
+            Brouillon personnel sauvegardé à{' '}
+            {savedAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        )}
+
         <div className="flex items-center gap-3">
           <button
             type="submit"
             disabled={isPending}
+            onClick={() => { if (intentStatusRef.current) intentStatusRef.current.value = 'draft' }}
+            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+          >
+            {isPending ? 'Enregistrement…' : 'Soumettre en brouillon'}
+          </button>
+          <button
+            type="submit"
+            disabled={isPending}
+            onClick={() => { if (intentStatusRef.current) intentStatusRef.current.value = 'published' }}
             className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-mid disabled:opacity-50"
           >
-            {isPending ? 'Enregistrement…' : event ? 'Modifier' : 'Créer'}
+            {isPending ? 'Enregistrement…' : 'Publier'}
           </button>
           <button
             type="button"
