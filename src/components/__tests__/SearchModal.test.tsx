@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import React from 'react'
 
-const mockPush = vi.fn()
+const mockNavigate = vi.fn()
 
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: mockPush }),
+vi.mock('../NavigationContext', () => ({
+  useNavigate: () => mockNavigate,
 }))
 
 vi.mock('lucide-react', () => ({
@@ -129,7 +129,7 @@ describe('SearchModal', () => {
     fireEvent.change(screen.getByLabelText(/terme de recherche/i), { target: { value: 'conseil' } })
     await act(async () => { await vi.runAllTimersAsync() })
     fireEvent.click(screen.getByText('Conseil municipal'))
-    expect(mockPush).toHaveBeenCalledWith('/actualites/conseil')
+    expect(mockNavigate).toHaveBeenCalledWith('/actualites/conseil')
     expect(mockClose).toHaveBeenCalledOnce()
   })
 })
