@@ -155,7 +155,7 @@ describe('HeaderClient', () => {
     render(<HeaderClient items={items} role={null} />)
     fireEvent.mouseEnter(screen.getByText('Mairie').closest('div')!)
     const panel = screen.getByRole('region', { name: /sous-menu mairie/i })
-    expect(panel.className).toMatch(/w-screen/)
+    expect(panel.className).toMatch(/w-full/)
   })
 
   it('clicking a sub-item closes the mega-menu', () => {
