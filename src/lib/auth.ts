@@ -30,5 +30,12 @@ export function resolveMiddlewareRedirect(pathname: string, token: string | unde
     return null
   }
 
+  if (pathname === '/brouillons') {
+    if (!token) return '/connexion'
+    const decoded = decodePayloadToken(token)
+    if (decoded?.role !== 'admin' && decoded?.role !== 'agent') return '/connexion'
+    return null
+  }
+
   return null
 }

@@ -52,5 +52,6 @@ export const config = {
     '/actualites/:slug/modifier',
     '/agenda/new',
     '/agenda/:slug/modifier',
+    '/brouillons',
   ],
 }
