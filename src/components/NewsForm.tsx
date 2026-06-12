@@ -6,12 +6,22 @@ import type { News, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
 import { PreviewModal, type PreviewData } from './PreviewModal'
 import { slugify } from '@/lib/slugify'
-import { saveWorkingCopy } from '@/actions/working-copies'
+import { saveWorkingCopy, deleteWorkingCopy } from '@/actions/working-copies'
+
+interface WorkingCopyData {
+  title?: string
+  slug?: string
+  summary?: string
+  publishedAt?: string
+  featured?: boolean
+  layout?: Block[]
+}
 
 interface Props {
   action: (prevState: NewsFormState, formData: FormData) => Promise<NewsFormState>
   news?: News
   deleteAction?: (formData: FormData) => Promise<NewsFormState>
+  workingCopy?: { id: string; data: WorkingCopyData; updatedAt: string }
 }
 
 function parseLayout(raw: unknown): Block[] {
@@ -19,16 +29,20 @@ function parseLayout(raw: unknown): Block[] {
   return []
 }
 
-export function NewsForm({ action, news, deleteAction }: Props) {
+export function NewsForm({ action, news, deleteAction, workingCopy }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
-  const [title, setTitle] = useState(news?.title ?? '')
-  const [slug, setSlug] = useState(news?.slug ?? '')
-  const [summary, setSummary] = useState(news?.summary ?? '')
-  const [publishedAt, setPublishedAt] = useState(news?.publishedAt ? news.publishedAt.slice(0, 10) : '')
-  const [featured, setFeatured] = useState(news?.featured ?? false)
-  const [layout, setLayout] = useState<Block[]>(parseLayout(news?.layout))
+  const wc = workingCopy?.data
+  const [title, setTitle] = useState(wc?.title ?? news?.title ?? '')
+  const [slug, setSlug] = useState(wc?.slug ?? news?.slug ?? '')
+  const [summary, setSummary] = useState(wc?.summary ?? news?.summary ?? '')
+  const [publishedAt, setPublishedAt] = useState(
+    wc?.publishedAt?.slice(0, 10) ?? (news?.publishedAt ? news.publishedAt.slice(0, 10) : '')
+  )
+  const [featured, setFeatured] = useState(wc?.featured ?? news?.featured ?? false)
+  const [layout, setLayout] = useState<Block[]>(parseLayout(wc?.layout ?? news?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
   const [savedAt, setSavedAt] = useState<Date | null>(null)
+  const [showBanner, setShowBanner] = useState(!!workingCopy)
 
   const formRef = useRef<HTMLFormElement>(null)
   const errorRef = useRef<HTMLParagraphElement>(null)
@@ -64,6 +78,18 @@ export function NewsForm({ action, news, deleteAction }: Props) {
     }
   }, [])
 
+  const handleDiscardWorkingCopy = async () => {
+    if (!confirm('Ignorer vos modifications non publiées et repartir de la version enregistrée ?')) return
+    await deleteWorkingCopy('news', news ? String(news.id) : undefined)
+    setTitle(news?.title ?? '')
+    setSlug(news?.slug ?? '')
+    setSummary(news?.summary ?? '')
+    setPublishedAt(news?.publishedAt ? news.publishedAt.slice(0, 10) : '')
+    setFeatured(news?.featured ?? false)
+    setLayout(parseLayout(news?.layout))
+    setShowBanner(false)
+  }
+
   const openPreview = () => {
     const form = formRef.current
     if (!form) return
@@ -89,6 +115,34 @@ export function NewsForm({ action, news, deleteAction }: Props) {
   return (
     <div className="space-y-8">
       {preview && <PreviewModal data={preview} onClose={() => setPreview(null)} />}
+      {showBanner && workingCopy && (
+        <div role="status" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <p>
+            Vous avez des modifications non publiées depuis{' '}
+            {new Date(workingCopy.updatedAt).toLocaleString('fr-FR', {
+              day: '2-digit', month: '2-digit', year: 'numeric',
+              hour: '2-digit', minute: '2-digit',
+            })}
+            . Ces modifications ne sont visibles que par vous.
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => setShowBanner(false)}
+              className="rounded border border-amber-400 bg-amber-100 px-3 py-1 text-xs font-semibold hover:bg-amber-200"
+            >
+              Continuer
+            </button>
+            <button
+              type="button"
+              onClick={handleDiscardWorkingCopy}
+              className="rounded border border-amber-400 px-3 py-1 text-xs font-semibold hover:bg-amber-100"
+            >
+              Ignorer et repartir de la version publiée
+            </button>
+          </div>
+        </div>
+      )}
       <form ref={formRef} action={formAction} className="space-y-6">
         {state?.error && (
           <p ref={errorRef} role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">

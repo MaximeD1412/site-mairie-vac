@@ -61,6 +61,38 @@ export async function saveWorkingCopy(
   return { id: String(created.id) }
 }
 
+export async function getWorkingCopy(
+  collection: 'events' | 'news',
+  relatedId: string,
+): Promise<{ id: string; data: unknown; updatedAt: string } | null> {
+  const userId = await getCurrentUserId()
+  if (!userId) return null
+
+  const payload = await getPayloadClient()
+
+  const result = await payload.find({
+    collection: 'working-copies',
+    where: {
+      and: [
+        { author: { equals: userId } },
+        { collection: { equals: collection } },
+        { relatedId: { equals: relatedId } },
+      ],
+    },
+    overrideAccess: true,
+    limit: 1,
+  })
+
+  if (result.docs.length === 0) return null
+
+  const doc = result.docs[0]
+  return {
+    id: String(doc.id),
+    data: doc.data,
+    updatedAt: doc.updatedAt,
+  }
+}
+
 export async function deleteWorkingCopy(
   collection: 'events' | 'news',
   relatedId?: string,
