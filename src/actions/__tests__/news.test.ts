@@ -209,7 +209,6 @@ describe('updateNews', () => {
     expect(mockRevalidatePath).toHaveBeenCalledWith('/actualites')
     expect(mockRevalidatePath).toHaveBeenCalledWith('/actualites/titre-modifie')
   })
-})
 
   it('met à jour avec _status draft si _intentStatus vaut draft', async () => {
     setupAuth('agent')
