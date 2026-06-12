@@ -16,6 +16,7 @@ import { Events } from './collections/Events'
 import { Documents } from './collections/Documents'
 import { Associations } from './collections/Associations'
 import { ElectedOfficials } from './collections/ElectedOfficials'
+import { WorkingCopies } from './collections/WorkingCopies'
 import { SiteSettings } from './globals/SiteSettings'
 import { MairieInfo } from './globals/MairieInfo'
 import { HomepageSettings } from './globals/HomepageSettings'
@@ -67,7 +68,8 @@ export default buildConfig({
     Events,
     Documents,
     Associations,
-    ElectedOfficials
+    ElectedOfficials,
+    WorkingCopies,
   ],
   globals: [SiteSettings, MairieInfo, HomepageSettings],
   plugins: [

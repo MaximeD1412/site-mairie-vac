@@ -15,6 +15,7 @@ import {
 interface MiniCalendarProps {
   events: CalendarEventInput[]
   initialDate?: Date
+  showLegend?: boolean
 }
 
 const DAYS_FR = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di']
@@ -25,7 +26,7 @@ const MONTHS_FR = [
 const INDICATOR_H = 8  // px, hauteur d'un indicateur
 const INDICATOR_GAP = 2 // px, espace entre indicateurs
 
-export function MiniCalendar({ events, initialDate }: MiniCalendarProps) {
+export function MiniCalendar({ events, initialDate, showLegend }: MiniCalendarProps) {
   const now = initialDate ?? new Date()
   const [year, setYear] = useState(now.getFullYear())
   const [month, setMonth] = useState(now.getMonth())
@@ -136,7 +137,42 @@ export function MiniCalendar({ events, initialDate }: MiniCalendarProps) {
           </div>
         )
       })}
+      {showLegend && <CategoryLegend events={events} />}
     </div>
+  )
+}
+
+function CategoryLegend({ events }: { events: CalendarEventInput[] }) {
+  const seen = new Set<string>()
+  const categories: { name: string; color: string }[] = []
+
+  for (const event of events) {
+    const { name, color } = event.category ?? {}
+    if (!name || !color) continue
+    const key = `${color}::${name}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    categories.push({ name, color })
+  }
+
+  if (categories.length === 0) return null
+
+  return (
+    <ul
+      className="mt-3 pt-3 border-t border-muted/20 flex flex-wrap gap-x-4 gap-y-1"
+      aria-label="Légende des catégories"
+    >
+      {categories.map(({ name, color }) => (
+        <li key={name} className="flex items-center gap-1.5">
+          <span
+            className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"
+            style={{ backgroundColor: color }}
+            aria-hidden="true"
+          />
+          <span className="text-[11px] text-text">{name}</span>
+        </li>
+      ))}
+    </ul>
   )
 }
 

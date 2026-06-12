@@ -76,4 +76,51 @@ describe('MiniCalendar', () => {
     const dot1 = screen.getByTestId('indicator-dot-1')
     expect(dot1.closest('a')).toHaveAttribute('href', '/agenda')
   })
+
+  describe('légende des catégories', () => {
+    const eventsWithCategories = [
+      { id: '1', slug: 'e1', title: 'Fest', startDate: '2026-05-10T10:00:00.000Z', category: { color: '#ff0000', name: 'Sport' } },
+      { id: '2', slug: 'e2', title: 'Expo', startDate: '2026-05-12T10:00:00.000Z', category: { color: '#00ff00', name: 'Culture' } },
+    ]
+
+    it('does not render legend when showLegend is not set', () => {
+      render(<MiniCalendar events={eventsWithCategories} initialDate={MAY_2026} />)
+      expect(screen.queryByRole('list', { name: /légende/i })).not.toBeInTheDocument()
+    })
+
+    it('renders legend with category names when showLegend is true', () => {
+      render(<MiniCalendar events={eventsWithCategories} initialDate={MAY_2026} showLegend />)
+      const legend = screen.getByRole('list', { name: /légende/i })
+      expect(legend).toBeInTheDocument()
+      expect(screen.getByText('Sport')).toBeInTheDocument()
+      expect(screen.getByText('Culture')).toBeInTheDocument()
+    })
+
+    it('deduplicates categories with same name and color', () => {
+      const events = [
+        { id: '1', slug: 'e1', title: 'A', startDate: '2026-05-10T10:00:00.000Z', category: { color: '#ff0000', name: 'Sport' } },
+        { id: '2', slug: 'e2', title: 'B', startDate: '2026-05-12T10:00:00.000Z', category: { color: '#ff0000', name: 'Sport' } },
+      ]
+      render(<MiniCalendar events={events} initialDate={MAY_2026} showLegend />)
+      expect(screen.getAllByText('Sport')).toHaveLength(1)
+    })
+
+    it('does not render legend when no event has a named category', () => {
+      const events = [
+        { id: '1', slug: 'e1', title: 'Test', startDate: '2026-05-10T10:00:00.000Z' },
+      ]
+      render(<MiniCalendar events={events} initialDate={MAY_2026} showLegend />)
+      expect(screen.queryByRole('list', { name: /légende/i })).not.toBeInTheDocument()
+    })
+
+    it('skips events whose category has no name', () => {
+      const events = [
+        { id: '1', slug: 'e1', title: 'A', startDate: '2026-05-10T10:00:00.000Z', category: { color: '#ff0000', name: 'Sport' } },
+        { id: '2', slug: 'e2', title: 'B', startDate: '2026-05-12T10:00:00.000Z', category: { color: '#00ff00' } },
+      ]
+      render(<MiniCalendar events={events} initialDate={MAY_2026} showLegend />)
+      expect(screen.getByText('Sport')).toBeInTheDocument()
+      expect(screen.getAllByRole('listitem')).toHaveLength(1)
+    })
+  })
 })

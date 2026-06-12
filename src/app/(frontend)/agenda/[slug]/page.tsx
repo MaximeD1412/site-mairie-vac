@@ -64,7 +64,7 @@ export default async function EventDetailPage(
         image={event.image as { url?: string | null; alt?: string | null } | null | undefined}
         layout={Array.isArray(event.layout) ? event.layout : undefined}
       />
-      <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" icon={<Pencil size={14} />} />
+      <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" icon={<Pencil size={16} />} fab />
     </>
   )
 }

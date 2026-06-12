@@ -1,5 +1,14 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, FieldHook } from 'payload'
 import { isAgentOrAdmin } from '../access'
+import { slugify } from '../lib/slugify'
+
+const generateSlug: FieldHook = ({ data, originalDoc, value }) => {
+  const name = data?.name
+  if (name !== undefined) {
+    return slugify(name as string)
+  }
+  return originalDoc?.slug ?? value ?? ''
+}
 
 export const EventCategories: CollectionConfig = {
   slug: 'event-categories',
@@ -13,14 +22,26 @@ export const EventCategories: CollectionConfig = {
   },
   fields: [
     { name: 'name', label: 'Nom', type: 'text', required: true },
-    { name: 'slug', label: 'Slug', type: 'text', required: true, unique: true },
+    {
+      name: 'slug',
+      label: 'Slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: { hidden: true },
+      hooks: { beforeChange: [generateSlug] },
+    },
     {
       name: 'color',
       label: 'Couleur',
       type: 'text',
       required: true,
-      defaultValue: '#3B82F6',
-      admin: { description: 'Couleur hexadécimale (ex: #3B82F6)' },
+      defaultValue: '#1D4ED8',
+      admin: {
+        components: {
+          Field: '@/components/admin/ColorPickerField#ColorPickerField',
+        },
+      },
     },
   ],
 }

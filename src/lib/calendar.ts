@@ -4,7 +4,7 @@ export interface CalendarEventInput {
   title: string
   startDate: string
   endDate?: string | null
-  category?: { color?: string | null } | null
+  category?: { color?: string | null; name?: string | null } | null
 }
 
 export interface DotIndicator {
