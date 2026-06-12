@@ -8,6 +8,8 @@ import { Footer } from '@/components/Footer'
 import { getPayloadClient } from '@/lib/payload'
 import { AuthToast } from '@/components/AuthToast'
 import { Toaster } from 'sonner'
+import { NavigationProvider } from '@/components/NavigationContext'
+import { NavigationOverlay } from '@/components/NavigationOverlay'
 
 export const metadata: Metadata = {
   title: 'La Ville-aux-Clercs',
@@ -27,15 +29,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="fr">
       <body>
-        <Header navigation={mainNavResult?.docs?.[0] as any} siteSettings={siteSettings as any} />
-        <main id="main-content" tabIndex={-1}>
-          {children}
-        </main>
-        <Footer mairieInfo={mairieInfo as any} footerNav={footerNavResult?.docs?.[0] as any} />
-        <Toaster position="top-right" richColors />
-        <Suspense>
-          <AuthToast />
-        </Suspense>
+        <NavigationProvider>
+          <NavigationOverlay />
+          <Header navigation={mainNavResult?.docs?.[0] as any} siteSettings={siteSettings as any} />
+          <main id="main-content" tabIndex={-1}>
+            {children}
+          </main>
+          <Footer mairieInfo={mairieInfo as any} footerNav={footerNavResult?.docs?.[0] as any} />
+          <Toaster position="top-right" richColors />
+          <Suspense>
+            <AuthToast />
+          </Suspense>
+        </NavigationProvider>
       </body>
     </html>
   )
