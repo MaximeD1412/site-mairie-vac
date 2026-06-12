@@ -1,13 +1,13 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, ChevronDown, LogOut, NotebookPen } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
 import { MobileMenu } from './MobileMenu'
 import { LoginPopover } from './LoginPopover'
 import { SearchModal } from './SearchModal'
+import { useNavigate } from './NavigationContext'
 
 interface NavChild {
   label: string
@@ -39,7 +39,7 @@ const roleLabel: Record<string, string> = {
 }
 
 export function HeaderClient({ items, role, userName }: HeaderClientProps) {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [openItem, setOpenItem] = useState<number | null>(null)
   const [searchOpen, setSearchOpen] = useState(false)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -72,7 +72,7 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
 
   async function handleLogout() {
     await fetch('/api/users/logout', { method: 'POST' })
-    router.refresh()
+    navigate('/')
   }
 
   return (

@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import { X, Search, Loader2 } from 'lucide-react'
+import { useNavigate } from './NavigationContext'
 
 interface SearchResult {
   title: string
@@ -26,7 +26,7 @@ function formatDate(iso: string): string {
 }
 
 export function SearchModal({ onClose }: SearchModalProps) {
-  const router = useRouter()
+  const navigate = useNavigate()
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
@@ -77,7 +77,7 @@ export function SearchModal({ onClose }: SearchModalProps) {
   }, [])
 
   function handleResultClick(url: string) {
-    router.push(url)
+    navigate(url)
     onClose()
   }
 
