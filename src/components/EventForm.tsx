@@ -25,7 +25,14 @@ export function EventForm({ action, event, deleteAction, categories, association
   const [slug, setSlug] = useState(event?.slug ?? '')
   const [layout, setLayout] = useState<Block[]>(parseLayout(event?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
+  const [startDate, setStartDate] = useState(event?.startDate ? event.startDate.slice(0, 16) : '')
+  const [endDate, setEndDate] = useState(event?.endDate ? event.endDate.slice(0, 16) : '')
   const formRef = useRef<HTMLFormElement>(null)
+
+  const endDateError =
+    endDate && startDate && new Date(endDate) <= new Date(startDate)
+      ? 'La date de fin doit être postérieure à la date de début.'
+      : null
 
   const openPreview = () => {
     const form = formRef.current
@@ -105,7 +112,8 @@ export function EventForm({ action, event, deleteAction, categories, association
             name="startDate"
             type="datetime-local"
             required
-            defaultValue={event?.startDate ? event.startDate.slice(0, 16) : undefined}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
@@ -118,9 +126,15 @@ export function EventForm({ action, event, deleteAction, categories, association
             id="endDate"
             name="endDate"
             type="datetime-local"
-            defaultValue={event?.endDate ? event.endDate.slice(0, 16) : undefined}
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
+          {endDateError && (
+            <p role="alert" className="mt-1 text-sm text-red-600">
+              {endDateError}
+            </p>
+          )}
         </div>
 
         <div>

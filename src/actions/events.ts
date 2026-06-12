@@ -36,6 +36,10 @@ export async function createEvent(
     return { error: 'Le titre, le slug et la date de début sont obligatoires.' }
   }
 
+  if (endDate && new Date(endDate) <= new Date(startDate)) {
+    return { error: 'La date de fin doit être postérieure à la date de début.' }
+  }
+
   const payload = await getPayloadClient()
 
   let imageId: number | undefined
@@ -90,6 +94,10 @@ export async function updateEvent(
 
   if (!title || !slug || !startDate) {
     return { error: 'Le titre, le slug et la date de début sont obligatoires.' }
+  }
+
+  if (endDate && new Date(endDate) <= new Date(startDate)) {
+    return { error: 'La date de fin doit être postérieure à la date de début.' }
   }
 
   const payload = await getPayloadClient()

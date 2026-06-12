@@ -150,6 +150,42 @@ describe('createEvent', () => {
       }),
     )
   })
+
+  it('retourne une erreur si date de fin antérieure à la date de début', async () => {
+    setupAuth('agent')
+    const result = await createEvent(null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00', endDate: '2026-06-21T17:00',
+    }))
+    expect(result).toEqual({ error: expect.stringContaining('postérieure') })
+    expect(mockRedirect).not.toHaveBeenCalled()
+  })
+
+  it('retourne une erreur si date de fin égale à la date de début', async () => {
+    setupAuth('agent')
+    const result = await createEvent(null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00', endDate: '2026-06-21T18:00',
+    }))
+    expect(result).toEqual({ error: expect.stringContaining('postérieure') })
+    expect(mockRedirect).not.toHaveBeenCalled()
+  })
+
+  it('sauvegarde normalement si pas de date de fin', async () => {
+    setupAuth('agent')
+    const { create } = setupPayload()
+    create.mockResolvedValue({ id: 1, slug: 'fete' })
+    await expect(createEvent(null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00',
+    }))).rejects.toThrow('REDIRECT:/agenda/fete')
+  })
+
+  it('sauvegarde normalement si date de fin valide', async () => {
+    setupAuth('agent')
+    const { create } = setupPayload()
+    create.mockResolvedValue({ id: 1, slug: 'fete' })
+    await expect(createEvent(null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00', endDate: '2026-06-21T20:00',
+    }))).rejects.toThrow('REDIRECT:/agenda/fete')
+  })
 })
 
 describe('updateEvent', () => {
@@ -162,6 +198,42 @@ describe('updateEvent', () => {
     setupAuth('agent')
     const result = await updateEvent(1, null, makeFormData({ title: '', slug: '', startDate: '' }))
     expect(result).toEqual({ error: expect.stringContaining('obligatoires') })
+  })
+
+  it('retourne une erreur si date de fin antérieure à la date de début', async () => {
+    setupAuth('agent')
+    const result = await updateEvent(1, null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00', endDate: '2026-06-21T17:00',
+    }))
+    expect(result).toEqual({ error: expect.stringContaining('postérieure') })
+    expect(mockRedirect).not.toHaveBeenCalled()
+  })
+
+  it('retourne une erreur si date de fin égale à la date de début', async () => {
+    setupAuth('agent')
+    const result = await updateEvent(1, null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00', endDate: '2026-06-21T18:00',
+    }))
+    expect(result).toEqual({ error: expect.stringContaining('postérieure') })
+    expect(mockRedirect).not.toHaveBeenCalled()
+  })
+
+  it('sauvegarde normalement si pas de date de fin', async () => {
+    setupAuth('agent')
+    const { update } = setupPayload()
+    update.mockResolvedValue({ id: 1 })
+    await expect(updateEvent(1, null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00',
+    }))).rejects.toThrow('REDIRECT:/agenda/fete')
+  })
+
+  it('sauvegarde normalement si date de fin valide', async () => {
+    setupAuth('agent')
+    const { update } = setupPayload()
+    update.mockResolvedValue({ id: 1 })
+    await expect(updateEvent(1, null, makeFormData({
+      title: 'Fête', slug: 'fete', startDate: '2026-06-21T18:00', endDate: '2026-06-21T20:00',
+    }))).rejects.toThrow('REDIRECT:/agenda/fete')
   })
 
   it('met à jour l\'événement et redirige vers /agenda/[slug]', async () => {
