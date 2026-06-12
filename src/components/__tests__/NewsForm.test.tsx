@@ -7,6 +7,11 @@ vi.mock('react', async (importOriginal) => {
   return { ...actual, useActionState: vi.fn() }
 })
 
+vi.mock('@/actions/working-copies', () => ({
+  saveWorkingCopy: vi.fn(),
+  deleteWorkingCopy: vi.fn(),
+}))
+
 vi.mock('@/components/BlockEditor', () => ({
   BlockEditor: ({ value, onChange }: { value: unknown[]; onChange: (v: unknown[]) => void }) => (
     <div data-testid="block-editor">
@@ -42,19 +47,10 @@ describe('NewsForm', () => {
     expect(screen.getByTestId('block-editor')).toBeInTheDocument()
   })
 
-  it('affiche le bouton "Créer" en mode création', () => {
+  it('affiche les boutons "Soumettre en brouillon" et "Publier"', () => {
     render(<NewsForm action={vi.fn()} />)
-    expect(screen.getByRole('button', { name: 'Créer' })).toBeInTheDocument()
-  })
-
-  it('affiche le bouton "Modifier" en mode édition', () => {
-    const news = {
-      id: 1, title: 'Test', slug: 'test', summary: 'Résumé',
-      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: null,
-      updatedAt: '', createdAt: '',
-    }
-    render(<NewsForm action={vi.fn()} news={news as any} />)
-    expect(screen.getByRole('button', { name: 'Modifier' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Soumettre en brouillon' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Publier' })).toBeInTheDocument()
   })
 
   it('le bouton Supprimer est absent en mode création', () => {
@@ -110,11 +106,12 @@ describe('NewsForm', () => {
     expect(screen.getByText('Erreur de sauvegarde')).toBeInTheDocument()
   })
 
-  it('désactive le bouton soumettre pendant l\'envoi', () => {
+  it('désactive les boutons soumettre pendant l\'envoi', () => {
     mockUseActionState.mockReturnValue([null, vi.fn(), true] as any)
     render(<NewsForm action={vi.fn()} />)
-    const btn = screen.getByRole('button', { name: /enregistrement/i })
-    expect(btn).toBeDisabled()
+    const btns = screen.getAllByRole('button', { name: /enregistrement/i })
+    expect(btns).toHaveLength(2)
+    btns.forEach((btn) => expect(btn).toBeDisabled())
   })
 
   it('le layout BlockEditor est sérialisé en JSON dans un champ caché', () => {

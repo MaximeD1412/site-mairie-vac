@@ -15,6 +15,10 @@ vi.mock('@/lib/payload', () => ({
 vi.mock('@/lib/auth', () => ({
   decodePayloadToken: vi.fn(),
 }))
+vi.mock('../working-copies', () => ({
+  deleteWorkingCopy: vi.fn(),
+  saveWorkingCopy: vi.fn(),
+}))
 
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -119,6 +123,34 @@ describe('createNews', () => {
     expect(mockRevalidatePath).toHaveBeenCalledWith('/actualites')
   })
 
+  it('crée avec _status published par défaut', async () => {
+    setupAuth('agent')
+    const { create } = setupPayload()
+    create.mockResolvedValue({ id: 1, slug: 'mon-titre' })
+
+    await expect(createNews(null, makeFormData({
+      title: 'Mon titre', slug: 'mon-titre', summary: 'Résumé', publishedAt: '2026-01-01',
+    }))).rejects.toThrow('REDIRECT:/actualites/mon-titre')
+
+    expect(create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ _status: 'published' }) }),
+    )
+  })
+
+  it('crée avec _status draft si _intentStatus vaut draft', async () => {
+    setupAuth('agent')
+    const { create } = setupPayload()
+    create.mockResolvedValue({ id: 1, slug: 'mon-titre' })
+
+    await expect(createNews(null, makeFormData({
+      title: 'Mon titre', slug: 'mon-titre', summary: 'Résumé', publishedAt: '2026-01-01', _intentStatus: 'draft',
+    }))).rejects.toThrow('REDIRECT:/actualites/mon-titre')
+
+    expect(create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ _status: 'draft' }) }),
+    )
+  })
+
   it('upload l\'image si un fichier est fourni', async () => {
     setupAuth('admin')
     const { create } = setupPayload()
@@ -176,6 +208,34 @@ describe('updateNews', () => {
     )
     expect(mockRevalidatePath).toHaveBeenCalledWith('/actualites')
     expect(mockRevalidatePath).toHaveBeenCalledWith('/actualites/titre-modifie')
+  })
+
+  it('met à jour avec _status draft si _intentStatus vaut draft', async () => {
+    setupAuth('agent')
+    const { update } = setupPayload()
+    update.mockResolvedValue({ id: 1 })
+
+    await expect(updateNews(5, null, makeFormData({
+      title: 'Titre', slug: 'titre', summary: 'Résumé', publishedAt: '2026-01-01', _intentStatus: 'draft',
+    }))).rejects.toThrow('REDIRECT:/actualites/titre')
+
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ _status: 'draft' }) }),
+    )
+  })
+
+  it('met à jour avec _status published par défaut', async () => {
+    setupAuth('agent')
+    const { update } = setupPayload()
+    update.mockResolvedValue({ id: 1 })
+
+    await expect(updateNews(5, null, makeFormData({
+      title: 'Titre', slug: 'titre', summary: 'Résumé', publishedAt: '2026-01-01',
+    }))).rejects.toThrow('REDIRECT:/actualites/titre')
+
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ _status: 'published' }) }),
+    )
   })
 })
 
