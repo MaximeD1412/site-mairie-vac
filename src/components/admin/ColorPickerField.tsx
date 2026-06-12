@@ -124,6 +124,7 @@ export function ColorPickerField({ path, field, required }: Props) {
               flexShrink: 0,
             }}
           />
+          <span style={{ fontSize: '12px', color: 'var(--theme-elevation-500)' }}>{COLORS.find(c => c.hex.toLowerCase() === value.toLowerCase())?.label || 'Couleur personnalisée'}</span>
           <code style={{ fontSize: '12px', color: 'var(--theme-elevation-500)' }}>{value}</code>
         </div>
       )}
