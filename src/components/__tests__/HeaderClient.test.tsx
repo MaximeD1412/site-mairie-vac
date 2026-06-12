@@ -26,6 +26,14 @@ vi.mock('../LoginPopover', () => ({
   LoginPopover: () => <div data-testid="login-popover" />,
 }))
 
+vi.mock('../SearchModal', () => ({
+  SearchModal: ({ onClose }: { onClose: () => void }) => (
+    <div data-testid="search-modal" role="dialog" aria-label="Recherche">
+      <button onClick={onClose} aria-label="Fermer la recherche" />
+    </div>
+  ),
+}))
+
 import { HeaderClient } from '../HeaderClient'
 
 const simpleItem = (label: string, slug = label.toLowerCase()) => ({
@@ -177,5 +185,20 @@ describe('HeaderClient', () => {
     render(<HeaderClient items={items} role={null} />)
     fireEvent.mouseEnter(screen.getByText('Mairie').closest('div')!)
     expect(screen.getByRole('button', { name: /mairie/i })).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('cliquer le bouton Search ouvre le modal de recherche', () => {
+    render(<HeaderClient items={[]} role={null} />)
+    expect(screen.queryByTestId('search-modal')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: /rechercher sur le site/i }))
+    expect(screen.getByTestId('search-modal')).toBeInTheDocument()
+  })
+
+  it('le modal se ferme quand onClose est appelé', () => {
+    render(<HeaderClient items={[]} role={null} />)
+    fireEvent.click(screen.getByRole('button', { name: /rechercher sur le site/i }))
+    expect(screen.getByTestId('search-modal')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /fermer la recherche/i }))
+    expect(screen.queryByTestId('search-modal')).toBeNull()
   })
 })
