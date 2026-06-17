@@ -15,6 +15,10 @@ vi.mock('next/navigation', () => ({
   }),
 }))
 
+vi.mock('next/headers', () => ({
+  cookies: vi.fn().mockResolvedValue({ get: vi.fn().mockReturnValue(undefined) }),
+}))
+
 vi.mock('@/components/events/EventArticle', () => ({
   EventArticle: ({ title, layout }: any) => (
     <main data-testid="event-article">
@@ -68,6 +72,7 @@ describe('EventDetailPage', () => {
     expect(find).toHaveBeenCalledWith({
       collection: 'events',
       where: publishedEventWhere('concert-14-juillet'),
+      overrideAccess: false,
       depth: 1,
       limit: 1,
     })
@@ -106,6 +111,7 @@ describe('generateMetadata', () => {
     expect(find).toHaveBeenCalledWith({
       collection: 'events',
       where: publishedEventWhere('fete-du-village'),
+      overrideAccess: false,
       depth: 1,
       limit: 1,
     })
