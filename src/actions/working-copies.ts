@@ -1,5 +1,6 @@
 'use server'
 
+import type { Where } from 'payload'
 import { cookies } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
 import { decodePayloadToken } from '@/lib/auth'
@@ -22,7 +23,7 @@ export async function saveWorkingCopy(
 
   const payload = await getPayloadClient()
 
-  const whereConditions: object[] = [
+  const whereConditions: Where[] = [
     { author: { equals: userId } },
     { collection: { equals: collection } },
   ]
@@ -102,7 +103,7 @@ export async function deleteWorkingCopy(
 
   const payload = await getPayloadClient()
 
-  const whereConditions: object[] = [
+  const whereConditions: Where[] = [
     { author: { equals: userId } },
     { collection: { equals: collection } },
   ]
