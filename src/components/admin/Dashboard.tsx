@@ -12,19 +12,27 @@ const SHORTCUTS = [
 ]
 
 export default async function AdminDashboard() {
-  const payload = await getPayloadClient()
-
-  const [newsCount, eventsCount, documentsCount] = await Promise.all([
-    payload.count({ collection: 'news', overrideAccess: true, where: { _status: { equals: 'published' } } }),
-    payload.count({ collection: 'events', overrideAccess: true, where: { _status: { equals: 'published' } } }),
-    payload.count({ collection: 'documents', overrideAccess: true }),
-  ])
-
-  const counters = [
-    { label: 'Actualités publiées', count: newsCount.totalDocs, href: '/admin/collections/news' },
-    { label: 'Événements publiés', count: eventsCount.totalDocs, href: '/admin/collections/events' },
-    { label: 'Documents', count: documentsCount.totalDocs, href: '/admin/collections/documents' },
+  let counters: { label: string; count: number | null; href: string }[] = [
+    { label: 'Actualités publiées', count: null, href: '/admin/collections/news' },
+    { label: 'Événements publiés', count: null, href: '/admin/collections/events' },
+    { label: 'Documents', count: null, href: '/admin/collections/documents' },
   ]
+
+  try {
+    const payload = await getPayloadClient()
+    const [newsCount, eventsCount, documentsCount] = await Promise.all([
+      payload.count({ collection: 'news', overrideAccess: true, where: { _status: { equals: 'published' } } }),
+      payload.count({ collection: 'events', overrideAccess: true, where: { _status: { equals: 'published' } } }),
+      payload.count({ collection: 'documents', overrideAccess: true }),
+    ])
+    counters = [
+      { label: 'Actualités publiées', count: newsCount.totalDocs, href: '/admin/collections/news' },
+      { label: 'Événements publiés', count: eventsCount.totalDocs, href: '/admin/collections/events' },
+      { label: 'Documents', count: documentsCount.totalDocs, href: '/admin/collections/documents' },
+    ]
+  } catch {
+    // DB unavailable — dashboard still renders without counters
+  }
 
   return (
     <div style={{ padding: '40px 32px', maxWidth: '900px' }}>
@@ -97,7 +105,7 @@ export default async function AdminDashboard() {
               }}
             >
               <div style={{ fontSize: '32px', fontWeight: 700, color: '#1a61ab', lineHeight: 1 }}>
-                {count}
+                {count ?? '—'}
               </div>
               <div style={{ fontSize: '13px', color: 'var(--theme-elevation-500)', marginTop: '6px' }}>
                 {label}

@@ -73,24 +73,21 @@ export default buildConfig({
   ],
   globals: [SiteSettings, MairieInfo, HomepageSettings],
   plugins: [
-    ...(s3Enabled
-      ? [
-          s3Storage({
-            collections: {
-              media: true
-            },
-            bucket: process.env.S3_BUCKET || '',
-            config: {
-              region: process.env.S3_REGION || 'gra',
-              endpoint: process.env.S3_ENDPOINT,
-              credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ''
-              },
-              forcePathStyle: true
-            }
-          })
-        ]
-      : [])
+    s3Storage({
+      enabled: s3Enabled,
+      collections: {
+        media: true
+      },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        region: process.env.S3_REGION || 'gra',
+        endpoint: process.env.S3_ENDPOINT,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ''
+        },
+        forcePathStyle: true
+      }
+    })
   ]
 })

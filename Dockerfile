@@ -10,6 +10,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
+# Required so Payload's importMap includes S3ClientUploadHandler (absent = admin crash in prod)
+ENV S3_ENABLED=true
 RUN npm run build
 
 # Stage 3 — Runtime
