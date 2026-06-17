@@ -77,6 +77,7 @@ export interface Config {
     documents: Document;
     associations: Association;
     'elected-officials': ElectedOfficial;
+    'working-copies': WorkingCopy;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +95,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     associations: AssociationsSelect<false> | AssociationsSelect<true>;
     'elected-officials': ElectedOfficialsSelect<false> | ElectedOfficialsSelect<true>;
+    'working-copies': WorkingCopiesSelect<false> | WorkingCopiesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -413,9 +415,6 @@ export interface EventCategory {
   id: number;
   name: string;
   slug: string;
-  /**
-   * Couleur hexadécimale (ex: #3B82F6)
-   */
   color: string;
   updatedAt: string;
   createdAt: string;
@@ -519,6 +518,27 @@ export interface ElectedOfficial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "working-copies".
+ */
+export interface WorkingCopy {
+  id: number;
+  author: number | User;
+  collection: 'events' | 'news';
+  relatedId?: number | null;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -580,6 +600,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'elected-officials';
         value: number | ElectedOfficial;
+      } | null)
+    | ({
+        relationTo: 'working-copies';
+        value: number | WorkingCopy;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -920,6 +944,18 @@ export interface ElectedOfficialsSelect<T extends boolean = true> {
   delegation?: T;
   photo?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "working-copies_select".
+ */
+export interface WorkingCopiesSelect<T extends boolean = true> {
+  author?: T;
+  collection?: T;
+  relatedId?: T;
+  data?: T;
   updatedAt?: T;
   createdAt?: T;
 }

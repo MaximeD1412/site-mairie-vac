@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { getPayloadClient } from '@/lib/payload'
 import { decodePayloadToken } from '@/lib/auth'
+import { deleteWorkingCopy } from './working-copies'
 
 export type EventFormState = { error: string } | null
 
@@ -31,9 +32,14 @@ export async function createEvent(
   const organizerRaw = formData.get('organizer') as string
   const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
+  const intentStatus = (formData.get('_intentStatus') as string) === 'draft' ? 'draft' : 'published'
 
   if (!title || !slug || !startDate) {
     return { error: 'Le titre, le slug et la date de début sont obligatoires.' }
+  }
+
+  if (endDate && new Date(endDate) <= new Date(startDate)) {
+    return { error: 'La date de fin doit être postérieure à la date de début.' }
   }
 
   const payload = await getPayloadClient()
@@ -50,23 +56,35 @@ export async function createEvent(
     imageId = media.id
   }
 
-  await payload.create({
-    collection: 'events',
-    data: {
-      title,
-      slug,
-      startDate,
-      ...(endDate && { endDate }),
-      ...(location && { location }),
-      ...(categoryRaw && { category: Number(categoryRaw) }),
-      ...(organizerRaw && { organizer: Number(organizerRaw) }),
-      layout: JSON.parse(layoutJson),
-      _status: 'published',
-      ...(imageId !== undefined && { image: imageId }),
-    } as any,
-    overrideAccess: true,
-  })
+  try {
+    await payload.create({
+      collection: 'events',
+      data: {
+        title,
+        slug,
+        startDate,
+        ...(endDate && { endDate }),
+        ...(location && { location }),
+        ...(categoryRaw && { category: Number(categoryRaw) }),
+        ...(organizerRaw && { organizer: Number(organizerRaw) }),
+        layout: JSON.parse(layoutJson),
+        _status: intentStatus,
+        ...(imageId !== undefined && { image: imageId }),
+      } as any,
+      overrideAccess: true,
+    })
+  } catch (err: any) {
+    if (err?.name === 'ValidationError') {
+      const hasSlugError = err.data?.errors?.some((e: { path: string }) => e.path === 'slug')
+      if (hasSlugError) {
+        return { error: `Le slug « ${slug} » est déjà utilisé par un autre événement. Modifiez le titre pour en générer un différent.` }
+      }
+      return { error: err.message ?? 'Erreur de validation.' }
+    }
+    throw err
+  }
 
+  await deleteWorkingCopy('events')
   revalidatePath('/agenda')
   redirect(`/agenda/${slug}`)
 }
@@ -87,9 +105,14 @@ export async function updateEvent(
   const organizerRaw = formData.get('organizer') as string
   const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
+  const intentStatus = (formData.get('_intentStatus') as string) === 'draft' ? 'draft' : 'published'
 
   if (!title || !slug || !startDate) {
     return { error: 'Le titre, le slug et la date de début sont obligatoires.' }
+  }
+
+  if (endDate && new Date(endDate) <= new Date(startDate)) {
+    return { error: 'La date de fin doit être postérieure à la date de début.' }
   }
 
   const payload = await getPayloadClient()
@@ -103,6 +126,7 @@ export async function updateEvent(
     category: categoryRaw ? Number(categoryRaw) : null,
     organizer: organizerRaw ? Number(organizerRaw) : null,
     layout: JSON.parse(layoutJson),
+    _status: intentStatus,
   }
 
   if (imageFile && imageFile.size > 0) {
@@ -123,6 +147,7 @@ export async function updateEvent(
     overrideAccess: true,
   })
 
+  await deleteWorkingCopy('events', String(id))
   revalidatePath('/agenda')
   revalidatePath(`/agenda/${slug}`)
   redirect(`/agenda/${slug}`)

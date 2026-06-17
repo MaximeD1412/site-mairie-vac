@@ -1,4 +1,4 @@
-export function decodePayloadToken(token: string): { role?: string; name?: string; email?: string } | null {
+export function decodePayloadToken(token: string): { id?: number | string; role?: string; name?: string; email?: string } | null {
   try {
     const parts = token.split('.')
     if (parts.length !== 3) return null
@@ -24,6 +24,13 @@ export function resolveMiddlewareRedirect(pathname: string, token: string | unde
   }
 
   if (pathname === '/actualites/new' || /^\/actualites\/[^/]+\/modifier$/.test(pathname)) {
+    if (!token) return '/connexion'
+    const decoded = decodePayloadToken(token)
+    if (decoded?.role !== 'admin' && decoded?.role !== 'agent') return '/connexion'
+    return null
+  }
+
+  if (pathname === '/brouillons') {
     if (!token) return '/connexion'
     const decoded = decodePayloadToken(token)
     if (decoded?.role !== 'admin' && decoded?.role !== 'agent') return '/connexion'

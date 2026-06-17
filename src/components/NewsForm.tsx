@@ -1,16 +1,27 @@
 'use client'
 
-import { useActionState, useRef, useState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import type { NewsFormState } from '@/actions/news'
 import type { News, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
 import { PreviewModal, type PreviewData } from './PreviewModal'
 import { slugify } from '@/lib/slugify'
+import { saveWorkingCopy, deleteWorkingCopy } from '@/actions/working-copies'
+
+interface WorkingCopyData {
+  title?: string
+  slug?: string
+  summary?: string
+  publishedAt?: string
+  featured?: boolean
+  layout?: Block[]
+}
 
 interface Props {
   action: (prevState: NewsFormState, formData: FormData) => Promise<NewsFormState>
   news?: News
   deleteAction?: (formData: FormData) => Promise<NewsFormState>
+  workingCopy?: { id: string; data: WorkingCopyData; updatedAt: string }
 }
 
 function parseLayout(raw: unknown): Block[] {
@@ -18,13 +29,66 @@ function parseLayout(raw: unknown): Block[] {
   return []
 }
 
-export function NewsForm({ action, news, deleteAction }: Props) {
+export function NewsForm({ action, news, deleteAction, workingCopy }: Props) {
   const [state, formAction, isPending] = useActionState(action, null)
-  const [slug, setSlug] = useState(news?.slug ?? '')
-  const [slugTouched, setSlugTouched] = useState(!!news)
-  const [layout, setLayout] = useState<Block[]>(parseLayout(news?.layout))
+  const wc = workingCopy?.data
+  const [title, setTitle] = useState(wc?.title ?? news?.title ?? '')
+  const [slug, setSlug] = useState(wc?.slug ?? news?.slug ?? '')
+  const [summary, setSummary] = useState(wc?.summary ?? news?.summary ?? '')
+  const [publishedAt, setPublishedAt] = useState(
+    wc?.publishedAt?.slice(0, 10) ?? (news?.publishedAt ? news.publishedAt.slice(0, 10) : '')
+  )
+  const [featured, setFeatured] = useState(wc?.featured ?? news?.featured ?? false)
+  const [layout, setLayout] = useState<Block[]>(parseLayout(wc?.layout ?? news?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
+  const [savedAt, setSavedAt] = useState<Date | null>(null)
+  const [showBanner, setShowBanner] = useState(!!workingCopy)
+
   const formRef = useRef<HTMLFormElement>(null)
+  const errorRef = useRef<HTMLParagraphElement>(null)
+  const intentStatusRef = useRef<HTMLInputElement>(null)
+  const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isFirstRender = useRef(true)
+
+  useEffect(() => {
+    if (state?.error) {
+      errorRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' })
+    }
+  }, [state])
+
+  const formSnapshot = JSON.stringify({ title, slug, summary, publishedAt, featured, layout })
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    if (autosaveTimer.current) clearTimeout(autosaveTimer.current)
+    autosaveTimer.current = setTimeout(async () => {
+      const relatedId = news ? String(news.id) : undefined
+      await saveWorkingCopy('news', { title, slug, summary, publishedAt, featured, layout }, relatedId)
+      setSavedAt(new Date())
+    }, 5000)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formSnapshot])
+
+  useEffect(() => {
+    return () => {
+      if (autosaveTimer.current) clearTimeout(autosaveTimer.current)
+    }
+  }, [])
+
+  const handleDiscardWorkingCopy = async () => {
+    if (!confirm('Ignorer vos modifications non publiées et repartir de la version enregistrée ?')) return
+    await deleteWorkingCopy('news', news ? String(news.id) : undefined)
+    setTitle(news?.title ?? '')
+    setSlug(news?.slug ?? '')
+    setSummary(news?.summary ?? '')
+    setPublishedAt(news?.publishedAt ? news.publishedAt.slice(0, 10) : '')
+    setFeatured(news?.featured ?? false)
+    setLayout(parseLayout(news?.layout))
+    setShowBanner(false)
+  }
 
   const openPreview = () => {
     const form = formRef.current
@@ -41,12 +105,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!slugTouched) setSlug(slugify(e.target.value))
-  }
-
-  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlug(e.target.value)
-    setSlugTouched(true)
+    setTitle(e.target.value)
+    if (!news) setSlug(slugify(e.target.value))
   }
 
   const existingImage =
@@ -55,12 +115,42 @@ export function NewsForm({ action, news, deleteAction }: Props) {
   return (
     <div className="space-y-8">
       {preview && <PreviewModal data={preview} onClose={() => setPreview(null)} />}
+      {showBanner && workingCopy && (
+        <div role="status" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <p>
+            Vous avez des modifications non publiées depuis{' '}
+            {new Date(workingCopy.updatedAt).toLocaleString('fr-FR', {
+              day: '2-digit', month: '2-digit', year: 'numeric',
+              hour: '2-digit', minute: '2-digit',
+            })}
+            . Ces modifications ne sont visibles que par vous.
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => setShowBanner(false)}
+              className="rounded border border-amber-400 bg-amber-100 px-3 py-1 text-xs font-semibold hover:bg-amber-200"
+            >
+              Continuer
+            </button>
+            <button
+              type="button"
+              onClick={handleDiscardWorkingCopy}
+              className="rounded border border-amber-400 px-3 py-1 text-xs font-semibold hover:bg-amber-100"
+            >
+              Ignorer et repartir de la version publiée
+            </button>
+          </div>
+        </div>
+      )}
       <form ref={formRef} action={formAction} className="space-y-6">
         {state?.error && (
-          <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p ref={errorRef} role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {state.error}
           </p>
         )}
+
+        <input ref={intentStatusRef} type="hidden" name="_intentStatus" defaultValue="published" />
 
         <div>
           <label className="block text-sm font-medium text-slate-700" htmlFor="title">
@@ -71,26 +161,13 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             name="title"
             type="text"
             required
-            defaultValue={news?.title}
+            value={title}
             onChange={handleTitleChange}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700" htmlFor="slug">
-            Slug <span aria-hidden>*</span>
-          </label>
-          <input
-            id="slug"
-            name="slug"
-            type="text"
-            required
-            value={slug}
-            onChange={handleSlugChange}
-            className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
-          />
-        </div>
+        <input type="hidden" name="slug" value={slug} />
 
         <div>
           <label className="block text-sm font-medium text-slate-700" htmlFor="summary">
@@ -101,7 +178,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             name="summary"
             rows={3}
             required
-            defaultValue={news?.summary}
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
@@ -138,7 +216,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             name="publishedAt"
             type="date"
             required
-            defaultValue={news?.publishedAt ? news.publishedAt.slice(0, 10) : undefined}
+            value={publishedAt}
+            onChange={(e) => setPublishedAt(e.target.value)}
             className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
@@ -148,7 +227,8 @@ export function NewsForm({ action, news, deleteAction }: Props) {
             id="featured"
             name="featured"
             type="checkbox"
-            defaultChecked={news?.featured ?? false}
+            checked={featured}
+            onChange={(e) => setFeatured(e.target.checked)}
             className="rounded border-slate-300"
           />
           <label className="text-sm font-medium text-slate-700" htmlFor="featured">
@@ -164,13 +244,29 @@ export function NewsForm({ action, news, deleteAction }: Props) {
           <BlockEditor value={layout} onChange={setLayout} />
         </div>
 
+        {savedAt && (
+          <p className="text-xs text-slate-500">
+            Brouillon personnel sauvegardé à{' '}
+            {savedAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        )}
+
         <div className="flex items-center gap-3">
           <button
             type="submit"
             disabled={isPending}
+            onClick={() => { if (intentStatusRef.current) intentStatusRef.current.value = 'draft' }}
+            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+          >
+            {isPending ? 'Enregistrement…' : 'Soumettre en brouillon'}
+          </button>
+          <button
+            type="submit"
+            disabled={isPending}
+            onClick={() => { if (intentStatusRef.current) intentStatusRef.current.value = 'published' }}
             className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-mid disabled:opacity-50"
           >
-            {isPending ? 'Enregistrement…' : news ? 'Modifier' : 'Créer'}
+            {isPending ? 'Enregistrement…' : 'Publier'}
           </button>
           <button
             type="button"

@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Search, ChevronDown, LogOut } from 'lucide-react'
+import { Search, ChevronDown, LogOut, NotebookPen } from 'lucide-react'
 import { hrefFromNavItem } from '@/lib/links'
 import { MobileMenu } from './MobileMenu'
 import { LoginPopover } from './LoginPopover'
+import { SearchModal } from './SearchModal'
+import { useNavigate } from './NavigationContext'
 
 interface NavChild {
   label: string
@@ -38,16 +39,27 @@ const roleLabel: Record<string, string> = {
 }
 
 export function HeaderClient({ items, role, userName }: HeaderClientProps) {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [openItem, setOpenItem] = useState<number | null>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function cancelClose() {
+    if (closeTimer.current !== null) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }
+
+  function scheduleClose() {
+    cancelClose()
+    closeTimer.current = setTimeout(() => setOpenItem(null), 100)
+  }
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      const header = document.querySelector('header')
-      if (header && !header.contains(e.target as Node)) setOpenItem(null)
+    return () => {
+      if (closeTimer.current !== null) clearTimeout(closeTimer.current)
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   useEffect(() => {
@@ -60,7 +72,7 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
 
   async function handleLogout() {
     await fetch('/api/users/logout', { method: 'POST' })
-    router.refresh()
+    navigate('/')
   }
 
   return (
@@ -75,12 +87,22 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
             : 'text-white/90 border-transparent hover:text-brand-light hover:bg-white/10 hover:border-brand-light'
 
           return (
-            <div key={i}>
+            <div
+              key={i}
+              onMouseEnter={() => {
+                if (hasChildren) {
+                  cancelClose()
+                  setOpenItem(i)
+                }
+              }}
+              onMouseLeave={() => {
+                if (hasChildren) scheduleClose()
+              }}
+            >
               {hasChildren ? (
                 <button
                   aria-expanded={isOpen}
                   aria-haspopup="true"
-                  onClick={() => setOpenItem(isOpen ? null : i)}
                   className={`${navItemClass} ${activeClass}`}
                 >
                   {item.label}
@@ -112,6 +134,16 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
           </div>
         )}
 
+        {role != null && (
+          <Link
+            href="/brouillons"
+            aria-label="Mes brouillons"
+            className="hidden md:flex items-center justify-center w-9 h-9 rounded bg-white/15 text-white hover:bg-white/25 transition-colors"
+          >
+            <NotebookPen size={15} aria-hidden="true" />
+          </Link>
+        )}
+
         {role === 'admin' && (
           <Link
             href="/admin"
@@ -140,19 +172,23 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
 
         <button
           aria-label="Rechercher sur le site"
+          onClick={() => setSearchOpen(true)}
           className="w-9 h-9 rounded-full bg-white/12 text-white flex items-center justify-center hover:bg-white/22 transition-colors"
         >
           <Search size={16} aria-hidden="true" />
         </button>
+        {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
         <MobileMenu items={items} role={role} onLogout={handleLogout} />
       </div>
 
-      {/* Mega menu panel — absolute, full width, below header bar */}
+      {/* Mega menu panel — full viewport width, below header bar */}
       {openItem !== null && (items[openItem]?.children?.length ?? 0) > 0 && (
         <div
-          className="hidden md:block absolute inset-x-0 top-full bg-white border-t-2 border-brand-light shadow-xl z-110"
+          className="hidden md:block absolute left-0 w-full top-full bg-white border-t-2 border-brand-light shadow-xl z-110"
           role="region"
           aria-label={`Sous-menu ${items[openItem]!.label}`}
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
         >
           <div className="mx-auto max-w-7xl px-6 py-6">
             <ul className="grid grid-cols-2 lg:grid-cols-3 gap-2 list-none m-0 p-0">
@@ -161,8 +197,9 @@ export function HeaderClient({ items, role, userName }: HeaderClientProps) {
                   <Link
                     href={hrefFromNavItem(child)}
                     onClick={() => setOpenItem(null)}
-                    className="block px-4 py-3 rounded-lg text-[14px] font-medium text-text hover:bg-brand-pale hover:text-brand no-underline transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-[14px] font-medium text-text hover:bg-brand-pale hover:text-brand no-underline transition-colors"
                   >
+                    <span className="w-2 h-2 rounded-full bg-brand shrink-0" aria-hidden />
                     {child.label}
                   </Link>
                 </li>

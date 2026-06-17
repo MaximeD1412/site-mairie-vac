@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
-import type { Where } from 'payload'
 import type { News } from '@/payload-types'
 import { notFound } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
+import { decodePayloadToken } from '@/lib/auth'
 import { NewsArticle } from '@/components/news/NewsArticle'
 import { EditButton } from '@/components/EditButton'
+import { Pencil } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
-function publishedNewsWhere(slug: string): Where {
-  return {
-    and: [
-      { slug: { equals: slug } },
-      { _status: { equals: 'published' } },
-    ],
-  }
+async function isAgentOrAdmin(): Promise<boolean> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get('payload-token')?.value
+  const decoded = token ? decodePayloadToken(token) : null
+  return decoded?.role === 'admin' || decoded?.role === 'agent'
 }
 
 export async function generateMetadata(
@@ -22,9 +22,13 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayloadClient()
+  const privileged = await isAgentOrAdmin()
   const result = await payload.find({
     collection: 'news',
-    where: publishedNewsWhere(slug),
+    where: privileged
+      ? { slug: { equals: slug } }
+      : { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] },
+    overrideAccess: privileged,
     limit: 1,
   })
   const article = result.docs[0] as News | undefined
@@ -40,9 +44,13 @@ export default async function NewsDetailPage(
 ) {
   const { slug } = await params
   const payload = await getPayloadClient()
+  const privileged = await isAgentOrAdmin()
   const result = await payload.find({
     collection: 'news',
-    where: publishedNewsWhere(slug),
+    where: privileged
+      ? { slug: { equals: slug } }
+      : { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] },
+    overrideAccess: privileged,
     depth: 1,
     limit: 1,
   })
@@ -58,7 +66,7 @@ export default async function NewsDetailPage(
         image={article.image}
         layout={Array.isArray(article.layout) ? article.layout : undefined}
       />
-      <EditButton href={`/actualites/${slug}/modifier`} label="Modifier" />
+      <EditButton href={`/actualites/${slug}/modifier`} label="Modifier" icon={<Pencil size={14} />} />
     </>
   )
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
 import { EditButton } from '@/components/EditButton'
+import { Plus } from 'lucide-react'
 import { getAvailableTabs, getCategoryLabel } from '@/lib/documents'
 
 export default async function DocumentsArchive({
@@ -20,7 +21,7 @@ export default async function DocumentsArchive({
     <main className="mx-auto max-w-5xl px-4 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold">Documents</h1>
-        <EditButton href="/documents/new" label="Nouveau document" />
+        <EditButton href="/documents/new" label="Nouveau document" icon={<Plus size={14} />} />
       </div>
 
       <nav className="mt-8 flex flex-wrap gap-2" aria-label="Filtrer par catégorie">

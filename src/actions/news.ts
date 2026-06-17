@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { getPayloadClient } from '@/lib/payload'
 import { decodePayloadToken } from '@/lib/auth'
+import { deleteWorkingCopy } from './working-copies'
 
 export type NewsFormState = { error: string } | null
 
@@ -29,6 +30,7 @@ export async function createNews(
   const featured = formData.get('featured') === 'on'
   const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
+  const intentStatus = (formData.get('_intentStatus') as string) === 'draft' ? 'draft' : 'published'
 
   if (!title || !slug || !summary || !publishedAt) {
     return { error: 'Le titre, le slug, le résumé et la date sont obligatoires.' }
@@ -57,12 +59,13 @@ export async function createNews(
       publishedAt,
       featured,
       layout: JSON.parse(layoutJson),
-      _status: 'published',
+      _status: intentStatus,
       ...(imageId !== undefined && { image: imageId }),
     } as any,
     overrideAccess: true,
   })
 
+  await deleteWorkingCopy('news')
   revalidatePath('/actualites')
   redirect(`/actualites/${slug}`)
 }
@@ -81,6 +84,7 @@ export async function updateNews(
   const featured = formData.get('featured') === 'on'
   const layoutJson = (formData.get('layout') as string) || '[]'
   const imageFile = formData.get('image') as File | null
+  const intentStatus = (formData.get('_intentStatus') as string) === 'draft' ? 'draft' : 'published'
 
   if (!title || !slug || !summary || !publishedAt) {
     return { error: 'Le titre, le slug, le résumé et la date sont obligatoires.' }
@@ -95,6 +99,7 @@ export async function updateNews(
     publishedAt,
     featured,
     layout: JSON.parse(layoutJson),
+    _status: intentStatus,
   }
 
   if (imageFile && imageFile.size > 0) {
@@ -115,6 +120,7 @@ export async function updateNews(
     overrideAccess: true,
   })
 
+  await deleteWorkingCopy('news', String(id))
   revalidatePath('/actualites')
   revalidatePath(`/actualites/${slug}`)
   redirect(`/actualites/${slug}`)

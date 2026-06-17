@@ -5,7 +5,7 @@ import { ActuPanneauSection } from '@/components/home/ActuPanneauSection'
 import { AgendaSection } from '@/components/home/AgendaSection'
 import { PublicationsSection } from '@/components/home/PublicationsSection'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   const payload = await getPayloadClient()

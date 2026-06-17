@@ -2,11 +2,11 @@ import { getPayloadClient } from '@/lib/payload'
 
 const SHORTCUTS = [
   { label: 'Pages', href: '/admin/collections/pages', emoji: '📄' },
-  { label: 'Navigation', href: '/admin/globals/navigation', emoji: '🔗' },
   { label: 'Élus', href: '/admin/collections/elected-officials', emoji: '👤' },
   { label: 'Associations', href: '/admin/collections/associations', emoji: '🤝' },
   { label: 'Actualités', href: '/admin/collections/news', emoji: '📰' },
   { label: 'Agenda', href: '/admin/collections/events', emoji: '📅' },
+  { label: 'Catégories d\'événements', href: '/admin/collections/event-categories', emoji: '🏷️' },
   { label: 'Documents', href: '/admin/collections/documents', emoji: '📁' },
   { label: 'Paramètres du site', href: '/admin/globals/site-settings', emoji: '⚙️' },
 ]

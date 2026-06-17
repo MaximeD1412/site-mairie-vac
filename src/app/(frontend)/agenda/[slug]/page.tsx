@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
-import type { Where } from 'payload'
 import type { Event } from '@/payload-types'
 import { notFound } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { getPayloadClient } from '@/lib/payload'
+import { decodePayloadToken } from '@/lib/auth'
 import { EventArticle } from '@/components/events/EventArticle'
 import { EditButton } from '@/components/EditButton'
+import { Pencil } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
-function publishedEventWhere(slug: string): Where {
-  return {
-    and: [
-      { slug: { equals: slug } },
-      { _status: { equals: 'published' } },
-    ],
-  }
+async function isAgentOrAdmin(): Promise<boolean> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get('payload-token')?.value
+  const decoded = token ? decodePayloadToken(token) : null
+  return decoded?.role === 'admin' || decoded?.role === 'agent'
 }
 
 export async function generateMetadata(
@@ -22,9 +22,13 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayloadClient()
+  const privileged = await isAgentOrAdmin()
   const result = await payload.find({
     collection: 'events',
-    where: publishedEventWhere(slug),
+    where: privileged
+      ? { slug: { equals: slug } }
+      : { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] },
+    overrideAccess: privileged,
     depth: 1,
     limit: 1,
   })
@@ -38,9 +42,13 @@ export default async function EventDetailPage(
 ) {
   const { slug } = await params
   const payload = await getPayloadClient()
+  const privileged = await isAgentOrAdmin()
   const result = await payload.find({
     collection: 'events',
-    where: publishedEventWhere(slug),
+    where: privileged
+      ? { slug: { equals: slug } }
+      : { and: [{ slug: { equals: slug } }, { _status: { equals: 'published' } }] },
+    overrideAccess: privileged,
     depth: 1,
     limit: 1,
   })
@@ -63,7 +71,7 @@ export default async function EventDetailPage(
         image={event.image as { url?: string | null; alt?: string | null } | null | undefined}
         layout={Array.isArray(event.layout) ? event.layout : undefined}
       />
-      <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" />
+      <EditButton href={`/agenda/${slug}/modifier`} label="Modifier" icon={<Pencil size={16} />} fab />
     </>
   )
 }

@@ -9,3 +9,5 @@ data/*.db
 data/*.db-*
 .backups
 media
+
+graphify-out/cost.json

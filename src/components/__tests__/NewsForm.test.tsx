@@ -1,11 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import React from 'react'
 
 vi.mock('react', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react')>()
   return { ...actual, useActionState: vi.fn() }
 })
+
+vi.mock('@/actions/working-copies', () => ({
+  saveWorkingCopy: vi.fn(),
+  deleteWorkingCopy: vi.fn(),
+}))
 
 vi.mock('@/components/BlockEditor', () => ({
   BlockEditor: ({ value, onChange }: { value: unknown[]; onChange: (v: unknown[]) => void }) => (
@@ -22,11 +27,14 @@ vi.mock('@/components/BlockEditor', () => ({
 }))
 
 import { useActionState } from 'react'
+import { deleteWorkingCopy } from '@/actions/working-copies'
 import { NewsForm } from '../NewsForm'
 
 const mockUseActionState = vi.mocked(useActionState)
+const mockDeleteWorkingCopy = vi.mocked(deleteWorkingCopy)
 
 beforeEach(() => {
+  vi.clearAllMocks()
   mockUseActionState.mockReturnValue([null, vi.fn(), false] as any)
 })
 
@@ -35,7 +43,6 @@ describe('NewsForm', () => {
     render(<NewsForm action={vi.fn()} />)
 
     expect(screen.getByLabelText(/titre/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/slug/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/résumé/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/image de couverture/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/date de publication/i)).toBeInTheDocument()
@@ -43,19 +50,10 @@ describe('NewsForm', () => {
     expect(screen.getByTestId('block-editor')).toBeInTheDocument()
   })
 
-  it('affiche le bouton "Créer" en mode création', () => {
+  it('affiche les boutons "Soumettre en brouillon" et "Publier"', () => {
     render(<NewsForm action={vi.fn()} />)
-    expect(screen.getByRole('button', { name: 'Créer' })).toBeInTheDocument()
-  })
-
-  it('affiche le bouton "Modifier" en mode édition', () => {
-    const news = {
-      id: 1, title: 'Test', slug: 'test', summary: 'Résumé',
-      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: null,
-      updatedAt: '', createdAt: '',
-    }
-    render(<NewsForm action={vi.fn()} news={news as any} />)
-    expect(screen.getByRole('button', { name: 'Modifier' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Soumettre en brouillon' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Publier' })).toBeInTheDocument()
   })
 
   it('le bouton Supprimer est absent en mode création', () => {
@@ -77,7 +75,7 @@ describe('NewsForm', () => {
     render(<NewsForm action={vi.fn()} />)
     const titleInput = screen.getByLabelText(/titre/i)
     fireEvent.change(titleInput, { target: { value: 'Conseil Municipal 2026' } })
-    const slugInput = screen.getByLabelText(/slug/i) as HTMLInputElement
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
     expect(slugInput.value).toBe('conseil-municipal-2026')
   })
 
@@ -88,17 +86,21 @@ describe('NewsForm', () => {
       updatedAt: '', createdAt: '',
     }
     render(<NewsForm action={vi.fn()} news={news as any} />)
-    const slugInput = screen.getByLabelText(/slug/i) as HTMLInputElement
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
     expect(slugInput.value).toBe('titre-existant')
   })
 
-  it('le slug ne change plus quand il a été modifié manuellement', () => {
-    render(<NewsForm action={vi.fn()} />)
-    const slugInput = screen.getByLabelText(/slug/i)
-    fireEvent.change(slugInput, { target: { value: 'mon-slug-perso' } })
+  it('en mode édition, modifier le titre ne modifie pas le slug', () => {
+    const news = {
+      id: 1, title: 'Titre existant', slug: 'titre-existant', summary: 'Résumé',
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: null,
+      updatedAt: '', createdAt: '',
+    }
+    render(<NewsForm action={vi.fn()} news={news as any} />)
     const titleInput = screen.getByLabelText(/titre/i)
     fireEvent.change(titleInput, { target: { value: 'Nouveau titre quelconque' } })
-    expect((screen.getByLabelText(/slug/i) as HTMLInputElement).value).toBe('mon-slug-perso')
+    const slugInput = document.querySelector('input[name="slug"]') as HTMLInputElement
+    expect(slugInput.value).toBe('titre-existant')
   })
 
   it('affiche le message d\'erreur du serveur', () => {
@@ -107,11 +109,12 @@ describe('NewsForm', () => {
     expect(screen.getByText('Erreur de sauvegarde')).toBeInTheDocument()
   })
 
-  it('désactive le bouton soumettre pendant l\'envoi', () => {
+  it('désactive les boutons soumettre pendant l\'envoi', () => {
     mockUseActionState.mockReturnValue([null, vi.fn(), true] as any)
     render(<NewsForm action={vi.fn()} />)
-    const btn = screen.getByRole('button', { name: /enregistrement/i })
-    expect(btn).toBeDisabled()
+    const btns = screen.getAllByRole('button', { name: /enregistrement/i })
+    expect(btns).toHaveLength(2)
+    btns.forEach((btn) => expect(btn).toBeDisabled())
   })
 
   it('le layout BlockEditor est sérialisé en JSON dans un champ caché', () => {
@@ -121,6 +124,71 @@ describe('NewsForm', () => {
 
     fireEvent.click(screen.getByTestId('block-editor-add'))
     expect(JSON.parse(hiddenInput?.value ?? '[]')).toHaveLength(1)
+  })
+
+  describe('working copy banner', () => {
+    const news = {
+      id: 1, title: 'Titre original', slug: 'titre-original', summary: 'Résumé original',
+      publishedAt: '2026-01-01T00:00:00.000Z', featured: false, layout: [],
+      updatedAt: '', createdAt: '',
+    }
+    const workingCopy = {
+      id: 'wc1',
+      data: { title: 'Titre modifié', slug: 'titre-modifie', summary: 'Résumé modifié',
+        publishedAt: '2026-02-01', featured: true, layout: [] },
+      updatedAt: '2026-06-10T10:00:00.000Z',
+    }
+
+    it('le bandeau est absent sans prop workingCopy', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} />)
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    })
+
+    it('le bandeau est visible quand workingCopy est fourni', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      expect(screen.getByRole('status')).toBeInTheDocument()
+      expect(screen.getByText(/modifications non publiées/i)).toBeInTheDocument()
+    })
+
+    it('les champs sont pré-remplis depuis la working copy', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      expect(screen.getByLabelText(/titre/i)).toHaveValue('Titre modifié')
+      expect(screen.getByLabelText(/résumé/i)).toHaveValue('Résumé modifié')
+    })
+
+    it('le bouton Continuer ferme le bandeau', () => {
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      fireEvent.click(screen.getByRole('button', { name: 'Continuer' }))
+      expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    })
+
+    it('le bouton Ignorer appelle deleteWorkingCopy et recharge les données originales', async () => {
+      mockDeleteWorkingCopy.mockResolvedValue(undefined)
+      vi.spyOn(window, 'confirm').mockReturnValue(true)
+
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      expect(screen.getByLabelText(/titre/i)).toHaveValue('Titre modifié')
+
+      fireEvent.click(screen.getByRole('button', { name: /ignorer/i }))
+
+      await waitFor(() => {
+        expect(mockDeleteWorkingCopy).toHaveBeenCalledWith('news', '1')
+        expect(screen.getByLabelText(/titre/i)).toHaveValue('Titre original')
+        expect(screen.queryByRole('status')).not.toBeInTheDocument()
+      })
+    })
+
+    it('le bouton Ignorer ne fait rien si l\'utilisateur annule la confirmation', async () => {
+      vi.spyOn(window, 'confirm').mockReturnValue(false)
+
+      render(<NewsForm action={vi.fn()} news={news as any} workingCopy={workingCopy} />)
+      fireEvent.click(screen.getByRole('button', { name: /ignorer/i }))
+
+      await waitFor(() => {
+        expect(mockDeleteWorkingCopy).not.toHaveBeenCalled()
+        expect(screen.getByRole('status')).toBeInTheDocument()
+      })
+    })
   })
 
   it('le layout est pré-rempli depuis news.layout en mode édition', () => {
