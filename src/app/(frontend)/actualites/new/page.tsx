@@ -30,7 +30,7 @@ export default async function NewsNewPage({
       limit: 1,
     })
     const wc = wcResult.docs[0]
-    if (wc?.data) initialNews = wc.data as News
+    if (wc?.data) initialNews = wc.data as unknown as News
   }
 
   return (
