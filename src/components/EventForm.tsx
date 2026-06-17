@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useEffect, useRef, useState } from 'react'
+import { useActionState, useEffect, useMemo, useRef, useState } from 'react'
 import type { EventFormState } from '@/actions/events'
 import type { Event, EventCategory, Association, Media } from '@/payload-types'
 import { BlockEditor, type Block } from './BlockEditor'
@@ -37,7 +37,12 @@ export function EventForm({ action, event, deleteAction, categories, association
   const [state, formAction, isPending] = useActionState(action, null)
   const wc = workingCopy?.data
   const [title, setTitle] = useState(wc?.title ?? event?.title ?? '')
-  const [slug, setSlug] = useState(wc?.slug ?? event?.slug ?? '')
+  // Derived from title so it's always in sync, even without user interaction.
+  // For editing an existing event (event.id defined), keep the existing slug to avoid breaking URLs.
+  const slug = useMemo(
+    () => (event?.id ? (event.slug ?? '') : slugify(title)),
+    [title, event?.id, event?.slug],
+  )
   const [layout, setLayout] = useState<Block[]>(parseLayout(wc?.layout ?? event?.layout))
   const [preview, setPreview] = useState<PreviewData | null>(null)
   const [startDate, setStartDate] = useState(
@@ -112,7 +117,6 @@ export function EventForm({ action, event, deleteAction, categories, association
     if (!confirm('Ignorer vos modifications non publiées et repartir de la version enregistrée ?')) return
     await deleteWorkingCopy('events', event ? String(event.id) : undefined)
     setTitle(event?.title ?? '')
-    setSlug(event?.slug ?? '')
     setLayout(parseLayout(event?.layout))
     setStartDate(event?.startDate ? event.startDate.slice(0, 16) : '')
     setEndDate(event?.endDate ? event.endDate.slice(0, 16) : '')
@@ -153,7 +157,6 @@ export function EventForm({ action, event, deleteAction, categories, association
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
-    if (!event) setSlug(slugify(e.target.value))
   }
 
   const existingImage =
