@@ -6,7 +6,7 @@ import { decodePayloadToken } from '@/lib/auth'
 import { getPayloadClient } from '@/lib/payload'
 import { createEvent } from '@/actions/events'
 import { EventForm } from '@/components/EventForm'
-import type { EventCategory, Association } from '@/payload-types'
+import type { Event as PayloadEvent, EventCategory, Association } from '@/payload-types'
 
 export default async function EventNewPage({
   searchParams,
@@ -21,7 +21,7 @@ export default async function EventNewPage({
   const { wc: wcId } = await searchParams
   const payload = await getPayloadClient()
 
-  let initialEvent: Event | undefined
+  let initialEvent: PayloadEvent | undefined
   if (wcId && decoded!.id) {
     const wcResult = await payload.find({
       collection: 'working-copies',
@@ -30,7 +30,7 @@ export default async function EventNewPage({
       limit: 1,
     })
     const wc = wcResult.docs[0]
-    if (wc?.data) initialEvent = wc.data as Event
+    if (wc?.data) initialEvent = wc.data as unknown as PayloadEvent
   }
 
   const [categoriesResult, associationsResult] = await Promise.all([

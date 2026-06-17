@@ -65,7 +65,7 @@ export async function saveWorkingCopy(
 export async function getWorkingCopy(
   collection: 'events' | 'news',
   relatedId: string,
-): Promise<{ id: string; data: unknown; updatedAt: string } | null> {
+): Promise<{ id: string; data: any; updatedAt: string } | null> {
   const userId = await getCurrentUserId()
   if (!userId) return null
 
@@ -89,7 +89,7 @@ export async function getWorkingCopy(
   const doc = result.docs[0]
   return {
     id: String(doc.id),
-    data: doc.data,
+    data: doc.data as any,
     updatedAt: doc.updatedAt,
   }
 }
