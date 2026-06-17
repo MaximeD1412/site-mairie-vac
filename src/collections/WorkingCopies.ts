@@ -36,7 +36,7 @@ export const WorkingCopies: CollectionConfig = {
     {
       name: 'relatedId',
       label: 'ID du document existant',
-      type: 'text',
+      type: 'number',
     },
     {
       name: 'data',

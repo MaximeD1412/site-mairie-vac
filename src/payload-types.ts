@@ -524,7 +524,7 @@ export interface WorkingCopy {
   id: number;
   author: number | User;
   collection: 'events' | 'news';
-  relatedId?: string | null;
+  relatedId?: number | null;
   data:
     | {
         [k: string]: unknown;

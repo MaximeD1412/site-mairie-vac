@@ -56,22 +56,33 @@ export async function createEvent(
     imageId = media.id
   }
 
-  await payload.create({
-    collection: 'events',
-    data: {
-      title,
-      slug,
-      startDate,
-      ...(endDate && { endDate }),
-      ...(location && { location }),
-      ...(categoryRaw && { category: Number(categoryRaw) }),
-      ...(organizerRaw && { organizer: Number(organizerRaw) }),
-      layout: JSON.parse(layoutJson),
-      _status: intentStatus,
-      ...(imageId !== undefined && { image: imageId }),
-    } as any,
-    overrideAccess: true,
-  })
+  try {
+    await payload.create({
+      collection: 'events',
+      data: {
+        title,
+        slug,
+        startDate,
+        ...(endDate && { endDate }),
+        ...(location && { location }),
+        ...(categoryRaw && { category: Number(categoryRaw) }),
+        ...(organizerRaw && { organizer: Number(organizerRaw) }),
+        layout: JSON.parse(layoutJson),
+        _status: intentStatus,
+        ...(imageId !== undefined && { image: imageId }),
+      } as any,
+      overrideAccess: true,
+    })
+  } catch (err: any) {
+    if (err?.name === 'ValidationError') {
+      const hasSlugError = err.data?.errors?.some((e: { path: string }) => e.path === 'slug')
+      if (hasSlugError) {
+        return { error: `Le slug « ${slug} » est déjà utilisé par un autre événement. Modifiez le titre pour en générer un différent.` }
+      }
+      return { error: err.message ?? 'Erreur de validation.' }
+    }
+    throw err
+  }
 
   await deleteWorkingCopy('events')
   revalidatePath('/agenda')

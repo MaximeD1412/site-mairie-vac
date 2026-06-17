@@ -23,6 +23,7 @@ export default async function BrouillonsPage() {
       overrideAccess: true,
       sort: '-updatedAt',
       limit: 100,
+      depth: 0,
     }),
     payload.find({
       collection: 'events',

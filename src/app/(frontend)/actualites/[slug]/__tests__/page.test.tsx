@@ -15,6 +15,10 @@ vi.mock('next/navigation', () => ({
   }),
 }))
 
+vi.mock('next/headers', () => ({
+  cookies: vi.fn().mockResolvedValue({ get: vi.fn().mockReturnValue(undefined) }),
+}))
+
 vi.mock('@/components/news/NewsArticle', () => ({
   NewsArticle: ({ title, publishedAt, summary, image, layout }: any) => (
     <article data-testid="news-article">
@@ -73,6 +77,7 @@ describe('NewsDetailPage', () => {
     expect(find).toHaveBeenCalledWith({
       collection: 'news',
       where: publishedNewsWhere('conseil-municipal'),
+      overrideAccess: false,
       depth: 1,
       limit: 1,
     })
@@ -119,6 +124,7 @@ describe('generateMetadata', () => {
     expect(find).toHaveBeenCalledWith({
       collection: 'news',
       where: publishedNewsWhere('titre-metadata'),
+      overrideAccess: false,
       limit: 1,
     })
     expect(metadata).toEqual({
