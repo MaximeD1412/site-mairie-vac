@@ -43,7 +43,7 @@ export async function saveWorkingCopy(
     const updated = await payload.update({
       collection: 'working-copies',
       id: existing.docs[0].id,
-      data: { data },
+      data: { data: data as any },
       overrideAccess: true,
     })
     return { id: String(updated.id) }
